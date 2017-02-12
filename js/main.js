@@ -17,6 +17,11 @@ function ConsumeResource(cost, count)
 	SaveData.Bauxite -= cost.Bauxite * count;
 }
 
+function OccupiedFleetSize()
+{
+	return SaveData.DestroyerPlanned * StaticData.Destroyer.Size();
+}
+
 function UsedTerritory()
 {
 	return SaveData.City + SaveData.OilMiner + SaveData.SteelMiner + SaveData.BauxiteMiner;
@@ -71,6 +76,14 @@ function OnBuildBauxiteMiner(n)
 	}
 }
 
+function OnAddDestroyer(n)
+{
+	if (OccupiedFleetSize() + StaticData.Destroyer.Size() * n <= SaveData.FleetSize)
+	{
+		SaveData.DestroyerPlanned += n;
+	}
+}
+
 function OnTick()
 {
 	//Update Resources
@@ -88,22 +101,27 @@ function OnRender()
 {
 	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
 
-	$("#Manpower").text("Manpower: " + SaveData.Manpower + " + " + StaticData.ManpowerPerSec() + "/d");
-	$("#Fuel").text("Fuel: " + SaveData.Fuel + " + " + StaticData.FuelPerSec() + "/d");
-	$("#Steel").text("Steel: " + SaveData.Steel + " + " + StaticData.SteelPerSec() + "/d");
-	$("#Bauxite").text("Bauxite: " + SaveData.Bauxite + " + " + StaticData.BauxitePerSec() + "/d");
+	$("#Manpower").text("Manpower: " + Math.floor(SaveData.Manpower) + " + " + Math.floor(StaticData.ManpowerPerSec()) + "/d");
+	$("#Fuel").text("Fuel: " + Math.floor(SaveData.Fuel) + " + " + Math.floor(StaticData.FuelPerSec()) + "/d");
+	$("#Steel").text("Steel: " + Math.floor(SaveData.Steel) + " + " + Math.floor(StaticData.SteelPerSec()) + "/d");
+	$("#Bauxite").text("Bauxite: " + Math.floor(SaveData.Bauxite) + " + " + Math.floor(StaticData.BauxitePerSec()) + "/d");
 
 	$("#City").text("City: " + SaveData.City);
 	$("#OilMiner").text("Oil Miner: " + SaveData.OilMiner);
 	$("#SteelMiner").text("Steel Miner: " + SaveData.SteelMiner);
 	$("#BauxiteMiner").text("Bauxite Miner: " + SaveData.BauxiteMiner);
 
-	$("#FleetSize").text("FleetSize: " + SaveData.FleetSize);
-	$("#Destroyer").text("Destroyer: " + SaveData.Destroyer);
-	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser);
-	$("#BattleShip").text("BattleShip: " + SaveData.BattleShip);
-	$("#Carrier").text("Carrier: " + SaveData.Carrier);
-	$("#Submarine").text("Submarine: " + SaveData.Submarine);
+	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + SaveData.FleetSize);
+	$("#Destroyer").text("Destroyer: " + SaveData.Destroyer + " / " + SaveData.DestroyerPlanned);
+	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser + " / " + SaveData.CruiserPlanned);
+	$("#Battleship").text("Battleship: " + SaveData.Battleship + " / " + SaveData.BattleshipPlanned);
+	$("#Carrier").text("Carrier: " + SaveData.Carrier + " / " + SaveData.CarrierPlanned);
+	$("#Submarine").text("Submarine: " + SaveData.Submarine + " / " + SaveData.SubmarinePlanned);
+}
+
+function ResetSave()
+{
+	localStorage.removeItem("IdleBuilderSave");
 }
 
 function OnSave()

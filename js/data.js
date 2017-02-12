@@ -55,17 +55,19 @@ StaticData = {
 		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0};
 	},
 
-	DestroyerSize : function() {
-		return 2;
-	},
-	DestroyerBaseHP : function() {
-		return 10;
-	},
-	DestroyerBaseDefend : function() {
-		return 5;
-	},
-	DestroyerBaseEvade : function() {
-		return 0.5;
+	Destroyer : {
+		Size : function() {
+			return 2;
+		},
+		HP : function() {
+			return 10;
+		},
+		Defend : function() {
+			return 5;
+		},
+		Evade : function() {
+			return 0.5;
+		},
 	},
 
 	LightGunAttack : function() {

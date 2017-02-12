@@ -13,13 +13,18 @@
 		<link rel="stylesheet" href="css/layout.css">
 		<script type="text/javascript" language="javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" language="javascript" src="js/lz-string.min.js"></script>
-		
+
 		<script type="text/javascript" language="javascript" src="js/save.js"></script>
 		<script type="text/javascript" language="javascript" src="js/data.js"></script>
 		<script type="text/javascript" language="javascript" src="js/main.js"></script>
 	</head>
 
 	<body>
+		<div id="debug">
+			<span>Debug Menu:</span>
+			<button onclick="OnSave()">Save Now</button>
+			<button onclick="ResetSave()">Reset Save</button>
+		</div>
 		<div id="header">
 			<ul id="tabs">
 				<li><button onclick="OnTab('Infrastructure')">Infrastructure</button></li>
@@ -168,16 +173,127 @@
 			<div id="Ally"><table>
 				<tr>
 					<td id="FleetSize">Fleet Size: 0/10</td>
-					<td id="Destroyer">Destroyer X 0</td>
-					<td id="Cruiser">Cruiser X 0</td>
-					<td id="Carrier">Carrier X 0</td>
-					<td id="Battleship">Battleship X 0</td>
-					<td id="Submarine">Submarine X 0</td>
+					<td>
+						<span id="Destroyer">Destroyer: 0/0</span>
+						<button onclick="OnAddDestroyer(1)">+</button>
+						<button onclick="OnAddDestroyer(-1)">-</button>
+					</td>
+					<td>
+						<span id="Cruiser">Cruiser: 0/0</span>
+						<button>+</button>
+						<button>-</button>
+					</td>
+					<td>
+						<span id="Carrier">Carrier: 0/0</span>
+						<button>+</button>
+						<button>-</button>
+					</td>
+					<td>
+						<span id="Battleship">Battleship: 0/0</span>
+						<button>+</button>
+						<button>-</button>
+					</td>
+					<td>
+						<span id="Submarine">Submarine: 0/0</span>
+						<button>+</button>
+						<button>-</button>
+					</td>
+				</tr>
+				<tr>
+					<td id="FleetStat">
+						Overall Firepower:<br/>
+						Overall Torpedo:<br/>
+						Overall Anti Air:<br/>
+						Overall Anti Sub:<br/>
+						Overall Recon:<br/>
+						Overall Fighter:<br/>
+						Overall Bomber:<br/>
+					</td>
+					<td id="DestroyerStat">
+						Firepower:<br/>
+						Torpedo:<br/>
+						Anti Air:<br/>
+						Anti Sub:<br/>
+						Recon:<br/>
+					</td>
+					<td id="CruiserStat">
+						Firepower:<br/>
+						Torpedo:<br/>
+						Anti Air:<br/>
+						Anti Sub:<br/>
+						Recon:<br/>
+					</td>
+					<td id="CarrierStat">
+						Anti Air:<br/>
+						Anti Sub:<br/>
+						Recon:<br/>
+						Fighter:<br/>
+						Bomber:<br/>
+					</td>
+					<td id="BattleshipStat">
+						Firepower:<br/>
+						Anti Air:<br/>
+						Recon:<br/>
+					</td>
+					<td id="SubmarineStat">
+						Torpedo:<br/>
+						Recon:<br/>
+						Stealth:<br/>
+					</td>
 				</tr>
 			</table></div>
-			<div id="Enemy">
-				<p>Destroyers X 10</p>
-			</div>
+			<div id="Enemy"><table>
+				<tr>
+					<td>Enemy Fleet</td>
+					<td id="EnemyDestroyer">Destroyer X 0</td>
+					<td id="EnemyCruiser">Cruiser X 0</td>
+					<td id="EnemyCarrier">Carrier X 0</td>
+					<td id="EnemyBattleship">Battleship X 0</td>
+					<td id="EnemySubmarine">Submarine X 0</td>
+				</tr>
+				<tr>
+					<td id="EnemyFleetStat">
+						Overall Firepower:<br/>
+						Overall Torpedo:<br/>
+						Overall Anti Air:<br/>
+						Overall Anti Sub:<br/>
+						Overall Recon:<br/>
+						Overall Fighter:<br/>
+						Overall Bomber:<br/>
+					</td>
+					<td id="EnemyDestroyerStat">
+						Firepower:<br/>
+						Torpedo:<br/>
+						Anti Air:<br/>
+						Anti Sub:<br/>
+						Recon:<br/>
+					</td>
+					<td id="EnemyCruiserStat">
+						Firepower:<br/>
+						Torpedo:<br/>
+						Anti Air:<br/>
+						Anti Sub:<br/>
+						Recon:<br/>
+					</td>
+					<td id="EnemyCarrierStat">
+						Anti Air:<br/>
+						Anti Sub:<br/>
+						Recon:<br/>
+						Fighter:<br/>
+						Bomber:<br/>
+					</td>
+					<td id="EnemyBattleshipStat">
+						Firepower:<br/>
+						Anti Air:<br/>
+						Recon:<br/>
+					</td>
+					<td id="EnemySubmarineStat">
+						Torpedo:<br/>
+						Recon:<br/>
+						Stealth:<br/>
+					</td>
+				</tr>
+			</table></div>
 		</div>
 	</body>
 </html>

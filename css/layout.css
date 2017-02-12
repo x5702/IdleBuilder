@@ -1,3 +1,9 @@
+div#debug {
+    width: 100%;
+    border: 1px solid gray;
+    padding: 1em;
+}
+
 div#header {
     width: 100%;
     border: 1px solid gray;
@@ -29,21 +35,36 @@ div#header ul#tabs {
 }
 
 div#main-left {
-    width: auto;
     float: left;
+    width: auto;
     margin: 0;
     padding: 1em;
 }
 
 div#Ally {
     width:100%;
+    display:block;
+    border-bottom: 1px solid gray;
+}
+
+div#Ally table {
+    float: right;
+}
+
+div#Enemy {
+    width:100%;
+    display:block;
     border-bottom: 1px solid gray;
 }
 
 div#main-right {
-    width: 500px;
+    width: 300px;
     float: right;
     border-left: 1px solid gray;
     padding: 1em;
     overflow: hidden;
+}
+
+table tr td {
+    border: 1px solid gray;
 }
