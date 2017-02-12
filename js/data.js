@@ -89,4 +89,11 @@ StaticData = {
 	RadarRecon : function(){
 		return 10;
 	},
+
+	Technology : {
+		CityLevel : function() {
+			return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+		},
+
+	},
 }

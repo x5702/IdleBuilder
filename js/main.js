@@ -1,3 +1,4 @@
+//Utility Functions
 function CheckResource(cost, count)
 {
 	count = count < 0 ? 0 : count;
@@ -26,9 +27,12 @@ function CheckTerritory(count)
 	return UsedTerritory() + count <= SaveData.Territory;
 }
 
+
+//UI stuff
 function OnTab(name)
 {
-
+	$(".tab").hide();
+	$("#" + name).show();
 }
 
 function OnBuildCity(n)
@@ -84,24 +88,45 @@ function OnRender()
 {
 	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
 
-	$("#Manpower").text("Manpower: " + SaveData.Manpower + " + " + SaveData.City * StaticData.ManpowerPerSec() + "/d");
-	$("#Fuel").text("Fuel: " + SaveData.Fuel + " + " + SaveData.OilMiner * StaticData.FuelPerSec() + "/d");
-	$("#Steel").text("Steel: " + SaveData.Steel + " + " + SaveData.SteelMiner * StaticData.SteelPerSec() + "/d");
-	$("#Bauxite").text("Bauxite: " + SaveData.Bauxite + " + " + SaveData.BauxiteMiner * StaticData.BauxitePerSec() + "/d");
+	$("#Manpower").text("Manpower: " + SaveData.Manpower + " + " + StaticData.ManpowerPerSec() + "/d");
+	$("#Fuel").text("Fuel: " + SaveData.Fuel + " + " + StaticData.FuelPerSec() + "/d");
+	$("#Steel").text("Steel: " + SaveData.Steel + " + " + StaticData.SteelPerSec() + "/d");
+	$("#Bauxite").text("Bauxite: " + SaveData.Bauxite + " + " + StaticData.BauxitePerSec() + "/d");
 
 	$("#City").text("City: " + SaveData.City);
 	$("#OilMiner").text("Oil Miner: " + SaveData.OilMiner);
 	$("#SteelMiner").text("Steel Miner: " + SaveData.SteelMiner);
 	$("#BauxiteMiner").text("Bauxite Miner: " + SaveData.BauxiteMiner);
-	//$("#City").text("Cities: " + SaveData.City);
+
+	$("#FleetSize").text("FleetSize: " + SaveData.FleetSize);
+	$("#Destroyer").text("Destroyer: " + SaveData.Destroyer);
+	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser);
+	$("#BattleShip").text("BattleShip: " + SaveData.BattleShip);
+	$("#Carrier").text("Carrier: " + SaveData.Carrier);
+	$("#Submarine").text("Submarine: " + SaveData.Submarine);
 }
 
 function OnSave()
 {
+	var string = JSON.stringify(SaveData);
+	//string = LZString.compress(string);
+	localStorage.setItem("IdleBuilderSave", string);
+	
+}
 
+function OnLoad()
+{
+	var string = localStorage.getItem("IdleBuilderSave");
+	//string = LZString.decompress(compressed);
+	if (string)
+	{
+		SaveData = JSON.parse(SaveData);
+	}
 }
 
 window.addEventListener("load", function(){
+	//OnLoad();
+	OnRender();
 	setInterval(OnRender, 50);
 	setInterval(OnTick, 1000);
 	setInterval(OnSave, 1000 * 300);

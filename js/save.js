@@ -17,7 +17,7 @@ SaveData = {
 	FleetSize : 10,
 
 	Destroyer : 0,
-	Criuser : 0,
+	Cruiser : 0,
 	BattleShip : 0,
 	Carrier : 0,
 	Submarine : 0,

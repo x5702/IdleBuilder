@@ -41,7 +41,7 @@ div#Ally {
 }
 
 div#main-right {
-    width: 50%;
+    width: 500px;
     float: right;
     border-left: 1px solid gray;
     padding: 1em;
