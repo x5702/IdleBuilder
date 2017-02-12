@@ -1,28 +1,58 @@
 StaticData = {
-	ManpowerPerSec : function() {
-		return 10;
+	ManpowerPerUnitPerSec : function() {
+		return 10 + 2 * SaveData.City;
 	},
-	FuelPerSec : function() {
-		return 10;
+	FuelPerUnitPerSec : function() {
+		return 5 + 1 * SaveData.OilMiner;
 	},
-	SteelPerSec : function() {
-		return 10;
+	SteelPerUnitPerSec : function() {
+		return 5 + 1 * SaveData.SteelMiner;
 	},
-	BauxitePerSec : function() {
-		return 10;
+	BauxitePerUnitPerSec : function() {
+		return 5 + 1 * SaveData.BauxiteMiner;
 	},
 
 	CityBuildCost : function() {
-		return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0};
+		var ManpowerCost = 100;
+		for (var i = 0; i < SaveData.City; i ++)
+		{
+			ManpowerCost += ManpowerCost * 0.1;
+		}
+		
+		return {Manpower : ManpowerCost , Fuel : 0, Steel : 0, Bauxite : 0};
 	},
 	OilMinerBuildCost : function() {
-		return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0};
+		var ManpowerCost = 100;
+		
+		for (var i = 0; i < SaveData.OilMiner; i ++)
+		{
+			ManpowerCost += ManpowerCost * 0.2;
+		}
+		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0};
 	},
 	SteelMinerBuildCost : function() {
-		return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0};
+		var ManpowerCost = 50;
+		var FuelCost = 100;	
+		
+		for (var i = 0; i < SaveData.SteelMiner; i ++)
+		{
+			ManpowerCost += ManpowerCost * 0.1;
+			FuelCost += FuelCost * 0.2;
+		}	
+	
+		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0};
 	},
 	BauxiteMinerBuildCost : function() {
-		return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0};
+		var ManpowerCost = 100;
+		var FuelCost = 50;	
+		
+		for (var i = 0; i < SaveData.BauxiteMiner; i ++)
+		{
+			ManpowerCost += ManpowerCost * 0.2;
+			FuelCost += FuelCost * 0.1;
+		}	
+	
+		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0};
 	},
 
 	DestroyerSize : function() {
