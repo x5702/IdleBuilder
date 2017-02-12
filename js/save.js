@@ -13,4 +13,16 @@ SaveData = {
 	ShipFactory : 0,
 	EquipmentFactory : 0,
 	ResearchLab : 0,
+
+	FleetSize : 10,
+
+	Destroyer : 0,
+	Criuser : 0,
+	BattleShip : 0,
+	Carrier : 0,
+	Submarine : 0,
+
+	Technology : {
+		CityLevel : 0,
+	}
 };
