@@ -249,8 +249,8 @@ function OnInit()
 		var building = Buildings[i];
 		buildingTable.append("<tr>\n\
 			<td id='" + building + "'></td>\n\
-			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',1)>Build</button></td>\n\
-			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',-1)>Demolish</button></td>\n\
+			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',1)>+</button></td>\n\
+			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',-1)>-</button></td>\n\
 			</tr>\n\
 			<tr>\n\
 			<td><progress value=1 id='" + building + "Progress'></progress></td>\n\
