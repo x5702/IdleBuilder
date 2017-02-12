@@ -1,0 +1,49 @@
+div#header {
+    width: 100%;
+    border: 1px solid gray;
+
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+div#header ul {
+    list-style-type: none;
+}
+
+div#header ul li {
+    float: left;
+    text-decoration: none;
+    padding-right: 2em;
+}
+
+div#header ul li a {
+    text-decoration: none;
+    color: yellow;
+}
+
+div#header ul#tabs {
+     float: right;
+}
+
+div#main-left {
+    width: auto;
+    float: left;
+    margin: 0;
+    padding: 1em;
+}
+
+div#Ally {
+    width:100%;
+    border-bottom: 1px solid gray;
+}
+
+div#main-right {
+    width: 50%;
+    float: right;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
