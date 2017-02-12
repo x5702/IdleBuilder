@@ -1,0 +1,5 @@
+Formula = {
+	ShortRangeDamage : function() {
+		
+	}
+}

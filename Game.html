@@ -52,7 +52,7 @@
 					<td rowspan="2"><button onclick="OnBuildCity(-1)">Demolish</button></td>
 				</tr>
 				<tr>
-					<td>//progress bar//</td>
+					<td><progress value="1">100%</progress></td>
 				</tr>
 				<tr>
 					<td id="OilMiner">Oil Miner: 0</td>
@@ -60,7 +60,7 @@
 					<td rowspan="2"><button onclick="OnBuildOilMiner(-1)">Demolish</button></td>
 				</tr>
 				<tr>
-					<td>//progress bar//</td>
+					<td><progress value="1">100%</progress></td>
 				</tr>
 				<tr>
 					<td id="SteelMiner">Steel Miner: 0</td>
@@ -68,7 +68,7 @@
 					<td rowspan="2"><button onclick="OnBuildSteelMiner(-1)">Demolish</button></td>
 				</tr>
 				<tr>
-					<td>//progress bar//</td>
+					<td><progress value="1">100%</progress></td>
 				</tr>
 				<tr>
 					<td id="BauxiteMiner">Bauxite Miner: 0</td>
@@ -76,7 +76,7 @@
 					<td rowspan="2"><button onclick="OnBuildBauxiteMiner(-1)">Demolish</button></td>
 				</tr>
 				<tr>
-					<td>//progress bar//</td>
+					<td><progress value="1">100%</progress></td>
 				</tr>
 				<tr>
 					<td>Ship Factory: 0</td>
@@ -163,16 +163,35 @@
 			</table></div>
 
 			<div class="tab" id="Design" style="display:none">
-				<p>Destroyer</p>
-				<p>Engine</p>
-				<p>Main Gun 1:</p>
-				<p>Main Gun 2:</p>
+				<p>Destroyer:</p>
+				<table>
+					<tr><td>Engine</td>
+						<td><select name="">
+						<option value="1">Engine I</option>
+						</select></td>
+					</tr>
+					<tr><td>Armor</td>
+						<td><select name="">
+						<option value="1">Light Armor I</option>
+						</select></td>
+					</tr>
+					<tr><td>Main Gun</td>
+						<td><select name="">
+						<option value="1">Light Gun I</option>
+						</select></td>
+					</tr>
+					<tr><td>Torpedo</td>
+						<td><select name="">
+						<option value="1">Torpedo I</option>
+						</select></td>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<div id="main-left">
 			<div id="Ally"><table>
 				<tr>
-					<td id="FleetSize">Fleet Size: 0/10</td>
+					<td id="FleetSize" rowspan="2">Fleet Size: 0/10</td>
 					<td>
 						<span id="Destroyer">Destroyer: 0/0</span>
 						<button onclick="OnAddDestroyer(1)">+</button>
@@ -197,6 +216,23 @@
 						<span id="Submarine">Submarine: 0/0</span>
 						<button>+</button>
 						<button>-</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
 					</td>
 				</tr>
 				<tr>
@@ -244,12 +280,29 @@
 			</table></div>
 			<div id="Enemy"><table>
 				<tr>
-					<td>Enemy Fleet</td>
+					<td rowspan="2">Enemy Fleet</td>
 					<td id="EnemyDestroyer">Destroyer X 0</td>
 					<td id="EnemyCruiser">Cruiser X 0</td>
 					<td id="EnemyCarrier">Carrier X 0</td>
 					<td id="EnemyBattleship">Battleship X 0</td>
 					<td id="EnemySubmarine">Submarine X 0</td>
+				</tr>
+				<tr>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
+					<td>
+						<progress value="0">0%</progress>
+					</td>
 				</tr>
 				<tr>
 					<td id="EnemyFleetStat">

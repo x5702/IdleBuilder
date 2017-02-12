@@ -62,6 +62,9 @@ StaticData = {
 		Evade : function() {
 			return 0.5;
 		},
+		Cost : function() {
+			return {Manpower : 0, Fuel : 100, Steel : 100, Bauxite : 0, Time: 10};
+		},
 	},
 
 	LightGunAttack : function() {

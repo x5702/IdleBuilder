@@ -42,36 +42,40 @@ function OnTab(name)
 
 function OnBuildCity(n)
 {
-	if (CheckResource(StaticData.CityBuildCost(), n) && CheckTerritory(n))
+	var cost = StaticData.CityBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
-		ConsumeResource(StaticData.CityBuildCost(), n);
+		ConsumeResource(cost, n);
 		SaveData.City += n;
 	}
 }
 
 function OnBuildOilMiner(n)
 {
-	if (CheckResource(StaticData.OilMinerBuildCost(), n) && CheckTerritory(n))
+	var cost = StaticData.OilMinerBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
-		ConsumeResource(StaticData.OilMinerBuildCost(), n);
+		ConsumeResource(cost, n);
 		SaveData.OilMiner += n;
 	}
 }
 
 function OnBuildSteelMiner(n)
 {
-	if (CheckResource(StaticData.SteelMinerBuildCost(), n) && CheckTerritory(n))
+	var cost = StaticData.SteelMinerBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
-		ConsumeResource(StaticData.SteelMinerBuildCost(), n);
+		ConsumeResource(cost, n);
 		SaveData.SteelMiner += n;
 	}
 }
 
 function OnBuildBauxiteMiner(n)
 {
-	if (CheckResource(StaticData.BauxiteMinerBuildCost(), n) && CheckTerritory(n))
+	var cost = StaticData.BauxiteMinerBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
-		ConsumeResource(StaticData.BauxiteMinerBuildCost(), n);
+		ConsumeResource(cost, n);
 		SaveData.BauxiteMiner += n;
 	}
 }
@@ -81,7 +85,59 @@ function OnAddDestroyer(n)
 	if (OccupiedFleetSize() + StaticData.Destroyer.Size() * n <= SaveData.FleetSize)
 	{
 		SaveData.DestroyerPlanned += n;
+		if(SaveData.Destroyer > SaveData.DestroyerPlanned)
+		{
+			SaveData.Destroyer = SaveData.DestroyerPlanned;
+		}
 	}
+}
+
+function OnProductionPhase()
+{
+	if (SaveData.Destroyer < SaveData.DestroyerPlanned)
+	{
+		var cost = StaticData.Destroyer.Cost();
+		if(CheckResource(cost, 1))
+		{
+			ConsumeResource(cost, 1);
+			//Add Build Time Delay
+			SaveData.Destroyer++;
+		}
+	}
+	else
+	{
+		SaveData.Phase++;
+	}
+}
+
+function OnReconPhase()
+{
+	SaveData.Phase++;
+}
+
+function OnAirAttackPhase()
+{
+	SaveData.Phase++;
+}
+
+function OnSubmarineTorpedoPhase()
+{
+	SaveData.Phase++;
+}
+
+function OnLongRangeFirePhase()
+{
+	SaveData.Phase++;
+}
+
+function OnShortRangeFirePhase()
+{
+	SaveData.Phase++;
+}
+
+function OnTorpedoPhase()
+{
+	SaveData.Phase = 0;
 }
 
 function OnTick()
@@ -92,9 +148,31 @@ function OnTick()
 	SaveData.Steel = SaveData.Steel + StaticData.SteelPerSec();
 	SaveData.Bauxite = SaveData.Bauxite + StaticData.BauxitePerSec();
 
-	//Update Production
-
-	//Update Battle
+	//Update Battle Phase
+	switch(SaveData.BattlePhase)
+	{
+		case 0:
+			OnProductionPhase();
+			break;
+		case 1:
+			OnReconPhase();
+			break;
+		case 2:
+			OnAirAttackPhase();
+			break;
+		case 3:
+			OnSubmarineTorpedoPhase();
+			break;
+		case 4:
+			OnLongRangeFirePhase();
+			break;
+		case 5:
+			OnShortRangeFirePhase();
+			break;
+		case 6:
+			OnTorpedoPhase();
+			break;
+	}
 }
 
 function OnRender()
