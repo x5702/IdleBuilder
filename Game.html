@@ -41,98 +41,10 @@
 
 		</div>
 		<div id="main-right">
-			<div class="tab" id="Infrastructure"><table>
+			<div class="tab" id="Infrastructure"><table id="Buildings">
 				<tr>
 					<td>Total Territory:</td>
 					<td id="Territory" colspan="2">0/10</td>
-				</tr>
-				<tr>
-					<td id="City">City: 1</td>
-					<td rowspan="2"><button onclick="OnBuildCity(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildCity(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td id="OilMiner">Oil Miner: 0</td>
-					<td rowspan="2"><button onclick="OnBuildOilMiner(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildOilMiner(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td id="OilStorage">Oil Storage: 0</td>
-					<td rowspan="2"><button onclick="OnBuildOilStorage(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildOilStorage(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td id="SteelMiner">Steel Miner: 0</td>
-					<td rowspan="2"><button onclick="OnBuildSteelMiner(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildSteelMiner(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td id="SteelStorage">Steel Storage: 0</td>
-					<td rowspan="2"><button onclick="OnBuildSteelStorage(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildSteelStorage(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td id="BauxiteMiner">Bauxite Miner: 0</td>
-					<td rowspan="2"><button onclick="OnBuildBauxiteMiner(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildBauxiteMiner(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td id="BauxiteStorage">Bauxite Storage: 0</td>
-					<td rowspan="2"><button onclick="OnBuildBauxiteStorage(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildBauxiteStorage(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td><progress value="1">100%</progress></td>
-				</tr>
-				<tr>
-					<td>Ship Factory: 0</td>
-					<td rowspan="2"><button onclick="OnBuildShipFactory(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildShipFactory(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-				<tr>
-					<td>Equipment Factory: 0</td>
-					<td rowspan="2"><button onclick="OnBuildEquipmentFactory(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildEquipmentFactory(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-				<tr>
-					<td>Aircraft Factory: 0</td>
-					<td rowspan="2"><button onclick="OnBuildAircraftFactory(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildAircraftFactory(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-				<tr>
-					<td>Research Lab: 0</td>
-					<td rowspan="2"><button onclick="OnBuildResearchLab(1)">Build</button></td>
-					<td rowspan="2"><button onclick="OnBuildResearchLab(-1)">Demolish</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
 				</tr>
 			</table></div>
 
@@ -218,8 +130,8 @@
 					<td id="FleetSize" rowspan="2">Fleet Size: 0/10</td>
 					<td>
 						<span id="Destroyer">Destroyer: 0/0</span>
-						<button onclick="OnAddDestroyer(1)">+</button>
-						<button onclick="OnAddDestroyer(-1)">-</button>
+						<button onclick="OnBuildShip('Destroyer', 1)">+</button>
+						<button onclick="OnBuildShip('Destroyer', -1)">-</button>
 					</td>
 					<td>
 						<span id="Cruiser">Cruiser: 0/0</span>
@@ -244,19 +156,19 @@
 				</tr>
 				<tr>
 					<td>
-						<progress value="0">0%</progress>
+						<progress id="DestroyerHP" value="0">0%</progress>
 					</td>
 					<td>
-						<progress value="0">0%</progress>
+						<progress id="CruiserHP" value="0">0%</progress>
 					</td>
 					<td>
-						<progress value="0">0%</progress>
+						<progress id="CarrierHP" value="0">0%</progress>
 					</td>
 					<td>
-						<progress value="0">0%</progress>
+						<progress id="BattleshipHP" value="0">0%</progress>
 					</td>
 					<td>
-						<progress value="0">0%</progress>
+						<progress id="SubmarineHP" value="0">0%</progress>
 					</td>
 				</tr>
 				<tr>

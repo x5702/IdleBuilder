@@ -1,3 +1,26 @@
+//Helper Structure
+var Buildings = [
+	"City",
+	"OilMiner",
+	"OilStorage",
+	"SteelMiner",
+	"SteelStorage",
+	"BauxiteMiner",
+	"BauxiteStorage",
+	//"ShipFactory",
+	//"EquipmentFactory",
+	//"AircraftFactory",
+	//"ResearchLab",
+];
+
+var Ships = [
+	"Destroyer",
+	"Cruiser",
+	"Carrier",
+	"Battleship",
+	"Submarine",
+];
+
 //Utility Functions
 function CheckResource(cost, count)
 {
@@ -24,13 +47,8 @@ function OccupiedFleetSize()
 
 function UsedTerritory()
 {
-	return SaveData.City.Num + SaveData.OilMiner.Num + SaveData.SteelMiner.Num + SaveData.BauxiteMiner.Num + 
-		 SaveData.OilStorage.Num + SaveData.SteelStorage.Num + SaveData.BauxiteStorage.Num;
-}
-
-function CheckTerritory(count)
-{
-	return UsedTerritory() + count <= SaveData.Territory;
+	return SaveData.City.Planned + SaveData.OilMiner.Planned + SaveData.SteelMiner.Planned + SaveData.BauxiteMiner.Planned + 
+		 SaveData.OilStorage.Planned + SaveData.SteelStorage.Planned + SaveData.BauxiteStorage.Planned;
 }
 
 
@@ -41,99 +59,37 @@ function OnTab(name)
 	$("#" + name).show();
 }
 
-function OnBuildCity(n)
+function OnBuildBuilding(name, n)
 {
-	var cost = StaticData.CityBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
+	if (UsedTerritory() + n <= SaveData.Territory)
 	{
-		ConsumeResource(cost, n);
-		SaveData.City.Num += n;
-	}
-}
-
-function OnBuildOilMiner(n)
-{
-	var cost = StaticData.OilMinerBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
-	{
-		ConsumeResource(cost, n);
-		SaveData.OilMiner.Num += n;
-	}
-}
-
-function OnBuildOilStorage(n)
-{
-	var cost = StaticData.OilStorageBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
-	{
-		ConsumeResource(cost, n);
-		SaveData.OilStorage.Num += n;
-	}
-}
-
-function OnBuildSteelMiner(n)
-{
-	var cost = StaticData.SteelMinerBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
-	{
-		ConsumeResource(cost, n);
-		SaveData.SteelMiner.Num += n;
-	}
-}
-
-function OnBuildSteelStorage(n)
-{
-	var cost = StaticData.SteelStorageBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
-	{
-		ConsumeResource(cost, n);
-		SaveData.SteelStorage.Num += n;
-	}
-}
-
-function OnBuildBauxiteMiner(n)
-{
-	var cost = StaticData.BauxiteMinerBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
-	{
-		ConsumeResource(cost, n);
-		SaveData.BauxiteMiner.Num += n;
-	}
-}
-
-function OnBuildBauxiteStorage(n)
-{
-	var cost = StaticData.BauxiteStorageBuildCost();
-	if (CheckResource(cost, n) && CheckTerritory(n))
-	{
-		ConsumeResource(cost, n);
-		SaveData.BauxiteStorage.Num += n;
-	}
-}
-
-function OnAddDestroyer(n)
-{
-	if (OccupiedFleetSize() + StaticData.Destroyer.Size() * n <= SaveData.FleetSize)
-	{
-		SaveData.DestroyerPlanned += n;
-		if(SaveData.Destroyer > SaveData.DestroyerPlanned)
+		var min = (name == "City" ? 1 : 0);
+		SaveData[name].Planned = Math.max(min, SaveData[name].Planned + n);
+		if (SaveData[name].Num >= SaveData[name].Planned)
 		{
-			SaveData.Destroyer = SaveData.DestroyerPlanned;
+			SaveData[name].Num = SaveData[name].Planned;
+			SaveData[name].Progress = SaveData[name].Num > 0 ? 1 : 0;
+		}
+	}
+}
+
+function OnBuildShip(name, n)
+{
+	if (OccupiedFleetSize() + StaticData[name].Size() * n <= SaveData.FleetSize)
+	{
+		SaveData[name + "Planned"] = Math.max(0, SaveData[name + "Planned"] + n);
+		if (SaveData[name][0].Num > SaveData[name + "Planned"])
+		{
+			SaveData[name][0].Num = SaveData[name + "Planned"];
+			SaveData[name][0].HP = SaveData[name][0].Num > 0 ? 1 : 0;
 		}
 	}
 }
 
 function OnProductionPhase()
 {
-	if (SaveData.Destroyer < SaveData.DestroyerPlanned)
+	if (SaveData.Destroyer[0].Num < SaveData.DestroyerPlanned)
 	{
-		var cost = StaticData.Destroyer.Cost();
-		if(CheckResource(cost, 1))
-		{
-			ConsumeResource(cost, 1);
-			//Add Build Time Delay
-			SaveData.Destroyer++;
-		}
 	}
 	else
 	{
@@ -208,27 +164,98 @@ function OnTick()
 
 function OnRender()
 {
-	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
-
 	$("#Manpower").text("Manpower: " + Math.floor(SaveData.Manpower) + " + " + Math.floor(StaticData.ManpowerPerSec()) + "/d / " + Math.floor(StaticData.ManpowerMax()));
 	$("#Fuel").text("Fuel: " + Math.floor(SaveData.Fuel) + " + " + Math.floor(StaticData.FuelPerSec()) + "/d / " + Math.floor(StaticData.FuelMax()));
 	$("#Steel").text("Steel: " + Math.floor(SaveData.Steel) + " + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()));
 	$("#Bauxite").text("Bauxite: " + Math.floor(SaveData.Bauxite) + " + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()));
 
-	$("#City").text("City: " + SaveData.City.Num);
-	$("#OilMiner").text("Oil Miner: " + SaveData.OilMiner.Num);
-	$("#OilStorage").text("Oil Storage: " + SaveData.OilStorage.Num);
-	$("#SteelMiner").text("Steel Miner: " + SaveData.SteelMiner.Num);
-	$("#SteelStorage").text("Steel Storage: " + SaveData.SteelStorage.Num);
-	$("#BauxiteMiner").text("Bauxite Miner: " + SaveData.BauxiteMiner.Num);
-	$("#BauxiteStorage").text("Bauxite Storage: " + SaveData.BauxiteStorage.Num);
+
+	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
+
+	//Update Infrastructure Building
+	for(var i = 0; i < Buildings.length; i++)
+	{
+		var building = Buildings[i];
+		if (SaveData[building].Num < SaveData[building].Planned)
+		{
+			var cost = StaticData[building+"BuildCost"]();
+			if (SaveData[building].Progress >= 1)
+			{
+				SaveData[building].Progress = 0;
+			}
+			if (SaveData[building].Progress == 0)
+			{
+				if(CheckResource(cost, 1))
+				{
+					ConsumeResource(cost, 1);
+					SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
+				}
+			}
+			else if (SaveData[building].Progress < 1)
+			{
+				SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
+				if (SaveData[building].Progress >= 1)
+				{
+					SaveData[building].Num++;
+				}
+			}
+		}
+		$("#"+building).text(building + ": " + SaveData[building].Num + " / " + SaveData[building].Planned);
+		$("#"+building+"Progress").attr("value",SaveData[building].Progress);
+	}
 
 	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + SaveData.FleetSize);
-	$("#Destroyer").text("Destroyer: " + SaveData.Destroyer[0].Num + " / " + SaveData.DestroyerPlanned);
+
+	//Update Ship Production
+	if(SaveData.BattlePhase == 0)
+	{
+		for(var i = 0; i < 1/*Ships.length*/; i++)
+		{
+			var ship = Ships[i];
+			if (SaveData[ship][0].Num <= SaveData[ship+"Planned"])
+			{
+				var cost = StaticData[ship].Cost();
+				if (SaveData[ship][0].HP < 1 && SaveData[ship][0].Num > 0)
+				{
+					SaveData[ship][0].HP = Math.min(SaveData[ship][0].HP + 0.05 / cost.Time, 1);
+				}
+				else if (SaveData[ship][0].Num < SaveData[ship+"Planned"])
+				{
+					if(CheckResource(cost, 1))
+					{
+						ConsumeResource(cost, 1);
+						SaveData[ship][0].HP = 0;
+						SaveData[ship][0].Num++;
+					}
+				}
+			}
+			$("#"+ship).text(ship + ": " + SaveData[ship][0].Num + " / " + SaveData[ship+"Planned"]);
+			$("#"+ship+"HP").attr("value",SaveData[ship][0].HP);
+		}
+	}
+
+
 	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser[0].Num + " / " + SaveData.CruiserPlanned);
 	$("#Battleship").text("Battleship: " + SaveData.Battleship[0].Num + " / " + SaveData.BattleshipPlanned);
 	$("#Carrier").text("Carrier: " + SaveData.Carrier[0].Num + " / " + SaveData.CarrierPlanned);
 	$("#Submarine").text("Submarine: " + SaveData.Submarine[0].Num + " / " + SaveData.SubmarinePlanned);
+}
+
+function OnInit()
+{
+	var buildingTable = $("#Buildings");
+	for(i = 0; i < Buildings.length; i++)
+	{
+		var building = Buildings[i];
+		buildingTable.append("<tr>\n\
+			<td id='" + building + "'></td>\n\
+			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',1)>Build</button></td>\n\
+			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',-1)>Demolish</button></td>\n\
+			</tr>\n\
+			<tr>\n\
+			<td><progress value=1 id='" + building + "Progress'></progress></td>\n\
+			</tr>\n");
+	}
 }
 
 function ResetSave()
@@ -255,6 +282,7 @@ function OnLoad()
 
 window.addEventListener("load", function(){
 	OnLoad();
+	OnInit();
 	OnRender();
 	setInterval(OnRender, 50);
 	setInterval(OnTick, 1000);
