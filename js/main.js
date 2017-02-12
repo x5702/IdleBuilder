@@ -24,7 +24,8 @@ function OccupiedFleetSize()
 
 function UsedTerritory()
 {
-	return SaveData.City + SaveData.OilMiner + SaveData.SteelMiner + SaveData.BauxiteMiner;
+	return SaveData.City.Num + SaveData.OilMiner.Num + SaveData.SteelMiner.Num + SaveData.BauxiteMiner.Num + 
+		 SaveData.OilStorage.Num + SaveData.SteelStorage.Num + SaveData.BauxiteStorage.Num;
 }
 
 function CheckTerritory(count)
@@ -46,7 +47,7 @@ function OnBuildCity(n)
 	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
 		ConsumeResource(cost, n);
-		SaveData.City += n;
+		SaveData.City.Num += n;
 	}
 }
 
@@ -56,7 +57,17 @@ function OnBuildOilMiner(n)
 	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
 		ConsumeResource(cost, n);
-		SaveData.OilMiner += n;
+		SaveData.OilMiner.Num += n;
+	}
+}
+
+function OnBuildOilStorage(n)
+{
+	var cost = StaticData.OilStorageBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
+	{
+		ConsumeResource(cost, n);
+		SaveData.OilStorage.Num += n;
 	}
 }
 
@@ -66,7 +77,17 @@ function OnBuildSteelMiner(n)
 	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
 		ConsumeResource(cost, n);
-		SaveData.SteelMiner += n;
+		SaveData.SteelMiner.Num += n;
+	}
+}
+
+function OnBuildSteelStorage(n)
+{
+	var cost = StaticData.SteelStorageBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
+	{
+		ConsumeResource(cost, n);
+		SaveData.SteelStorage.Num += n;
 	}
 }
 
@@ -76,7 +97,17 @@ function OnBuildBauxiteMiner(n)
 	if (CheckResource(cost, n) && CheckTerritory(n))
 	{
 		ConsumeResource(cost, n);
-		SaveData.BauxiteMiner += n;
+		SaveData.BauxiteMiner.Num += n;
+	}
+}
+
+function OnBuildBauxiteStorage(n)
+{
+	var cost = StaticData.BauxiteStorageBuildCost();
+	if (CheckResource(cost, n) && CheckTerritory(n))
+	{
+		ConsumeResource(cost, n);
+		SaveData.BauxiteStorage.Num += n;
 	}
 }
 
@@ -143,10 +174,10 @@ function OnTorpedoPhase()
 function OnTick()
 {
 	//Update Resources
-	SaveData.Manpower = SaveData.Manpower + StaticData.ManpowerPerSec();
-	SaveData.Fuel = SaveData.Fuel + StaticData.FuelPerSec();
-	SaveData.Steel = SaveData.Steel + StaticData.SteelPerSec();
-	SaveData.Bauxite = SaveData.Bauxite + StaticData.BauxitePerSec();
+	SaveData.Manpower = Math.min(StaticData.ManpowerMax(), SaveData.Manpower + StaticData.ManpowerPerSec());
+	SaveData.Fuel = Math.min(StaticData.FuelMax(), SaveData.Fuel + StaticData.FuelPerSec());
+	SaveData.Steel = Math.min(StaticData.SteelMax(), SaveData.Steel + StaticData.SteelPerSec());
+	SaveData.Bauxite = Math.min(StaticData.BauxiteMax(), SaveData.Bauxite + StaticData.BauxitePerSec());
 
 	//Update Battle Phase
 	switch(SaveData.BattlePhase)
@@ -179,22 +210,25 @@ function OnRender()
 {
 	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
 
-	$("#Manpower").text("Manpower: " + Math.floor(SaveData.Manpower) + " + " + Math.floor(StaticData.ManpowerPerSec()) + "/d");
-	$("#Fuel").text("Fuel: " + Math.floor(SaveData.Fuel) + " + " + Math.floor(StaticData.FuelPerSec()) + "/d");
-	$("#Steel").text("Steel: " + Math.floor(SaveData.Steel) + " + " + Math.floor(StaticData.SteelPerSec()) + "/d");
-	$("#Bauxite").text("Bauxite: " + Math.floor(SaveData.Bauxite) + " + " + Math.floor(StaticData.BauxitePerSec()) + "/d");
+	$("#Manpower").text("Manpower: " + Math.floor(SaveData.Manpower) + " + " + Math.floor(StaticData.ManpowerPerSec()) + "/d / " + Math.floor(StaticData.ManpowerMax()));
+	$("#Fuel").text("Fuel: " + Math.floor(SaveData.Fuel) + " + " + Math.floor(StaticData.FuelPerSec()) + "/d / " + Math.floor(StaticData.FuelMax()));
+	$("#Steel").text("Steel: " + Math.floor(SaveData.Steel) + " + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()));
+	$("#Bauxite").text("Bauxite: " + Math.floor(SaveData.Bauxite) + " + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()));
 
-	$("#City").text("City: " + SaveData.City);
-	$("#OilMiner").text("Oil Miner: " + SaveData.OilMiner);
-	$("#SteelMiner").text("Steel Miner: " + SaveData.SteelMiner);
-	$("#BauxiteMiner").text("Bauxite Miner: " + SaveData.BauxiteMiner);
+	$("#City").text("City: " + SaveData.City.Num);
+	$("#OilMiner").text("Oil Miner: " + SaveData.OilMiner.Num);
+	$("#OilStorage").text("Oil Storage: " + SaveData.OilStorage.Num);
+	$("#SteelMiner").text("Steel Miner: " + SaveData.SteelMiner.Num);
+	$("#SteelStorage").text("Steel Storage: " + SaveData.SteelStorage.Num);
+	$("#BauxiteMiner").text("Bauxite Miner: " + SaveData.BauxiteMiner.Num);
+	$("#BauxiteStorage").text("Bauxite Storage: " + SaveData.BauxiteStorage.Num);
 
 	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + SaveData.FleetSize);
-	$("#Destroyer").text("Destroyer: " + SaveData.Destroyer + " / " + SaveData.DestroyerPlanned);
-	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser + " / " + SaveData.CruiserPlanned);
-	$("#Battleship").text("Battleship: " + SaveData.Battleship + " / " + SaveData.BattleshipPlanned);
-	$("#Carrier").text("Carrier: " + SaveData.Carrier + " / " + SaveData.CarrierPlanned);
-	$("#Submarine").text("Submarine: " + SaveData.Submarine + " / " + SaveData.SubmarinePlanned);
+	$("#Destroyer").text("Destroyer: " + SaveData.Destroyer[0].Num + " / " + SaveData.DestroyerPlanned);
+	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser[0].Num + " / " + SaveData.CruiserPlanned);
+	$("#Battleship").text("Battleship: " + SaveData.Battleship[0].Num + " / " + SaveData.BattleshipPlanned);
+	$("#Carrier").text("Carrier: " + SaveData.Carrier[0].Num + " / " + SaveData.CarrierPlanned);
+	$("#Submarine").text("Submarine: " + SaveData.Submarine[0].Num + " / " + SaveData.SubmarinePlanned);
 }
 
 function ResetSave()

@@ -1,29 +1,13 @@
 SaveData = {
-	Manpower : {
-		Stock : 0,
-		Max : 1000,
-	}, 
-	Fuel : {
-		Stock : 0,
-		Max : 1000,
-	},
-	Steel : {
-		Stock : 0,
-		Max : 1000,
-	},
-	Bauxite : {
-		Stock : 0,
-		Max : 1000,
-	},
+	Manpower : 0,
+	Fuel : 0,
+	Steel : 0,
+	Bauxite : 0,
 
 	Territory : 10,
 
 	City : {
 		Num : 1,
-		Progress : 0,
-	},
-	ManpowerStorage : {	//WTF???????
-		Num : 0,
 		Progress : 0,
 	},
 	OilMiner : {
@@ -63,6 +47,7 @@ SaveData = {
 		Progress : 0,
 	},
 
+	BattlePhase : 0,
 	FleetSize : 10,
 
 	Destroyer : [
@@ -121,8 +106,6 @@ SaveData = {
 	BattleshipPlanned : 0,
 	CarrierPlanned : 0,
 	SubmarinePlanned : 0,
-
-	BattlePhase : 0,
 
 	Technology : {
 		CityLevel : 0,
