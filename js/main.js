@@ -26,7 +26,7 @@ function CheckTerritory(count)
 	return UsedTerritory() + count <= SaveData.Territory;
 }
 
-function OnTab()
+function OnTab(name)
 {
 
 }
@@ -70,10 +70,10 @@ function OnBuildBauxiteMiner(n)
 function OnTick()
 {
 	//Update Resources
-	SaveData.Manpower = SaveData.Manpower + SaveData.City * StaticData.ManpowerPerUnitPerSec();
-	SaveData.Fuel = SaveData.Fuel + SaveData.OilMiner * StaticData.FuelPerUnitPerSec();
-	SaveData.Steel = SaveData.Steel + SaveData.SteelMiner * StaticData.SteelPerUnitPerSec();
-	SaveData.Bauxite = SaveData.Bauxite + SaveData.BauxiteMiner * StaticData.BauxitePerUnitPerSec();
+	SaveData.Manpower = SaveData.Manpower + StaticData.ManpowerPerSec();
+	SaveData.Fuel = SaveData.Fuel + StaticData.FuelPerSec();
+	SaveData.Steel = SaveData.Steel + StaticData.SteelPerSec();
+	SaveData.Bauxite = SaveData.Bauxite + StaticData.BauxitePerSec();
 
 	//Update Production
 
@@ -84,10 +84,10 @@ function OnRender()
 {
 	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
 
-	$("#Manpower").text("Manpower: " + SaveData.Manpower + " + " + SaveData.City * StaticData.ManpowerPerUnitPerSec() + "/d");
-	$("#Fuel").text("Fuel: " + SaveData.Fuel + " + " + SaveData.OilMiner * StaticData.FuelPerUnitPerSec() + "/d");
-	$("#Steel").text("Steel: " + SaveData.Steel + " + " + SaveData.SteelMiner * StaticData.SteelPerUnitPerSec() + "/d");
-	$("#Bauxite").text("Bauxite: " + SaveData.Bauxite + " + " + SaveData.BauxiteMiner * StaticData.BauxitePerUnitPerSec() + "/d");
+	$("#Manpower").text("Manpower: " + SaveData.Manpower + " + " + SaveData.City * StaticData.ManpowerPerSec() + "/d");
+	$("#Fuel").text("Fuel: " + SaveData.Fuel + " + " + SaveData.OilMiner * StaticData.FuelPerSec() + "/d");
+	$("#Steel").text("Steel: " + SaveData.Steel + " + " + SaveData.SteelMiner * StaticData.SteelPerSec() + "/d");
+	$("#Bauxite").text("Bauxite: " + SaveData.Bauxite + " + " + SaveData.BauxiteMiner * StaticData.BauxitePerSec() + "/d");
 
 	$("#City").text("City: " + SaveData.City);
 	$("#OilMiner").text("Oil Miner: " + SaveData.OilMiner);
@@ -96,7 +96,13 @@ function OnRender()
 	//$("#City").text("Cities: " + SaveData.City);
 }
 
+function OnSave()
+{
+
+}
+
 window.addEventListener("load", function(){
 	setInterval(OnRender, 50);
 	setInterval(OnTick, 1000);
+	setInterval(OnSave, 1000 * 300);
 })
