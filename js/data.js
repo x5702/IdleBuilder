@@ -1,58 +1,52 @@
+ConstData = {
+	BaseCost : 100,
+};
+
 StaticData = {
 	ManpowerPerSec : function() {
-		return 10 + 2 * SaveData.City;
+		return 20 + 2 * SaveData.City;
 	},
 	FuelPerSec : function() {
 		return 5 + 1 * SaveData.OilMiner;
 	},
 	SteelPerSec : function() {
-		return 5 + 1 * SaveData.SteelMiner;
+		return 3 + 1 * SaveData.SteelMiner;
 	},
 	BauxitePerSec : function() {
-		return 5 + 1 * SaveData.BauxiteMiner;
+		return 3 + 1 * SaveData.BauxiteMiner;
 	},
 
 	CityBuildCost : function() {
-		var ManpowerCost = 100;
-		for (var i = 0; i < SaveData.City; i ++)
-		{
-			ManpowerCost += ManpowerCost * 0.1;
-		}
+		var ManpowerCost = ConstData.BaseCost;
 		
-		return {Manpower : ManpowerCost , Fuel : 0, Steel : 0, Bauxite : 0};
+		ManpowerCost *= Math.pow( 1.4, SaveData.City);	
+			
+		return {Manpower : ManpowerCost , Fuel : 0, Steel : 0, Bauxite : 0 ,  Time: 1 + SaveData.City * 2};
 	},
 	OilMinerBuildCost : function() {
-		var ManpowerCost = 100;
+		var ManpowerCost = ConstData.BaseCost;
 		
-		for (var i = 0; i < SaveData.OilMiner; i ++)
-		{
-			ManpowerCost += ManpowerCost * 0.2;
-		}
-		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0};
+		ManpowerCost *= Math.pow( 1.6, SaveData.City);	
+		
+		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 1 + SaveData.City * 2};
 	},
 	SteelMinerBuildCost : function() {
-		var ManpowerCost = 50;
-		var FuelCost = 100;	
+		var ManpowerCost = ConstData.BaseCost;
+		var FuelCost = 2 * ConstData.BaseCost;	
 		
-		for (var i = 0; i < SaveData.SteelMiner; i ++)
-		{
-			ManpowerCost += ManpowerCost * 0.1;
-			FuelCost += FuelCost * 0.2;
-		}	
-	
-		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0};
+		ManpowerCost *= Math.pow( 1.6, SaveData.City);	
+		FuelCost *= Math.pow( 1.6, SaveData.OilMiner);	
+		
+		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: 1 + SaveData.City * 2};
 	},
 	BauxiteMinerBuildCost : function() {
-		var ManpowerCost = 100;
-		var FuelCost = 50;	
+		var ManpowerCost = 2 * ConstData.BaseCost;
+		var FuelCost = ConstData.BaseCost;	
 		
-		for (var i = 0; i < SaveData.BauxiteMiner; i ++)
-		{
-			ManpowerCost += ManpowerCost * 0.2;
-			FuelCost += FuelCost * 0.1;
-		}	
+		ManpowerCost *= Math.pow( 1.6, SaveData.City);	
+		FuelCost *= Math.pow( 1.6, SaveData.OilMiner);	
 	
-		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0};
+		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: 1 + SaveData.City * 2};
 	},
 
 	Destroyer : {
