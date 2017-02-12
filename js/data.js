@@ -1,14 +1,14 @@
 StaticData = {
-	ManpowerPerUnitPerSec : function() {
+	ManpowerPerSec : function() {
 		return 10 + 2 * SaveData.City;
 	},
-	FuelPerUnitPerSec : function() {
+	FuelPerSec : function() {
 		return 5 + 1 * SaveData.OilMiner;
 	},
-	SteelPerUnitPerSec : function() {
+	SteelPerSec : function() {
 		return 5 + 1 * SaveData.SteelMiner;
 	},
-	BauxitePerUnitPerSec : function() {
+	BauxitePerSec : function() {
 		return 5 + 1 * SaveData.BauxiteMiner;
 	},
 

@@ -109,23 +109,22 @@ function OnRender()
 function OnSave()
 {
 	var string = JSON.stringify(SaveData);
-	//string = LZString.compress(string);
+	string = LZString.compress(string);
 	localStorage.setItem("IdleBuilderSave", string);
-	
 }
 
 function OnLoad()
 {
 	var string = localStorage.getItem("IdleBuilderSave");
-	//string = LZString.decompress(compressed);
+	string = LZString.decompress(string);
 	if (string)
 	{
-		SaveData = JSON.parse(SaveData);
+		SaveData = JSON.parse(string);
 	}
 }
 
 window.addEventListener("load", function(){
-	//OnLoad();
+	OnLoad();
 	OnRender();
 	setInterval(OnRender, 50);
 	setInterval(OnTick, 1000);
