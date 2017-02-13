@@ -41,16 +41,16 @@
 		</div>
 
 		<div class="container">
-			<div class="col-xs-3">
-				<div class="tab" id="Infrastructure"><table id="Buildings">
+			<div class="tab col-xs-12 col-sm-3" id="Build">
+				<table id="Buildings">
 					<tr>
 						<td>Total Territory:</td>
 						<td id="Territory" colspan="2">0/10</td>
 					</tr>
-				</table></div>
+				</table>
 			</div>
-			<div class="col-xs-3">
-				<div class="tab" id="Research"><table>
+			<div class="tab col-xs-12 col-sm-3 hidden-xs" id="Research">
+				<table>
 					<tr>
 						<td>Research Destroyer Class I: 0</td>
 						<td rowspan="2"><button>Start</button></td>
@@ -98,37 +98,35 @@
 					<tr>
 						<td>//progress bar//</td>
 					</tr>
-				</table></div>			
+				</table>
 			</div>
-			<div class="col-xs-3">
-				<div class="tab" id="Design">
-					<p>Destroyer:</p>
-					<table>
-						<tr><td>Engine</td>
-							<td><select name="">
-							<option value="1">Engine I</option>
-							</select></td>
-						</tr>
-						<tr><td>Armor</td>
-							<td><select name="">
-							<option value="1">Light Armor I</option>
-							</select></td>
-						</tr>
-						<tr><td>Main Gun</td>
-							<td><select name="">
-							<option value="1">Light Gun I</option>
-							</select></td>
-						</tr>
-						<tr><td>Torpedo</td>
-							<td><select name="">
-							<option value="1">Torpedo I</option>
-							</select></td>
-						</tr>
-					</table>
-				</div>
+			<div class="tab col-xs-12 col-sm-3 hidden-xs" id="Design">
+				<table>
+					<tr><td>Destroyer:</td></tr>
+					<tr><td>Engine</td>
+						<td><select name="">
+						<option value="1">Engine I</option>
+						</select></td>
+					</tr>
+					<tr><td>Armor</td>
+						<td><select name="">
+						<option value="1">Light Armor I</option>
+						</select></td>
+					</tr>
+					<tr><td>Main Gun</td>
+						<td><select name="">
+						<option value="1">Light Gun I</option>
+						</select></td>
+					</tr>
+					<tr><td>Torpedo</td>
+						<td><select name="">
+						<option value="1">Torpedo I</option>
+						</select></td>
+					</tr>
+				</table>
 			</div>
-			<div class="col-xs-3">
-				<div><table width="100%">
+			<div class="tab col-xs-12 col-sm-3 hidden-xs" id="Battle">
+				<table width="100%">
 					<tr>
 						<td id="FleetSize">Fleet Size: 0/10</td>
 						<td rowspan=17>vs</td>
@@ -306,22 +304,22 @@
 							Stealth:<br/>
 						</td>
 					</tr>
-				</table></div>
+				</table>
 			</div>
 		</div>
 
 		<div class="container" id="Footer">
 			<div class="col-xs-3 text-center">
-				<button>Build</button>
+				<button onclick="OnTab('Build')">Build</button>
 			</div>
 			<div class="col-xs-3 text-center">
-				<button>Research</button>
+				<button onclick="OnTab('Research')">Research</button>
 			</div>
 			<div class="col-xs-3 text-center">
-				<button>Design</button>
+				<button onclick="OnTab('Design')">Design</button>
 			</div>
 			<div class="col-xs-3 text-center">
-				<button>Battle</button>
+				<button onclick="OnTab('Battle')">Battle</button>
 			</div>
 		</div>
 

@@ -55,8 +55,8 @@ function UsedTerritory()
 //UI stuff
 function OnTab(name)
 {
-	$(".tab").hide();
-	$("#" + name).show();
+	$(".tab").addClass("hidden-xs");
+	$("#" + name).removeClass("hidden-xs");
 }
 
 function OnBuildBuilding(name, n)
