@@ -1,288 +1,294 @@
 <!doctype html>
 <html lang="en">
-
 	<head>
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<title>Idle Builder</title>
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap-theme.css">
 		<link rel="stylesheet" href="css/layout.css">
+	</head>
+
+	<body>
+		<div class="row" id="debug">
+			<span>Debug Menu:</span>
+			<button onclick="OnSave()">Save Now</button>
+			<button onclick="ResetSave()">Reset Save</button>
+		</div>
+		<div class="row" id="header">
+			<div class="col-md-8"><ul>
+				<li id="Manpower">Manpower: 0 + 0/s</li>
+				<li id="Fuel">Fuel: 0 + 0/s</li>
+				<li id="Steel">Steel: 0 + 0/s</li>
+				<li id="Bauxite">Bauxite: 0 + 0/s</li>
+			</ul></div>
+
+			<div class="col-md-4"><ul id="tabs">
+				<li><button onclick="OnTab('Infrastructure')">Infrastructure</button></li>
+				<li><button onclick="OnTab('Research')">Research</button></li>
+				<li><button onclick="OnTab('Design')">Design</button></li>
+			</ul></div>
+		</div>
+		<div class="row" id="middle">
+			<div class="col-md-1">
+				<p>Phase</p>
+				<p>Maintainence</p>
+			</div>
+			<div class="col-md-7" id="main-left">
+				<div id="Ally"><table>
+					<tr>
+						<td id="FleetSize" rowspan="2">Fleet Size: 0/10</td>
+						<td>
+							<span id="Destroyer">Destroyer: 0/0</span>
+							<button onclick="OnBuildShip('Destroyer', 1)">+</button>
+							<button onclick="OnBuildShip('Destroyer', -1)">-</button>
+						</td>
+						<td>
+							<span id="Cruiser">Cruiser: 0/0</span>
+							<button>+</button>
+							<button>-</button>
+						</td>
+						<td>
+							<span id="Carrier">Carrier: 0/0</span>
+							<button>+</button>
+							<button>-</button>
+						</td>
+						<td>
+							<span id="Battleship">Battleship: 0/0</span>
+							<button>+</button>
+							<button>-</button>
+						</td>
+						<td>
+							<span id="Submarine">Submarine: 0/0</span>
+							<button>+</button>
+							<button>-</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<progress id="DestroyerHP" value="0">0%</progress>
+						</td>
+						<td>
+							<progress id="CruiserHP" value="0">0%</progress>
+						</td>
+						<td>
+							<progress id="CarrierHP" value="0">0%</progress>
+						</td>
+						<td>
+							<progress id="BattleshipHP" value="0">0%</progress>
+						</td>
+						<td>
+							<progress id="SubmarineHP" value="0">0%</progress>
+						</td>
+					</tr>
+					<tr>
+						<td id="FleetStat">
+							Overall Firepower:<br/>
+							Overall Torpedo:<br/>
+							Overall Anti Air:<br/>
+							Overall Anti Sub:<br/>
+							Overall Recon:<br/>
+							Overall Fighter:<br/>
+							Overall Bomber:<br/>
+						</td>
+						<td id="DestroyerStat">
+							Firepower:<br/>
+							Torpedo:<br/>
+							Anti Air:<br/>
+							Anti Sub:<br/>
+							Recon:<br/>
+						</td>
+						<td id="CruiserStat">
+							Firepower:<br/>
+							Torpedo:<br/>
+							Anti Air:<br/>
+							Anti Sub:<br/>
+							Recon:<br/>
+						</td>
+						<td id="CarrierStat">
+							Anti Air:<br/>
+							Anti Sub:<br/>
+							Recon:<br/>
+							Fighter:<br/>
+							Bomber:<br/>
+						</td>
+						<td id="BattleshipStat">
+							Firepower:<br/>
+							Anti Air:<br/>
+							Recon:<br/>
+						</td>
+						<td id="SubmarineStat">
+							Torpedo:<br/>
+							Recon:<br/>
+							Stealth:<br/>
+						</td>
+					</tr>
+				</table></div>
+				<div id="Enemy"><table>
+					<tr>
+						<td rowspan="2">Enemy Fleet</td>
+						<td id="EnemyDestroyer">Destroyer X 0</td>
+						<td id="EnemyCruiser">Cruiser X 0</td>
+						<td id="EnemyCarrier">Carrier X 0</td>
+						<td id="EnemyBattleship">Battleship X 0</td>
+						<td id="EnemySubmarine">Submarine X 0</td>
+					</tr>
+					<tr>
+						<td>
+							<progress value="0">0%</progress>
+						</td>
+						<td>
+							<progress value="0">0%</progress>
+						</td>
+						<td>
+							<progress value="0">0%</progress>
+						</td>
+						<td>
+							<progress value="0">0%</progress>
+						</td>
+						<td>
+							<progress value="0">0%</progress>
+						</td>
+					</tr>
+					<tr>
+						<td id="EnemyFleetStat">
+							Overall Firepower:<br/>
+							Overall Torpedo:<br/>
+							Overall Anti Air:<br/>
+							Overall Anti Sub:<br/>
+							Overall Recon:<br/>
+							Overall Fighter:<br/>
+							Overall Bomber:<br/>
+						</td>
+						<td id="EnemyDestroyerStat">
+							Firepower:<br/>
+							Torpedo:<br/>
+							Anti Air:<br/>
+							Anti Sub:<br/>
+							Recon:<br/>
+						</td>
+						<td id="EnemyCruiserStat">
+							Firepower:<br/>
+							Torpedo:<br/>
+							Anti Air:<br/>
+							Anti Sub:<br/>
+							Recon:<br/>
+						</td>
+						<td id="EnemyCarrierStat">
+							Anti Air:<br/>
+							Anti Sub:<br/>
+							Recon:<br/>
+							Fighter:<br/>
+							Bomber:<br/>
+						</td>
+						<td id="EnemyBattleshipStat">
+							Firepower:<br/>
+							Anti Air:<br/>
+							Recon:<br/>
+						</td>
+						<td id="EnemySubmarineStat">
+							Torpedo:<br/>
+							Recon:<br/>
+							Stealth:<br/>
+						</td>
+					</tr>
+				</table></div>
+			</div>
+			<div class="col-md-4" id="main-right">
+				<div class="tab" id="Infrastructure"><table id="Buildings">
+					<tr>
+						<td>Total Territory:</td>
+						<td id="Territory" colspan="2">0/10</td>
+					</tr>
+				</table></div>
+
+				<div class="tab" id="Research" style="display:none"><table>
+					<tr>
+						<td>Research Destroyer Class I: 0</td>
+						<td rowspan="2"><button>Start</button></td>
+					</tr>
+					<tr>
+						<td>//progress bar//</td>
+					</tr>
+
+					<tr>
+						<td>Research Main Gun I: 0</td>
+						<td rowspan="2"><button>Start</button></td>
+					</tr>
+					<tr>
+						<td>//progress bar//</td>
+					</tr>
+
+					<tr>
+						<td>Research Tropedo I: 0</td>
+						<td rowspan="2"><button>Start</button></td>
+					</tr>
+					<tr>
+						<td>//progress bar//</td>
+					</tr>
+
+					<tr>
+						<td>Research Engine I: 0</td>
+						<td rowspan="2"><button>Start</button></td>
+					</tr>
+					<tr>
+						<td>//progress bar//</td>
+					</tr>
+
+					<tr>
+						<td>Research Armor I: 0</td>
+						<td rowspan="2"><button>Start</button></td>
+					</tr>
+					<tr>
+						<td>//progress bar//</td>
+					</tr>
+
+					<tr>
+						<td>Upgrade Main Gun Accuracy: 0</td>
+						<td rowspan="2"><button>Start</button></td>
+					</tr>
+					<tr>
+						<td>//progress bar//</td>
+					</tr>
+				</table></div>
+
+				<div class="tab" id="Design" style="display:none">
+					<p>Destroyer:</p>
+					<table>
+						<tr><td>Engine</td>
+							<td><select name="">
+							<option value="1">Engine I</option>
+							</select></td>
+						</tr>
+						<tr><td>Armor</td>
+							<td><select name="">
+							<option value="1">Light Armor I</option>
+							</select></td>
+						</tr>
+						<tr><td>Main Gun</td>
+							<td><select name="">
+							<option value="1">Light Gun I</option>
+							</select></td>
+						</tr>
+						<tr><td>Torpedo</td>
+							<td><select name="">
+							<option value="1">Torpedo I</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
 		<script type="text/javascript" language="javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" language="javascript" src="js/lz-string.min.js"></script>
 
 		<script type="text/javascript" language="javascript" src="js/save.js"></script>
 		<script type="text/javascript" language="javascript" src="js/data.js"></script>
 		<script type="text/javascript" language="javascript" src="js/main.js"></script>
-	</head>
-
-	<body>
-		<div id="debug">
-			<span>Debug Menu:</span>
-			<button onclick="OnSave()">Save Now</button>
-			<button onclick="ResetSave()">Reset Save</button>
-		</div>
-		<div id="header">
-			<ul id="tabs">
-				<li><button onclick="OnTab('Infrastructure')">Infrastructure</button></li>
-				<li><button onclick="OnTab('Research')">Research</button></li>
-				<li><button onclick="OnTab('Design')">Design</button></li>
-			</ul>
-
-			<ul>
-				<li id="Manpower">Manpower: 0 + 0/s</li>
-				<li id="Fuel">Fuel: 0 + 0/s</li>
-				<li id="Steel">Steel: 0 + 0/s</li>
-				<li id="Bauxite">Bauxite: 0 + 0/s</li>
-			</ul>
-
-		</div>
-		<div id="main-right">
-			<div class="tab" id="Infrastructure"><table id="Buildings">
-				<tr>
-					<td>Total Territory:</td>
-					<td id="Territory" colspan="2">0/10</td>
-				</tr>
-			</table></div>
-
-			<div class="tab" id="Research" style="display:none"><table>
-				<tr>
-					<td>Research Destroyer Class I: 0</td>
-					<td rowspan="2"><button>Start</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-
-				<tr>
-					<td>Research Main Gun I: 0</td>
-					<td rowspan="2"><button>Start</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-
-				<tr>
-					<td>Research Tropedo I: 0</td>
-					<td rowspan="2"><button>Start</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-
-				<tr>
-					<td>Research Engine I: 0</td>
-					<td rowspan="2"><button>Start</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-
-				<tr>
-					<td>Research Armor I: 0</td>
-					<td rowspan="2"><button>Start</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-
-				<tr>
-					<td>Upgrade Main Gun Accuracy: 0</td>
-					<td rowspan="2"><button>Start</button></td>
-				</tr>
-				<tr>
-					<td>//progress bar//</td>
-				</tr>
-			</table></div>
-
-			<div class="tab" id="Design" style="display:none">
-				<p>Destroyer:</p>
-				<table>
-					<tr><td>Engine</td>
-						<td><select name="">
-						<option value="1">Engine I</option>
-						</select></td>
-					</tr>
-					<tr><td>Armor</td>
-						<td><select name="">
-						<option value="1">Light Armor I</option>
-						</select></td>
-					</tr>
-					<tr><td>Main Gun</td>
-						<td><select name="">
-						<option value="1">Light Gun I</option>
-						</select></td>
-					</tr>
-					<tr><td>Torpedo</td>
-						<td><select name="">
-						<option value="1">Torpedo I</option>
-						</select></td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div id="main-left">
-			<div id="Ally"><table>
-				<tr>
-					<td id="FleetSize" rowspan="2">Fleet Size: 0/10</td>
-					<td>
-						<span id="Destroyer">Destroyer: 0/0</span>
-						<button onclick="OnBuildShip('Destroyer', 1)">+</button>
-						<button onclick="OnBuildShip('Destroyer', -1)">-</button>
-					</td>
-					<td>
-						<span id="Cruiser">Cruiser: 0/0</span>
-						<button>+</button>
-						<button>-</button>
-					</td>
-					<td>
-						<span id="Carrier">Carrier: 0/0</span>
-						<button>+</button>
-						<button>-</button>
-					</td>
-					<td>
-						<span id="Battleship">Battleship: 0/0</span>
-						<button>+</button>
-						<button>-</button>
-					</td>
-					<td>
-						<span id="Submarine">Submarine: 0/0</span>
-						<button>+</button>
-						<button>-</button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<progress id="DestroyerHP" value="0">0%</progress>
-					</td>
-					<td>
-						<progress id="CruiserHP" value="0">0%</progress>
-					</td>
-					<td>
-						<progress id="CarrierHP" value="0">0%</progress>
-					</td>
-					<td>
-						<progress id="BattleshipHP" value="0">0%</progress>
-					</td>
-					<td>
-						<progress id="SubmarineHP" value="0">0%</progress>
-					</td>
-				</tr>
-				<tr>
-					<td id="FleetStat">
-						Overall Firepower:<br/>
-						Overall Torpedo:<br/>
-						Overall Anti Air:<br/>
-						Overall Anti Sub:<br/>
-						Overall Recon:<br/>
-						Overall Fighter:<br/>
-						Overall Bomber:<br/>
-					</td>
-					<td id="DestroyerStat">
-						Firepower:<br/>
-						Torpedo:<br/>
-						Anti Air:<br/>
-						Anti Sub:<br/>
-						Recon:<br/>
-					</td>
-					<td id="CruiserStat">
-						Firepower:<br/>
-						Torpedo:<br/>
-						Anti Air:<br/>
-						Anti Sub:<br/>
-						Recon:<br/>
-					</td>
-					<td id="CarrierStat">
-						Anti Air:<br/>
-						Anti Sub:<br/>
-						Recon:<br/>
-						Fighter:<br/>
-						Bomber:<br/>
-					</td>
-					<td id="BattleshipStat">
-						Firepower:<br/>
-						Anti Air:<br/>
-						Recon:<br/>
-					</td>
-					<td id="SubmarineStat">
-						Torpedo:<br/>
-						Recon:<br/>
-						Stealth:<br/>
-					</td>
-				</tr>
-			</table></div>
-			<div id="Enemy"><table>
-				<tr>
-					<td rowspan="2">Enemy Fleet</td>
-					<td id="EnemyDestroyer">Destroyer X 0</td>
-					<td id="EnemyCruiser">Cruiser X 0</td>
-					<td id="EnemyCarrier">Carrier X 0</td>
-					<td id="EnemyBattleship">Battleship X 0</td>
-					<td id="EnemySubmarine">Submarine X 0</td>
-				</tr>
-				<tr>
-					<td>
-						<progress value="0">0%</progress>
-					</td>
-					<td>
-						<progress value="0">0%</progress>
-					</td>
-					<td>
-						<progress value="0">0%</progress>
-					</td>
-					<td>
-						<progress value="0">0%</progress>
-					</td>
-					<td>
-						<progress value="0">0%</progress>
-					</td>
-				</tr>
-				<tr>
-					<td id="EnemyFleetStat">
-						Overall Firepower:<br/>
-						Overall Torpedo:<br/>
-						Overall Anti Air:<br/>
-						Overall Anti Sub:<br/>
-						Overall Recon:<br/>
-						Overall Fighter:<br/>
-						Overall Bomber:<br/>
-					</td>
-					<td id="EnemyDestroyerStat">
-						Firepower:<br/>
-						Torpedo:<br/>
-						Anti Air:<br/>
-						Anti Sub:<br/>
-						Recon:<br/>
-					</td>
-					<td id="EnemyCruiserStat">
-						Firepower:<br/>
-						Torpedo:<br/>
-						Anti Air:<br/>
-						Anti Sub:<br/>
-						Recon:<br/>
-					</td>
-					<td id="EnemyCarrierStat">
-						Anti Air:<br/>
-						Anti Sub:<br/>
-						Recon:<br/>
-						Fighter:<br/>
-						Bomber:<br/>
-					</td>
-					<td id="EnemyBattleshipStat">
-						Firepower:<br/>
-						Anti Air:<br/>
-						Recon:<br/>
-					</td>
-					<td id="EnemySubmarineStat">
-						Torpedo:<br/>
-						Recon:<br/>
-						Stealth:<br/>
-					</td>
-				</tr>
-			</table></div>
-		</div>
 	</body>
 </html>
