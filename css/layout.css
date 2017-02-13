@@ -8,9 +8,7 @@ div#header {
     width: 100%;
     border: 1px solid gray;
 
-    padding: 1em;
-    color: white;
-    background-color: black;
+    background-color: grey;
     clear: left;
     text-align: center;
 }
