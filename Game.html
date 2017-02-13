@@ -14,12 +14,18 @@
 
 	<body>
 		<div class="container">
-			<span>Debug Menu:</span>
-			<button onclick="OnSave()">Save Now</button>
-			<button onclick="ResetSave()">Reset Save</button>
+			<div class="col-xs-3">
+				<h4>Idle Builder</h4>
+			</div>
+			<div class="col-xs-9 text-right">
+				<p>Debug Menu:
+					<button onclick="OnSave()">Save Now</button>
+					<button onclick="ResetSave()">Reset Save</button>
+				</p>
+			</div>
 		</div>
 
-		<div class="container">
+		<div class="container" id="Resource">
 			<div class="col-xs-3">
 				<p id="Manpower">Manpower: 0 + 0/s</p>
 			</div>
@@ -304,17 +310,17 @@
 			</div>
 		</div>
 
-		<div class="container">
-			<div class="col-xs-3">
+		<div class="container" id="Footer">
+			<div class="col-xs-3 text-center">
 				<button>Build</button>
 			</div>
-			<div class="col-xs-3">
+			<div class="col-xs-3 text-center">
 				<button>Research</button>
 			</div>
-			<div class="col-xs-3">
+			<div class="col-xs-3 text-center">
 				<button>Design</button>
 			</div>
-			<div class="col-xs-3">
+			<div class="col-xs-3 text-center">
 				<button>Battle</button>
 			</div>
 		</div>
