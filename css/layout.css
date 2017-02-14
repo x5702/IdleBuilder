@@ -5,3 +5,12 @@ div#Resource {
 div#Footer {
     background-color: grey;
 }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu a.text-danger:hover{
+    background-color: #e74c3c !important;
+}

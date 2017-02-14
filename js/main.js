@@ -51,8 +51,14 @@ function UsedTerritory()
 		 SaveData.OilStorage.Planned + SaveData.SteelStorage.Planned + SaveData.BauxiteStorage.Planned;
 }
 
-
 //UI stuff
+function CopyToClipboard(selector)
+{
+  var copyTextarea = $(selector);
+  copyTextarea.select();
+  document.execCommand('copy');
+}
+
 function OnTab(name)
 {
 	$(".tab").addClass("hidden-xs");
@@ -266,19 +272,46 @@ function ResetSave()
 function OnSave()
 {
 	var string = JSON.stringify(SaveData);
-	string = LZString.compress(string);
+	string = LZString.compressToEncodedURIComponent(string);
 	localStorage.setItem("IdleBuilderSave", string);
+	var savedtext = $("#Saved");
+	savedtext.show();
+	savedtext.fadeOut(2000);
 }
 
 function OnLoad()
 {
 	var string = localStorage.getItem("IdleBuilderSave");
-	string = LZString.decompress(string);
 	if (string)
 	{
+		string = LZString.decompressFromEncodedURIComponent(string);
 		SaveData = JSON.parse(string);
 	}
 }
+
+function OnImport(selector)
+{
+	var string = $(selector).val();
+	if (string)
+	{
+		string = LZString.decompressFromEncodedURIComponent(string);
+		SaveData = JSON.parse(string);
+	}
+}
+
+$('#ModalExport').on('show.bs.modal', function (event) {
+	var string = localStorage.getItem("IdleBuilderSave");
+	if (string)
+	{
+		var textarea = $("#ModalExport textarea");
+		textarea.val(string);
+		textarea.select();
+	}
+})
+
+$("#ModalImport").on("show.bs.modal", function (event) {
+  $("#ModalImport textarea").val("");
+})
 
 window.addEventListener("load", function(){
 	OnLoad();

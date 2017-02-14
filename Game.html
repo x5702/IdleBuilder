@@ -8,20 +8,70 @@
 		<title>Idle Builder</title>
 
 		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.css">
 		<link rel="stylesheet" href="css/layout.css">
 	</head>
 
 	<body>
 		<div class="container">
-			<div class="col-xs-3">
-				<h4>Idle Builder</h4>
-			</div>
-			<div class="col-xs-9 text-right">
-				<p>Debug Menu:
-					<button onclick="OnSave()">Save Now</button>
-					<button onclick="ResetSave()">Reset Save</button>
-				</p>
+			<div class="row vertical-align">
+				<div class="col-xs-3">
+					<h4>Idle Builder</h4>
+				</div>
+				<div class="col-xs-9 text-right">
+					<span id="Saved" class="text-success" style="display: none">Game Saved</span>
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary btn-sm" onclick="OnSave()">Save</button>
+						<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="caret"></span><span class="sr-only">Save Dropdown</span>
+					  </button>
+					  <ul class="dropdown-menu">
+					    <li><a href="#" data-toggle="modal" data-target="#ModalExport">Export</a></li>
+					    <li><a href="#" data-toggle="modal" data-target="#ModalImport">Import</a></li>
+					    <li role="separator" class="divider"></li>
+					    <li><a href="#" class="text-danger" onclick="ResetSave()">Reset</a></li>
+					  </ul>
+					</div>
+				</div>
+
+				<div class="modal fade" id="ModalExport" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title" id="myModalLabel">Export Save Data</h4>
+				      </div>
+				      <div class="modal-body">
+				      	<p>If you see nothing below, try click Save to create a save data.</p>
+				        <textarea class="form-control" rows="10"></textarea>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-primary btn-sm" onclick="CopyToClipboard('#ModalExport textarea')">Copy To Clipboard</button>
+				        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
+				<div class="modal fade" id="ModalImport" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title" id="myModalLabel">Import Save Data</h4>
+				      </div>
+				      <div class="modal-body">
+				      	<p>You still have to Save after importing the data.<br/>
+				      	If you find anything wrong with the import, refreshing the page before saving will take you back.</p>
+				        <textarea class="form-control" rows="10"></textarea>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="OnImport('#ModalImport textarea')">Import</button>
+				        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
 			</div>
 		</div>
 
@@ -325,6 +375,7 @@
 
 
 		<script type="text/javascript" language="javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" language="javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" language="javascript" src="js/lz-string.min.js"></script>
 
 		<script type="text/javascript" language="javascript" src="js/save.js"></script>
