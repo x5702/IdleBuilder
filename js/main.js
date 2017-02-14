@@ -170,10 +170,10 @@ function OnTick()
 
 function OnRender()
 {
-	$("#Manpower").text("Manpower: " + Math.floor(SaveData.Manpower) + " + " + Math.floor(StaticData.ManpowerPerSec()) + "/d / " + Math.floor(StaticData.ManpowerMax()));
-	$("#Fuel").text("Fuel: " + Math.floor(SaveData.Fuel) + " + " + Math.floor(StaticData.FuelPerSec()) + "/d / " + Math.floor(StaticData.FuelMax()));
-	$("#Steel").text("Steel: " + Math.floor(SaveData.Steel) + " + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()));
-	$("#Bauxite").text("Bauxite: " + Math.floor(SaveData.Bauxite) + " + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()));
+	$("#Manpower").html("M: " + Math.floor(SaveData.Manpower) + "<span class='hidden-xs'> + " + Math.floor(StaticData.ManpowerPerSec()) + "/d / " + Math.floor(StaticData.ManpowerMax()) + "</span>");
+	$("#Fuel").html(Math.floor(SaveData.Fuel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.FuelPerSec()) + "/d / " + Math.floor(StaticData.FuelMax()) + "</span>");
+	$("#Steel").html(Math.floor(SaveData.Steel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()) + "</span>");
+	$("#Bauxite").html("B: " + Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
 
 
 	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
