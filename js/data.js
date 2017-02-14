@@ -19,21 +19,21 @@ StaticData = {
 	CityBuildCost : function() {
 		var ManpowerCost = ConstData.BaseCost;
 		
-		ManpowerCost *= Math.pow( 1.4, SaveData.City.Num);	
+		ManpowerCost *= Math.pow( 1.4, SaveData.City.Num + SaveData.City.Planned);	
 			
-		return {Manpower : ManpowerCost , Fuel : 0, Steel : 0, Bauxite : 0 ,  Time: 1 + SaveData.City.Num * 2};
+		return {Manpower : ManpowerCost , Fuel : 0, Steel : 0, Bauxite : 0 ,  Time: 1 + (SaveData.City.Num + SaveData.City.Planned) * 2};
 	},
 	OilMinerBuildCost : function() {
 		var ManpowerCost = ConstData.BaseCost;
 		
-		ManpowerCost *= Math.pow( 1.6, SaveData.OilMiner.Num);	
+		ManpowerCost *= Math.pow( 1.6, SaveData.OilMiner.Num + SaveData.OilMiner.Planned);	
 		
-		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 1 + SaveData.OilMiner.Num * 2};
+		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 1 + (SaveData.OilMiner.Num + SaveData.OilMiner.Planned) * 2};
 	},
 	OilStorageBuildCost : function() {
 		var ManpowerCost = 5 * ConstData.BaseCost;
 		
-		ManpowerCost +=  SaveData.OilStorage.Num * ConstData.BaseCost;	
+		ManpowerCost +=  (SaveData.OilStorage.Num + SaveData.OilStorage.Planned) * ConstData.BaseCost;	
 	
 		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10};
 	},
@@ -41,15 +41,15 @@ StaticData = {
 		var ManpowerCost = ConstData.BaseCost;
 		var FuelCost = 2 * ConstData.BaseCost;	
 		
-		ManpowerCost *= Math.pow( 1.6, SaveData.SteelMiner.Num);	
-		FuelCost *= Math.pow( 1.6, SaveData.SteelMiner.Num);	
+		ManpowerCost *= Math.pow( 1.6, SaveData.SteelMiner.Num + SaveData.SteelMiner.Planned);	
+		FuelCost *= Math.pow( 1.6, SaveData.SteelMiner.Num + SaveData.SteelMiner.Planned);	
 		
-		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: 1 + SaveData.SteelMiner.Num * 2};
+		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: 1 + (SaveData.SteelMiner.Num + SaveData.SteelMiner.Planned)* 2};
 	},
 	SteelStorageBuildCost : function() {
 		var ManpowerCost = 5 * ConstData.BaseCost;
 		
-		ManpowerCost +=  SaveData.SteelStorage.Num * ConstData.BaseCost;	
+		ManpowerCost +=  (SaveData.SteelStorage.Num + SaveData.SteelStorage.Num )* ConstData.BaseCost;	
 	
 		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10};
 	},
@@ -57,15 +57,15 @@ StaticData = {
 		var ManpowerCost = 2 * ConstData.BaseCost;
 		var FuelCost = ConstData.BaseCost;	
 		
-		ManpowerCost *= Math.pow( 1.6, SaveData.BauxiteMiner.Num);	
-		FuelCost *= Math.pow( 1.6, SaveData.BauxiteMiner.Num);	
+		ManpowerCost *= Math.pow( 1.6, (SaveData.BauxiteMiner.Num + SaveData.BauxiteMiner.Planned));	
+		FuelCost *= Math.pow( 1.6, (SaveData.BauxiteMiner.Num + SaveData.BauxiteMiner.Planned));	
 	
-		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: 1 + SaveData.BauxiteMiner.Num * 2};
+		return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: 1 + (SaveData.BauxiteMiner.Num + SaveData.BauxiteMiner.Planned) * 2};
 	},
 	BauxiteStorageBuildCost : function() {
 		var ManpowerCost = 5 * ConstData.BaseCost;
 		
-		ManpowerCost +=  SaveData.BauxiteStorage.Num * ConstData.BaseCost;	
+		ManpowerCost +=  (SaveData.BauxiteStorage.Num + SaveData.BauxiteStorage.Planned) * ConstData.BaseCost;	
 	
 		return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10};
 	},
