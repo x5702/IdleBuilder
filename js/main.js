@@ -69,6 +69,7 @@ function OnBuildBuilding(name, n)
 		{
 			ConsumeResource(cost, 1);
 			SaveData[name].Progress = Math.min(SaveData[name].Progress + 0.05 / cost.Time, 1);
+			$("#"+name+"Build").attr("disabled", "disabled");
 		}
 	}
 }
@@ -181,6 +182,7 @@ function OnRender()
 		{
 			SaveData[building].Progress = 0;
 			SaveData[building].Num++;
+			$("#"+building+"Build").removeAttr("disabled");
 		}
 		else if (SaveData[building].Progress > 0)
 		{
@@ -188,7 +190,7 @@ function OnRender()
 		}
 
 		$("#"+building).text(building + ": " + SaveData[building].Num);
-		$("#"+building+"Progress").attr("value",SaveData[building].Progress);
+		$("#"+building+"Progress").css("width", Math.ceil(SaveData[building].Progress*100) + "%");
 	}
 
 	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + SaveData.FleetSize);
@@ -234,13 +236,13 @@ function OnInit()
 	for(i = 0; i < Buildings.length; i++)
 	{
 		var building = Buildings[i];
-		buildingTable.append("<tr>\n\
-			<td id='" + building + "'></td>\n\
-			<td rowspan=2><button type='button' class='btn btn-primary btn-sm' onclick=OnBuildBuilding('" + building + "',1)>Build</button></td>\n\
-			</tr>\n\
-			<tr>\n\
-			<td><progress value=1 id='" + building + "Progress'></progress></td>\n\
-			</tr>\n");
+		buildingTable.append("<div class='btn-group btn-block' role='group'>\n\
+			  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "'>Building Style Test: 0</button>\n\
+			  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "',1)>Build</button>\n\
+			</div>\n\
+			<div class='progress progress-striped active'>\n\
+			  <div class='progress-bar progress-bar-info' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n\
+			</div>\n");
 	}
 }
 
