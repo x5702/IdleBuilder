@@ -21,6 +21,8 @@ var Ships = [
 	"Submarine",
 ];
 
+var SaveData;
+
 //Utility Functions
 function CheckResource(cost, count)
 {
@@ -264,9 +266,9 @@ function OnInit()
 	}
 }
 
-function ResetSave()
+function Reset()
 {
-	localStorage.removeItem("IdleBuilderSave");
+	SaveData = JSON.parse(JSON.stringify(SaveDataInit));
 }
 
 function OnSave()
@@ -286,6 +288,10 @@ function OnLoad()
 	{
 		string = LZString.decompressFromEncodedURIComponent(string);
 		SaveData = JSON.parse(string);
+	}
+	else
+	{
+		SaveData = JSON.parse(JSON.stringify(SaveDataInit));
 	}
 }
 

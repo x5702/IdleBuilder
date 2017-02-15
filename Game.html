@@ -28,7 +28,7 @@
 					    <li><a href="#" data-toggle="modal" data-target="#ModalExport">Export</a></li>
 					    <li><a href="#" data-toggle="modal" data-target="#ModalImport">Import</a></li>
 					    <li role="separator" class="divider"></li>
-					    <li><a href="#" class="text-danger" onclick="ResetSave()">Reset</a></li>
+					    <li><a href="#" class="text-danger" data-toggle="modal" data-target="#ModalReset">Reset</a></li>
 					  </ul>
 					</div>
 				</div>
@@ -72,6 +72,24 @@
 				  </div>
 				</div>
 
+				<div class="modal fade" id="ModalReset" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title" id="myModalLabel">Game Reset</h4>
+				      </div>
+				      <div class="modal-body">
+				      	<p class="text-danger">Are you sure you want to reset game? You will lose all of your progress.</p>
+				      	<p>Note that you still have to Save after reset, refreshing the page before saving can recover your save data.</p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="Reset()">Yes, I'm sure.</button>
+				        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
 			</div>
 		</div>
 
