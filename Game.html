@@ -12,8 +12,8 @@
 	</head>
 
 	<body>
-		<div class="container">
-			<div class="row vertical-align">
+		<div id="Header"><div class="container">
+			<div class="row">
 				<div class="col-xs-5">
 					<h4><b>Idle Fleet</b></h4>
 				</div>
@@ -91,16 +91,15 @@
 				  </div>
 				</div>
 			</div>
-		</div>
-
-		<div class="container" id="Resource">
-			<small><ul class="list-inline">
-  			<li id="Manpower">Manpower: 0 + 0/s</li>
-  			<li><img src="img/Oil.png" alt="Fuel" style="vertical-align: top"><span id="Fuel">0 + 0/</span></li>
-  			<li><img src="img/Steel.png" alt="Steel" style="vertical-align: top"><span id="Steel">0 + 0/s</span></li>
-  			<li id="Bauxite">Bauxite: 0 + 0/s</li>
-			</ul></small>
-		</div>
+			<div class="row" id="Resource">
+				<small><ul class="list-inline">
+	  			<li id="Manpower">Manpower: 0 + 0/s</li>
+	  			<li><img src="img/Oil.png" alt="Fuel" style="vertical-align: top"><span id="Fuel">0 + 0/</span></li>
+	  			<li><img src="img/Steel.png" alt="Steel" style="vertical-align: top"><span id="Steel">0 + 0/s</span></li>
+	  			<li id="Bauxite">Bauxite: 0 + 0/s</li>
+				</ul></small>
+			</div>
+		</div></div>
 
 		<div class="container" id="Main">
 			<div class="tab col-xs-12 col-sm-3" id="Build">
@@ -370,22 +369,22 @@
 			</div>
 		</div>
 
-		<div class="container" id="Footer">
+		<div id="Footer"><div class="container">
 			<div class="btn-group btn-group-justified" role="group" aria-label="...">
 				<div class="btn-group" role="group">
-  				<button class="btn btn-primary" type="button" onclick="OnTab('Build')">Build  <span class="badge">1</span></button>
-  			</div>
-  			<div class="btn-group" role="group">
-  				<button class="btn btn-primary" type="button" onclick="OnTab('Research')">Research  <span class="badge">2</span></button>
-   			</div>
-  			<div class="btn-group" role="group">
-  				<button class="btn btn-primary" type="button" onclick="OnTab('Design')">Design  <span class="badge">6</span></button>
-   			</div>
-  			<div class="btn-group" role="group">
-  				<button class="btn btn-primary" type="button" onclick="OnTab('Battle')">Battle  <span class="badge">!</span></button>
-  			</div>
+  					<button class="btn btn-primary" type="button" onclick="OnTab('Build')">Build  <span class="badge">1</span></button>
+	  			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-primary" type="button" onclick="OnTab('Research')">Research  <span class="badge">2</span></button>
+	   			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-primary" type="button" onclick="OnTab('Design')">Design  <span class="badge">6</span></button>
+	   			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-primary" type="button" onclick="OnTab('Battle')">Battle  <span class="badge">!</span></button>
+	  			</div>
 			</div>
-		</div>
+		</div></div>
 
 
 		<script type="text/javascript" language="javascript" src="js/jquery.min.js"></script>
