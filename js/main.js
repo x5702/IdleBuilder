@@ -1,6 +1,5 @@
 //Helper Structure
 var Buildings = [
-	"City",
 	"OilMiner",
 	"OilStorage",
 	"SteelMiner",
@@ -47,12 +46,6 @@ function OccupiedFleetSize()
 	return SaveData.DestroyerPlanned * StaticData.Destroyer.Size();
 }
 
-function UsedTerritory()
-{
-	return SaveData.City.Planned + SaveData.OilMiner.Planned + SaveData.SteelMiner.Planned + SaveData.BauxiteMiner.Planned + 
-		 SaveData.OilStorage.Planned + SaveData.SteelStorage.Planned + SaveData.BauxiteStorage.Planned;
-}
-
 //UI stuff
 function CopyToClipboard(selector)
 {
@@ -69,14 +62,13 @@ function OnTab(name)
 
 function OnBuildBuilding(name, n)
 {
-	if (UsedTerritory() + n <= SaveData.Territory)
+	if (SaveData[name].Progress == 0)
 	{
-		var min = (name == "City" ? 1 : 0);
-		SaveData[name].Planned = Math.max(min, SaveData[name].Planned + n);
-		if (SaveData[name].Num >= SaveData[name].Planned)
+		var cost = StaticData[name+"BuildCost"]();
+		if(CheckResource(cost, 1))
 		{
-			SaveData[name].Num = SaveData[name].Planned;
-			SaveData[name].Progress = SaveData[name].Num > 0 ? 1 : 0;
+			ConsumeResource(cost, 1);
+			SaveData[name].Progress = Math.min(SaveData[name].Progress + 0.05 / cost.Time, 1);
 		}
 	}
 }
@@ -177,38 +169,25 @@ function OnRender()
 	$("#Steel").html(Math.floor(SaveData.Steel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()) + "</span>");
 	$("#Bauxite").html("B: " + Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
 
-
-	$("#Territory").text(UsedTerritory() + " / " + SaveData.Territory);
+	$("#Territory").text(SaveData.Territory);
 
 	//Update Infrastructure Building
 	for(var i = 0; i < Buildings.length; i++)
 	{
 		var building = Buildings[i];
-		if (SaveData[building].Num < SaveData[building].Planned)
+
+		var cost = StaticData[building+"BuildCost"]();
+		if (SaveData[building].Progress >= 1)
 		{
-			var cost = StaticData[building+"BuildCost"]();
-			if (SaveData[building].Progress >= 1)
-			{
-				SaveData[building].Progress = 0;
-			}
-			if (SaveData[building].Progress == 0)
-			{
-				if(CheckResource(cost, 1))
-				{
-					ConsumeResource(cost, 1);
-					SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
-				}
-			}
-			else if (SaveData[building].Progress < 1)
-			{
-				SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
-				if (SaveData[building].Progress >= 1)
-				{
-					SaveData[building].Num++;
-				}
-			}
+			SaveData[building].Progress = 0;
+			SaveData[building].Num++;
 		}
-		$("#"+building).text(building + ": " + SaveData[building].Num + " / " + SaveData[building].Planned);
+		else if (SaveData[building].Progress > 0)
+		{
+			SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
+		}
+
+		$("#"+building).text(building + ": " + SaveData[building].Num);
 		$("#"+building+"Progress").attr("value",SaveData[building].Progress);
 	}
 
@@ -257,8 +236,7 @@ function OnInit()
 		var building = Buildings[i];
 		buildingTable.append("<tr>\n\
 			<td id='" + building + "'></td>\n\
-			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',1)>+</button></td>\n\
-			<td rowspan=2><button onclick=OnBuildBuilding('" + building + "',-1)>-</button></td>\n\
+			<td rowspan=2><button type='button' class='btn btn-primary btn-sm' onclick=OnBuildBuilding('" + building + "',1)>Build</button></td>\n\
 			</tr>\n\
 			<tr>\n\
 			<td><progress value=1 id='" + building + "Progress'></progress></td>\n\

@@ -4,7 +4,7 @@ ConstData = {
 
 StaticData = {
 	ManpowerPerSec : function() {
-		return 20 + 2 * SaveData.City.Num;
+		return 20 + 2 * SaveData.Territory;
 	},
 	FuelPerSec : function() {
 		return 5 + 1 * SaveData.OilMiner.Num;
@@ -16,13 +16,6 @@ StaticData = {
 		return 3 + 1 * SaveData.BauxiteMiner.Num;
 	},
 
-	CityBuildCost : function() {
-		var ManpowerCost = ConstData.BaseCost;
-		
-		ManpowerCost *= Math.pow( 1.4, SaveData.City.Num + SaveData.City.Planned);	
-			
-		return {Manpower : ManpowerCost , Fuel : 0, Steel : 0, Bauxite : 0 ,  Time: 1 + (SaveData.City.Num + SaveData.City.Planned) * 2};
-	},
 	OilMinerBuildCost : function() {
 		var ManpowerCost = ConstData.BaseCost;
 		
@@ -71,7 +64,7 @@ StaticData = {
 	},
 
 	ManpowerMax : function() {
-		return 1000 * SaveData.City.Num;
+		return 1000 * SaveData.Territory;
 	},
 
 	FuelMax : function() {
@@ -127,7 +120,7 @@ StaticData = {
 	},
 
 	Technology : {
-		CityLevel : function() {
+		OilMinerLevel : function() {
 			return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
 		},
 
