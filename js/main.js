@@ -23,6 +23,26 @@ var Ships = [
 var SaveData;
 
 //Utility Functions
+function TimeDisplay(sec)
+{
+	sec = Math.floor(sec);
+	var h = sec / 3600;
+	var m = (sec % 3600) / 60;
+	var s = sec % 60;
+}
+
+function ShortNumber(n)
+{
+	var suffix = ['', 'K', 'M', 'B', 'T'];
+	var suffixid = 0;
+	while(n >= 1000 && suffixid < suffix.length)
+	{
+		n = n / 1000;
+		suffixid++;
+	}
+	return Math.floor(n*10)/10 + suffix[suffixid];
+}
+
 function CheckResource(cost, count)
 {
 	count = count < 0 ? 0 : count;
@@ -39,6 +59,24 @@ function ConsumeResource(cost, count)
 	SaveData.Fuel -= cost.Fuel * count;
 	SaveData.Steel -= cost.Steel * count;
 	SaveData.Bauxite -= cost.Bauxite * count;
+}
+
+function EstimateTimeToGetResource(cost)
+{
+	if (cost.Manpower > StaticData.ManpowerMax() || 
+		cost.Fuel > StaticData.FuelMax() || 
+		cost.Steel > StaticData.SteelMax() || 
+		cost.Bauxite > StaticData.BauxiteMax() )
+	{
+		return "inf";
+	}
+	else
+	{
+		var time = Math.max((cost.Manpower - SaveData.Manpower) / StaticData.ManpowerPerSec(), (cost.Fuel - SaveData.Fuel) / StaticData.FuelPerSec());
+		time = Math.max(time, (cost.Steel - SaveData.Steel) / StaticData.SteelPerSec());
+		time = Math.max(time, (cost.Bauxite - SaveData.Bauxite) / StaticData.BauxitePerSec());
+		return Math.ceil(time) + "s";
+	}
 }
 
 function OccupiedFleetSize()
@@ -188,6 +226,20 @@ function OnRender()
 		{
 			SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
 		}
+		else
+		{
+			var buildbutton = $("#"+building+"Build");
+			if(CheckResource(cost, 1))
+			{
+				buildbutton.removeAttr("disabled");
+				buildbutton.text("Build");
+			}
+			else
+			{
+				buildbutton.attr("disabled", "disabled");
+				buildbutton.text(EstimateTimeToGetResource(cost));
+			}
+		}
 
 		$("#"+building).text(building + ": " + SaveData[building].Num);
 		$("#"+building+"Progress").css("width", Math.ceil(SaveData[building].Progress*100) + "%");
@@ -232,17 +284,20 @@ function OnRender()
 
 function OnInit()
 {
-	var buildingTable = $("#Buildings");
+	var buildingTable = $("#Build");
 	for(i = 0; i < Buildings.length; i++)
 	{
 		var building = Buildings[i];
 		buildingTable.append("<div class='btn-group btn-block' role='group'>\n\
-			  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "'>Building Style Test: 0</button>\n\
+			  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "' data-toggle='collapse' data-target='#" + building + "Detail'></button>\n\
 			  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "',1)>Build</button>\n\
 			</div>\n\
 			<div class='progress progress-striped active'>\n\
-			  <div class='progress-bar progress-bar-info' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n\
-			</div>\n");
+			  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n\
+			</div>\n\
+			<div class='collapse' id='" + building + "Detail'><div class='well'><small>\n\
+				  <u>Detail info here</u>\n\
+				</small></div></div>\n");
 	}
 }
 

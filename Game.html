@@ -103,20 +103,18 @@
 
 		<div class="container" id="Main">
 			<div class="tab col-xs-12 col-sm-3" id="Build">
-				<table class="table table-condensed" id="Buildings">
-					<tr>
-						<td>Total Territory:</td>
-						<td id="Territory" colspan="2">0/10</td>
-					</tr>
-					<tr>
-					<td id="">Building Style Test: 0</td>
-					<td rowspan=2><button type='button' class='btn btn-primary btn-sm' disabled="disabled">Build</button></td>
-					</tr>
-					<tr>
-					<td><progress value=1></progress></td>
-					</tr>
-
-				</table>
+			  <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#TerritoryDetail">Territory:<span id="Territory">0/10</span></button>
+				<div class='progress progress-striped active'>
+			  	<div class="progress-bar progress-bar-warning" role="progressbar" style="width: 0%;"></div>
+				</div>
+			  <div class="collapse" id="TerritoryDetail">
+				  <div class="well"><small>
+				    <u>Manpower/s: 40</u><br/>
+				    Base Manpower: 20<br/>
+				    Manpower Per City: 2<br/>
+				    Cities: 10<br/>
+				  </small></div>
+				</div>
 			</div>
 			<div class="tab col-xs-12 col-sm-3 hidden-xs" id="Research">
 				<table class="table table-condensed">
@@ -380,13 +378,13 @@
 		<div id="Footer"><div class="container">
 			<div class="btn-group btn-group-justified" role="group" aria-label="...">
 				<div class="btn-group" role="group">
-  					<button class="btn btn-primary" type="button" onclick="OnTab('Build')">Build  <span class="badge">1</span></button>
+  					<button class="btn btn-primary" type="button" onclick="OnTab('Build')">Base  <span class="badge">1</span></button>
 	  			</div>
 	  			<div class="btn-group" role="group">
-	  				<button class="btn btn-primary" type="button" onclick="OnTab('Research')">Research  <span class="badge">2</span></button>
+	  				<button class="btn btn-primary" type="button" onclick="OnTab('Research')">Lab  <span class="badge">2</span></button>
 	   			</div>
 	  			<div class="btn-group" role="group">
-	  				<button class="btn btn-primary" type="button" onclick="OnTab('Design')">Design  <span class="badge">6</span></button>
+	  				<button class="btn btn-primary" type="button" onclick="OnTab('Design')">Ship  <span class="badge">6</span></button>
 	   			</div>
 	  			<div class="btn-group" role="group">
 	  				<button class="btn btn-primary" type="button" onclick="OnTab('Battle')">Battle  <span class="badge">!</span></button>

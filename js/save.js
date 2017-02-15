@@ -4,7 +4,7 @@ SaveDataInit = {
 	Steel : 0,
 	Bauxite : 0,
 
-	Territory : 1,
+	Territory : 10,
 
 	OilMiner : {
 		Num : 0,

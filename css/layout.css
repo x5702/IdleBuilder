@@ -19,7 +19,7 @@ div#Resource ul {
 
 div#Main {
   margin: 50 auto 50px;
-  padding: 60px 0 50px;
+  padding: 70px 0 50px;
 }
 
 div#Footer {
@@ -36,4 +36,8 @@ div#Footer div.container {
 
 .dropdown-menu a.text-danger:hover{
   background-color: #e74c3c !important;
+}
+
+.progress {
+    margin-bottom: 0;
 }
