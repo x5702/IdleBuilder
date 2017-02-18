@@ -26,9 +26,13 @@ var SaveData;
 function TimeDisplay(sec)
 {
 	sec = Math.floor(sec);
-	var h = sec / 3600;
-	var m = (sec % 3600) / 60;
+	var h = Math.floor(sec / 3600);
+	var m = Math.floor((sec % 3600) / 60);
 	var s = sec % 60;
+	var hs = (h > 0) ? (h + "h") : "";
+	var ms = (h > 0 || m > 0) ? (m + "m") : "";
+	var ss = s + "s";
+	return hs + ms + ss;
 }
 
 function ShortNumber(n)
@@ -75,7 +79,7 @@ function EstimateTimeToGetResource(cost)
 		var time = Math.max((cost.Manpower - SaveData.Manpower) / StaticData.ManpowerPerSec(), (cost.Fuel - SaveData.Fuel) / StaticData.FuelPerSec());
 		time = Math.max(time, (cost.Steel - SaveData.Steel) / StaticData.SteelPerSec());
 		time = Math.max(time, (cost.Bauxite - SaveData.Bauxite) / StaticData.BauxitePerSec());
-		return Math.ceil(time) + "s";
+		return TimeDisplay(Math.ceil(time));
 	}
 }
 
@@ -206,7 +210,8 @@ function OnRender()
 	$("#Manpower").html("M: " + Math.floor(SaveData.Manpower) + "<span class='hidden-xs'> + " + Math.floor(StaticData.ManpowerPerSec()) + "/d / " + Math.floor(StaticData.ManpowerMax()) + "</span>");
 	$("#Fuel").html(Math.floor(SaveData.Fuel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.FuelPerSec()) + "/d / " + Math.floor(StaticData.FuelMax()) + "</span>");
 	$("#Steel").html(Math.floor(SaveData.Steel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()) + "</span>");
-	$("#Bauxite").html("B: " + Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
+	$("#Bauxite").html(Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
+	$("#Exp").html(Math.floor(SaveData.Exp));
 
 	$("#Territory").text(SaveData.Territory);
 
@@ -288,16 +293,16 @@ function OnInit()
 	for(i = 0; i < Buildings.length; i++)
 	{
 		var building = Buildings[i];
-		buildingTable.append("<div class='btn-group btn-block' role='group'>\n\
-			  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "' data-toggle='collapse' data-target='#" + building + "Detail'></button>\n\
-			  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "',1)>Build</button>\n\
-			</div>\n\
-			<div class='progress progress-striped active'>\n\
-			  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n\
-			</div>\n\
-			<div class='collapse' id='" + building + "Detail'><div class='well'><small>\n\
-				  <u>Detail info here</u>\n\
-				</small></div></div>\n");
+		buildingTable.append("<div class='btn-group btn-block' role='group'>\n" +
+			"  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "' data-toggle='collapse' data-target='#" + building + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "',1)>Build</button>\n" +
+			"</div>\n" +
+			"<div class='progress progress-striped active'>\n" +
+			"  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n" +
+			"</div>\n" +
+			"<div class='collapse' id='" + building + "Detail'><div class='well'><small>\n" +
+			"	  <u>Detail info here</u>\n" +
+			"	</small></div></div>\n");
 	}
 }
 
@@ -348,11 +353,11 @@ $('#ModalExport').on('show.bs.modal', function (event) {
 		textarea.val(string);
 		textarea.select();
 	}
-})
+});
 
 $("#ModalImport").on("show.bs.modal", function (event) {
   $("#ModalImport textarea").val("");
-})
+});
 
 window.addEventListener("load", function(){
 	OnLoad();
@@ -361,4 +366,4 @@ window.addEventListener("load", function(){
 	setInterval(OnRender, 50);
 	setInterval(OnTick, 1000);
 	setInterval(OnSave, 1000 * 300);
-})
+});

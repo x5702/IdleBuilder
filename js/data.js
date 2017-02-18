@@ -172,16 +172,6 @@ StaticData = {
 				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
 			},
 		},		
-		Steel_GrowthRate : {
-			Cost : function() {
-				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
-			},
-		},		
-		Steel_OutputEfficiency : {
-			Cost : function() {
-				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
-			},
-		},	
 		OilMinerLevel : {
 			Cost : function() {
 				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
@@ -189,4 +179,4 @@ StaticData = {
 		},		
 		
 	},
-}
+};

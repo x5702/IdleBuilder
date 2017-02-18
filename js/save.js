@@ -3,6 +3,7 @@ SaveDataInit = {
 	Fuel : 0,
 	Steel : 0,
 	Bauxite : 0,
+	Exp: 0,
 
 	Territory : 10,
 
