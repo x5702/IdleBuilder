@@ -6,16 +6,16 @@ ConstData = {
 
 StaticData = {
 	ManpowerPerSec : function() {
-		return (20 + SaveData.Manpower_InitialPlan + (2 + ConstData.ResourceBonusRate * SaveData.Manpower_GrowthRate) * SaveData.Territory ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
+		return (20 + SaveData.Technology.Manpower_InitialPlan + (2 + ConstData.ResourceBonusRate * SaveData.Technology.Manpower_GrowthRate) * SaveData.Territory ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Technology.Manpower_OutputEfficiency);
 	},
 	FuelPerSec : function() {
-		return (5 + SaveData.Fuel_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Fuel_GrowthRate) * SaveData.OilMiner ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
+		return (5 + SaveData.Technology.Fuel_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Technology.Fuel_GrowthRate) * SaveData.OilMiner.Num ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Technology.Fuel_OutputEfficiency);
 	},
 	SteelPerSec : function() {
-		return (3 + SaveData.Steel_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Steel_GrowthRate) * SaveData.SteelMiner ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
+		return (3 + SaveData.Technology.Steel_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Technology.Steel_GrowthRate) * SaveData.SteelMiner.Num ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Technology.Steel_OutputEfficiency);
 	},
 	BauxitePerSec : function() {
-		return (3 + SaveData.Bauxite_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Bauxite_GrowthRate) * SaveData.BauxiteMiner ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
+		return (3 + SaveData.Technology.Bauxite_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Technology.Bauxite_GrowthRate) * SaveData.BauxiteMiner.Num ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Technology.Bauxite_OutputEfficiency);
 		},
 
 	OilMinerBuildCost : function() {
