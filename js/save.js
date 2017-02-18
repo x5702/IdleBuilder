@@ -104,6 +104,19 @@ SaveDataInit = {
 	SubmarinePlanned : 0,
 
 	Technology : {
+		Manpower_InitialPlan : 0,
+		Manpower_GrowthRate : 0,
+		Manpower_OutputEfficiency : 0,
+		Fuel_InitialPlan : 0,
+		Fuel_GrowthRate : 0,
+		Fuel_OutputEfficiency : 0,
+		Steel_InitialPlan : 0,
+		Steel_GrowthRate : 0,
+		Steel_OutputEfficiency : 0,
+		Bauxite_InitialPlan : 0,
+		Bauxite_GrowthRate : 0,
+		Bauxite_OutputEfficiency : 0,
+
 		OilMinerLevel : 0,
 	}
 };

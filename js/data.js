@@ -1,20 +1,22 @@
 ConstData = {
 	BaseCost : 100,
+	ResourceBonusRate : 0.01,
+	ResourceMultiRate : 0.01,
 };
 
 StaticData = {
 	ManpowerPerSec : function() {
-		return 20 + 2 * SaveData.Territory;
+		return (20 + SaveData.Manpower_InitialPlan + (2 + ConstData.ResourceBonusRate * SaveData.Manpower_GrowthRate) * SaveData.Territory ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
 	},
 	FuelPerSec : function() {
-		return 5 + 1 * SaveData.OilMiner.Num;
+		return (5 + SaveData.Fuel_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Fuel_GrowthRate) * SaveData.OilMiner ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
 	},
 	SteelPerSec : function() {
-		return 3 + 1 * SaveData.SteelMiner.Num;
+		return (3 + SaveData.Steel_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Steel_GrowthRate) * SaveData.SteelMiner ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
 	},
 	BauxitePerSec : function() {
-		return 3 + 1 * SaveData.BauxiteMiner.Num;
-	},
+		return (3 + SaveData.Bauxite_InitialPlan + (1 + ConstData.ResourceBonusRate * SaveData.Bauxite_GrowthRate) * SaveData.BauxiteMiner ) * ( 1 + ConstData.ResourceMultiRate * SaveData.Manpower_OutputEfficiency);
+		},
 
 	OilMinerBuildCost : function() {
 		var ManpowerCost = ConstData.BaseCost;
@@ -120,9 +122,71 @@ StaticData = {
 	},
 
 	Technology : {
-		OilMinerLevel : function() {
-			return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+		Manpower_InitialPlan :{
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
 		},
-
+		Manpower_GrowthRate :  {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},
+		Manpower_OutputEfficiency :{
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Fuel_InitialPlan :  {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Fuel_GrowthRate : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Fuel_OutputEfficiency :{
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Steel_InitialPlan : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Steel_GrowthRate : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Steel_OutputEfficiency : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Bauxite_InitialPlan :  {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Steel_GrowthRate : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		Steel_OutputEfficiency : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},	
+		OilMinerLevel : {
+			Cost : function() {
+				return {Manpower : 100, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10};
+			},
+		},		
+		
 	},
 }
