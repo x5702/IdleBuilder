@@ -91,6 +91,7 @@ function BattlePhaseStep()
 		SaveData.Exp += StaticData.ExpPerBattle(true);		//Add exp before go to next area
 		SaveData.WorldArea++;
 		Formula.GenerateEnemy();
+		RenderPhase();
 		return;		//In this case, we don't care how many ally ships survived, just go back and repair ships
 	}
 
@@ -118,6 +119,7 @@ function BattlePhaseStep()
 			SaveData.Exp += StaticData.ExpPerBattle(false);
 		}
 	}
+	RenderPhase();
 }
 
 function GetEquipNum(attacker, ship, equip)
@@ -256,6 +258,7 @@ function OnProductionPhase()
 		}
 	}
 	SaveData.Phase++;
+	RenderPhase();
 }
 
 function OnReconPhase()
@@ -264,6 +267,7 @@ function OnReconPhase()
 
 	//Should be no ship loss, skip check
 	SaveData.Phase++;
+	RenderPhase();
 }
 
 function OnAirAttackPhase()
@@ -330,6 +334,17 @@ function OnTick()
 			OnTorpedoPhase();
 			break;
 	}
+}
+
+function RenderPhase()
+{
+	for (var i = 0; i < 7; i++)
+	{
+		$("#Phase" + i).removeClass("btn-danger");
+		$("#Phase" + i).addClass("btn-default");
+	}
+		$("#Phase" + SaveData.Phase).removeClass("btn-default");
+		$("#Phase" + SaveData.Phase).addClass("btn-danger");
 }
 
 function OnRender()
@@ -411,38 +426,36 @@ function OnRender()
 	}
 
 	//Update Ship Production
+	$("#WorldArea").text("World Area: " + SaveData.WorldArea);
 	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + StaticData.FleetSize());
-	
-	if(SaveData.Phase == 0)
+
+	for(var ship in StaticData.Ship)
 	{
-		for(var ship in StaticData.Ship)
+		if (SaveData.Phase == 0)
 		{
-			if (SaveData.Phase == 0)
+			if (SaveData.Ship[ship][0].Num <= SaveData.Ship[ship][0].Planned)
 			{
-				if (SaveData.Ship[ship][0].Num <= SaveData.Ship[ship][0].Planned)
+				var cost = StaticData.Ship[ship][0].Cost();
+				if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP() && SaveData.Ship[ship][0].Num > 0)
 				{
-					var cost = StaticData.Ship[ship][0].Cost();
-					if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP() && SaveData.Ship[ship][0].Num > 0)
+					var maxhp = StaticData.Ship[ship][0].HP();
+					SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
+				}
+				else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
+				{
+					if(CheckResource(cost, 1))
 					{
-						var maxhp = StaticData.Ship[ship][0].HP();
-						SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
-					}
-					else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
-					{
-						if(CheckResource(cost, 1))
-						{
-							ConsumeResource(cost, 1);
-							SaveData.Ship[ship][0].HP = 0;
-							SaveData.Ship[ship][0].Num++;
-						}
+						ConsumeResource(cost, 1);
+						SaveData.Ship[ship][0].HP = 0;
+						SaveData.Ship[ship][0].Num++;
 					}
 				}
 			}
-			$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
-			$("#"+ship+"HP").attr("value",SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP());
-			$("#Enemy"+ship).text(ship + ": " + SaveData.Ship[ship][1].Num);
-			$("#Enemy"+ship+"HP").attr("value",SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP());
 		}
+		$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
+		$("#"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP()*100) + "%");
+		$("#Enemy"+ship).text(ship + ": " + SaveData.Ship[ship][1].Num);
+		$("#Enemy"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP()*100) + "%");
 	}
 }
 
@@ -474,6 +487,35 @@ function OnInit()
 			"  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + tech + "Progress'></div>\n" +
 			"</div>\n" +
 			"<div class='collapse' id='" + tech + "Detail'><div class='well'><small>\n" +
+			"	  <u>Detail info here</u>\n" +
+			"	</small></div></div>\n");
+	}
+
+	RenderPhase();
+
+	var allyShipTable = $("#Ally");
+	var enemyShipTable = $("#Enemy");
+	for (var ship in StaticData.Ship)
+	{
+		allyShipTable.append("<div class='btn-group btn-block' role='group'>\n" +
+			"  <button type='button' class='btn btn-default' style='width: 70%' id='" + ship + "' data-toggle='collapse' data-target='#" + ship + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 15%' id='" + ship + "Research' onclick=OnBuildShip('" + ship + "', 1)>+</button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 15%' id='" + ship + "Research' onclick=OnBuildShip('" + ship + "', -1)>-</button>\n" +
+			"</div>\n" +
+			"<div class='progress progress-striped active'>\n" +
+			"  <div class='progress-bar progress-bar-success' role='progressbar' style='width: 80%;' id='" + ship + "HP'></div>\n" +
+			"</div>\n" +
+			"<div class='collapse' id='" + ship + "Detail'><div class='well'><small>\n" +
+			"	  <u>Detail info here</u>\n" +
+			"	</small></div></div>\n");
+
+		enemyShipTable.append("<div class='btn-group btn-block' role='group'>\n" +
+			"  <button type='button' class='btn btn-default' style='width: 100%' id='Enemy" + ship + "' data-toggle='collapse' data-target='#Enemy" + ship + "Detail'></button>\n" +
+			"</div>\n" +
+			"<div class='progress progress-striped active'>\n" +
+			"  <div class='progress-bar progress-bar-success' role='progressbar' style='width: 80%;' id='Enemy" + ship + "HP'></div>\n" +
+			"</div>\n" +
+			"<div class='collapse' id='Enemy" + ship + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
 			"	</small></div></div>\n");
 	}

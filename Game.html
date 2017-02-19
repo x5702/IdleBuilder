@@ -145,202 +145,92 @@
 				</table>
 			</div>
 			<div class="tab col-xs-12 col-sm-3 hidden-xs" id="Battle">
-				<table  class="table table-condensed">
-					<tr>
-						<td id="FleetSize">Fleet Size: 0/10</td>
-						<td rowspan=17>vs</td>
-						<td>Phase : Maintainence</td>
-					</tr>
-					<tr>
-						<td id="FleetStat">
-							Overall Firepower:<br/>
-							Overall Torpedo:<br/>
-							Overall Anti Air:<br/>
-							Overall Anti Sub:<br/>
-							Overall Recon:<br/>
-							Overall Fighter:<br/>
-							Overall Bomber:<br/>
-						</td>
-						<td id="EnemyFleetStat">
-							Overall Firepower:<br/>
-							Overall Torpedo:<br/>
-							Overall Anti Air:<br/>
-							Overall Anti Sub:<br/>
-							Overall Recon:<br/>
-							Overall Fighter:<br/>
-							Overall Bomber:<br/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span id="Destroyer">Destroyer: 0/0</span>
-							<button onclick="OnBuildShip('Destroyer', 1)">+</button>
-							<button onclick="OnBuildShip('Destroyer', -1)">-</button>
-						</td>
-						<td id="EnemyDestroyer">Destroyer : 0</td>
-					</tr>
-					<tr>
-						<td>
-							<progress id="DestroyerHP" value="0">0%</progress>
-						</td>
-						<td>
-							<progress id="EnemyDestroyerHP" value="0">0%</progress>
-						</td>
-					</tr>
-					<tr>
-						<td id="DestroyerStat">
-							Firepower:<br/>
+				<div class="btn-group btn-group-justified" role="group" aria-label="...">
+					<div class="btn-group" role="group" style="vertical-align: top">
+					  <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#WorldAndFleetDetail"><span id="WorldArea">World Area:</span></button>
+	  			</div>
+	  			<div class="btn-group" role="group" style="vertical-align: top">
+					  <button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#WorldAndFleetDetail"><span id="FleetSize">Fleet Size:</span></button>
+	   			</div>
+				</div>
+			  <div class="collapse" id="WorldAndFleetDetail">
+				  <div class="well"><small>
+				    Exp in this area:<br/>
+				    Base Fleet Size:<br/>
+				    Fleet Expansion:
+				  </small></div>
+				</div>
+
+				<div class="btn-group btn-group-justified" role="group" aria-label="...">
+					<div class="btn-group" role="group">
+  					<button class="btn btn-default" type="button" id="Phase0">Repair</button>
+	  			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-default" type="button" id="Phase1">Recon</button>
+	   			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-default" type="button" id="Phase2">Air</button>
+	   			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-default" type="button" id="Phase3">AntiSub</button>
+	  			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-default" type="button" id="Phase4">Long</button>
+	  			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-default" type="button" id="Phase5">Short</button>
+	  			</div>
+	  			<div class="btn-group" role="group">
+	  				<button class="btn btn-default" type="button" id="Phase6">Torpedo</button>
+	  			</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6" id="Ally">
+						<div id="FleetStat">
+							Long:<br/>
+							Short:<br/>
 							Torpedo:<br/>
-							Anti Air:<br/>
-							Anti Sub:<br/>
-							Recon:<br/>
-						</td>
-						<td id="EnemyDestroyerStat">
-							Firepower:<br/>
-							Torpedo:<br/>
-							Anti Air:<br/>
-							Anti Sub:<br/>
-							Recon:<br/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span id="Cruiser">Cruiser: 0/0</span>
-							<button>+</button>
-							<button>-</button>
-						</td>
-						<td id="EnemyCruiser">Cruiser : 0</td>
-					</tr>
-					<tr>
-						<td>
-							<progress id="CruiserHP" value="0">0%</progress>
-						</td>
-						<td>
-							<progress value="0">0%</progress>
-						</td>
-					</tr>
-					<tr>
-						<td id="CruiserStat">
-							Firepower:<br/>
-							Torpedo:<br/>
-							Anti Air:<br/>
-							Anti Sub:<br/>
-							Recon:<br/>
-						</td>
-						<td id="EnemyCruiserStat">
-							Firepower:<br/>
-							Torpedo:<br/>
-							Anti Air:<br/>
-							Anti Sub:<br/>
-							Recon:<br/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span id="Carrier">Carrier: 0/0</span>
-							<button>+</button>
-							<button>-</button>
-						</td>
-						<td id="EnemyCarrier">Carrier : 0</td>
-					</tr>
-					<tr>
-						<td>
-							<progress id="CarrierHP" value="0">0%</progress>
-						</td>
-						<td>
-							<progress value="0">0%</progress>
-						</td>
-					</tr>
-					<tr>
-						<td id="CarrierStat">
+							Submarine:<br/>
 							Anti Air:<br/>
 							Anti Sub:<br/>
 							Recon:<br/>
 							Fighter:<br/>
 							Bomber:<br/>
-						</td>
-						<td id="EnemyCarrierStat">
+						</div>
+					</div>
+
+					<div class="col-xs-6" id="Enemy">
+						<div id="EnemyFleetStat">
+							Long:<br/>
+							Short:<br/>
+							Torpedo:<br/>
+							Submarine:<br/>
 							Anti Air:<br/>
 							Anti Sub:<br/>
 							Recon:<br/>
 							Fighter:<br/>
 							Bomber:<br/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span id="Battleship">Battleship: 0/0</span>
-							<button>+</button>
-							<button>-</button>
-						</td>
-						<td id="EnemyBattleship">Battleship : 0</td>
-					</tr>
-					<tr>
-						<td>
-							<progress id="BattleshipHP" value="0">0%</progress>
-						</td>
-						<td>
-							<progress value="0">0%</progress>
-						</td>
-					</tr>
-					<tr>
-						<td id="BattleshipStat">
-							Firepower:<br/>
-							Anti Air:<br/>
-							Recon:<br/>
-						</td>
-						<td id="EnemyBattleshipStat">
-							Firepower:<br/>
-							Anti Air:<br/>
-							Recon:<br/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span id="Submarine">Submarine: 0/0</span>
-							<button>+</button>
-							<button>-</button>
-						</td>
-						<td id="EnemySubmarine">Submarine : 0</td>
-					</tr>
-					<tr>
-						<td>
-							<progress id="SubmarineHP" value="0">0%</progress>
-						</td>
-						<td>
-							<progress value="0">0%</progress>
-						</td>
-					</tr>
-					<tr>
-						<td id="SubmarineStat">
-							Torpedo:<br/>
-							Recon:<br/>
-							Stealth:<br/>
-						</td>
-						<td id="EnemySubmarineStat">
-							Torpedo:<br/>
-							Recon:<br/>
-							Stealth:<br/>
-						</td>
-					</tr>
-				</table>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div id="Footer"><div class="container" style="width: 100%">
 			<div class="btn-group btn-group-justified" role="group" aria-label="...">
 				<div class="btn-group" role="group">
-  					<button class="btn btn-primary" type="button" onclick="OnTab('Build')">Base  <span class="badge">1</span></button>
-	  			</div>
-	  			<div class="btn-group" role="group">
-	  				<button class="btn btn-primary" type="button" onclick="OnTab('Research')">Lab  <span class="badge">2</span></button>
-	   			</div>
-	  			<div class="btn-group" role="group">
-	  				<button class="btn btn-primary" type="button" onclick="OnTab('Design')">Ship  <span class="badge">6</span></button>
-	   			</div>
-	  			<div class="btn-group" role="group">
-	  				<button class="btn btn-primary" type="button" onclick="OnTab('Battle')">Battle  <span class="badge">!</span></button>
-	  			</div>
+					<button class="btn btn-primary" type="button" onclick="OnTab('Build')">Base  <span class="badge">1</span></button>
+  			</div>
+  			<div class="btn-group" role="group">
+  				<button class="btn btn-primary" type="button" onclick="OnTab('Research')">Lab  <span class="badge">2</span></button>
+   			</div>
+  			<div class="btn-group" role="group">
+  				<button class="btn btn-primary" type="button" onclick="OnTab('Design')">Ship  <span class="badge">6</span></button>
+   			</div>
+  			<div class="btn-group" role="group">
+  				<button class="btn btn-primary" type="button" onclick="OnTab('Battle')">Battle  <span class="badge">!</span></button>
+  			</div>
 			</div>
 		</div></div>
 
