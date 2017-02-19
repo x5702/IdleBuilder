@@ -88,7 +88,7 @@ function BattlePhaseStep()
 	if (alldestroyed)
 	{
 		SaveData.Phase = 0;
-		SaveData.Exp += ExpPerBattle(true);		//Add exp before go to next area
+		SaveData.Exp += StaticData.ExpPerBattle(true);		//Add exp before go to next area
 		SaveData.WorldArea++;
 		Formula.GenerateEnemy();
 		return;		//In this case, we don't care how many ally ships survived, just go back and repair ships
@@ -107,7 +107,7 @@ function BattlePhaseStep()
 	if (alldestroyed)
 	{
 		SaveData.Phase = 0;
-		SaveData.Exp += ExpPerBattle(false);
+		SaveData.Exp += StaticData.ExpPerBattle(false);
 	}
 	else
 	{
@@ -115,7 +115,7 @@ function BattlePhaseStep()
 		if (SaveData.Phase > 6)
 		{
 			SaveData.Phase = 0;
-			SaveData.Exp += ExpPerBattle(false);
+			SaveData.Exp += StaticData.ExpPerBattle(false);
 		}
 	}
 }
@@ -132,7 +132,7 @@ function TotalAttackCount(attacker, weaponused)
 	for (var weapon in weaponused)
 	{
 		result[weapon] = 0;
-		if (weaponused[weapon])
+		if ((weapon == "LightGun" || weapon == "Torpedo") && weaponused[weapon])
 		{
 			for (var ship in StaticData.Ship)
 			{
@@ -168,7 +168,7 @@ function CalculateShipLoss(damage, side, ship)
 function Attack(phase, attacker)
 {
 	var weaponused = Formula.WeaponsUsed(phase);
-	var totalattackcount = TotalAttackCount(weaponused);
+	var totalattackcount = TotalAttackCount(attacker, weaponused);
 	var weights = Formula.CalculateDamageWeight(1 - attacker);
 	for (var weapon in totalattackcount)
 	{
@@ -176,7 +176,7 @@ function Attack(phase, attacker)
 		{
 			for (var ship in weights)
 			{
-				var totaldamage = totalattackcount[weapon] * Formula.CalculateDamagePerAttack(attacker, weapon, ship);
+				var totaldamage = totalattackcount[weapon] * weights[ship] * Formula.CalculateDamagePerAttack(attacker, weapon, ship);
 				CalculateShipLoss(totaldamage, 1 - attacker, ship);
 			}
 		}
@@ -254,7 +254,7 @@ function OnProductionPhase()
 
 function OnReconPhase()
 {
-	SaveData.Initiative = TotalRecon(0) >= TotalRecon(1) ? 0 : 1;
+	SaveData.Initiative = Formula.TotalRecon(0) >= Formula.TotalRecon(1) ? 0 : 1;
 
 	//Should be no ship loss, skip check
 	SaveData.Phase++;
@@ -262,7 +262,7 @@ function OnReconPhase()
 
 function OnAirAttackPhase()
 {
-	SaveData.Initiative = TotalAirToAirPower(0) >= TotalAirToAirPower(1) ? 0 : 1;
+	SaveData.Initiative = Formula.TotalAirToAirPower(0) >= Formula.TotalAirToAirPower(1) ? 0 : 1;
 
 	BattlePhaseStep();
 }
@@ -411,26 +411,31 @@ function OnRender()
 	{
 		for(var ship in StaticData.Ship)
 		{
-			if (SaveData.Ship[ship][0].Num <= SaveData.Ship[ship][0].Planned)
+			if (SaveData.Phase == 0)
 			{
-				var cost = StaticData.Ship[ship][0].Cost();
-				if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP() && SaveData.Ship[ship][0].Num > 0)
+				if (SaveData.Ship[ship][0].Num <= SaveData.Ship[ship][0].Planned)
 				{
-					var maxhp = StaticData.Ship[ship][0].HP();
-					SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
-				}
-				else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
-				{
-					if(CheckResource(cost, 1))
+					var cost = StaticData.Ship[ship][0].Cost();
+					if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP() && SaveData.Ship[ship][0].Num > 0)
 					{
-						ConsumeResource(cost, 1);
-						SaveData.Ship[ship][0].HP = 0;
-						SaveData.Ship[ship][0].Num++;
+						var maxhp = StaticData.Ship[ship][0].HP();
+						SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
+					}
+					else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
+					{
+						if(CheckResource(cost, 1))
+						{
+							ConsumeResource(cost, 1);
+							SaveData.Ship[ship][0].HP = 0;
+							SaveData.Ship[ship][0].Num++;
+						}
 					}
 				}
 			}
 			$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
 			$("#"+ship+"HP").attr("value",SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP());
+			$("#Enemy"+ship).text(ship + ": " + SaveData.Ship[ship][1].Num);
+			$("#Enemy"+ship+"HP").attr("value",SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP());
 		}
 	}
 }
