@@ -1,4 +1,4 @@
-SaveDataInit = {
+var SaveDataInit = {
 	Manpower: 0,
 	Fuel: 0,
 	Steel: 0,

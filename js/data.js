@@ -1,4 +1,4 @@
-ConstData = {
+var ConstData = {
 	BaseCost : 100,
 	ResourceBonusRate : 0.01,
 	ResourceMultiRate : 0.01,
@@ -24,7 +24,7 @@ ConstData = {
 };
 
 
-StaticData = {
+var StaticData = {
 	Territory : function() {
 		return 10 + SaveData.WorldArea;
 	},

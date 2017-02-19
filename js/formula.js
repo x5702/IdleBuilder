@@ -1,4 +1,4 @@
-Formula = {
+var Formula = {
 	GenerateEnemy : function() {
 		for (var ship in StaticData.Ship)
 		{
@@ -44,7 +44,7 @@ Formula = {
 	},
 
 	CalculateDamageWeight : function(side) {
-		var weight = {Destroyer: 1, Cruiser: 2, Battleship: 5, Carrier: 4, Submarine : 0};
+		var weight = {Destroyer: 1}; //, Cruiser: 2, Battleship: 5, Carrier: 4, Submarine : 0};
 		var totalWeight = 0;
 		for (var ship in StaticData.Ship)
 		{
