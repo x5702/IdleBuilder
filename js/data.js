@@ -104,46 +104,97 @@ StaticData = {
 	},
 
 	Ship : {
-		Destroyer : {
-			Size : function() {
-				return 2;
+		Destroyer : [
+			{
+				Size : function() {
+					return 2;
+				},
+				HP : function() {
+					return 10;
+				},
+				Defend : function() {
+					return 0;
+				},
+				Evade : function() {
+					return 0.5;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 100, Steel : 100, Bauxite : 0, Time: 10};
+				},
 			},
-			HP : function() {
-				return 10;
+			{
+				Size : function() {
+					return 0;
+				},
+				HP : function() {
+					return 10 * SaveData.WorldArea;
+				},
+				Defend : function() {
+					return 0;
+				},
+				Evade : function() {
+					return 0.5;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				},
 			},
-			Defend : function() {
-				return 5;
-			},
-			Evade : function() {
-				return 0.5;
-			},
-			Cost : function() {
-				return {Manpower : 0, Fuel : 100, Steel : 100, Bauxite : 0, Time: 10};
-			},
-		},
+		],
 	},
 
 	Equip : {
-		LightGunAttack : function() {
-			return 10;
-		},
-		LightGunAccuracy : function() {
-			return 0.8;
-		},
-		LightGunSpeed : function() {
-			return 1;
+		LightGun : {
+			Attack : function() {
+				return 10;
+			},
+			Piercing : function() {
+				return 0;
+			},
+			Accuracy : function() {
+				return 0.8;
+			},
+			Evadable : function () {
+				return 0;
+			},
+			Speed : function() {
+				return 2;
+			},
 		},
 
-		LightArmorDefend : function() {
-			return 2;
+		Torpedo : {
+			Attack : function() {
+				return 10;
+			},
+			Piercing : function() {
+				return 0.5;
+			},
+			Accuracy : function() {
+				return 0.2;
+			},
+			Evadable : function () {
+				return 0.5;
+			},
+			Speed : function() {
+				return 1;
+			},
 		},
 
-		LightEngineEvade : function() {
-			return 0.1;
+		LightArmor : {
+			Defend : function() {
+				return 2;
+			},
 		},
 
-		RadarRecon : function(){
-			return 10;
+		LightEngine : {
+			Evade : function() {
+				return 0.1;
+			},
+		},
+
+		Radar : {
+			Recon : function(){
+				return 10;
+			},
 		},
 	},
 

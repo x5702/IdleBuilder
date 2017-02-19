@@ -7,6 +7,8 @@ SaveDataInit = {
 
 	WorldArea : 0,
 	Phase : 0,
+	Initiative : -1,
+	AirSupremacy : -1,
 
 	Building : {
 		OilMiner : {
@@ -52,55 +54,87 @@ SaveDataInit = {
 			{
 				Num : 0,
 				HP : 0,
+				Equip : [
+					"LightGun",
+					"Torpedo",
+				],
 				Planned : 0,
 			},
 			{
 				Num : 0,
 				HP : 0,
+				Equip : [
+					"LightGun",
+					"Torpedo",
+				],
 			},
 		],
 		Cruiser : [
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 				Planned : 0,
 			},
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 			},
 		],
 		Battleship : [
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 				Planned : 0,
 			},
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 			},
 		],
 		Carrier : [
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 				Planned : 0,
 			},
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 			},
 		],
 		Submarine : [
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 				Planned : 0,
 			},
 			{
 				Num : 0,
 				HP : 0,
+				Equip : {
+
+				},
 			},
 		],
 	},

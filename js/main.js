@@ -65,7 +65,29 @@ function EstimateTimeToGetResource(cost)
 
 function OccupiedFleetSize()
 {
-	return SaveData.Ship.Destroyer[0].Planned * StaticData.Ship.Destroyer.Size();
+	var total = 0;
+	for (var ship in StaticData.Ship)
+	{
+		total += SaveData.Ship[ship][0].Planned * StaticData.Ship[ship][0].Size();
+	}
+	return total;
+}
+
+//Don't call this on the end of last phase, simply do /SaveData.Phase = 0;/
+function BattlePhaseStep()
+{
+	for(var i = 0; i < 2; i++)
+	{
+		for (var ship in StaticData.Ship)
+		{
+			if (SaveData.Ship[ship][i].Num > 0)
+			{
+				SaveData.Phase++;
+				return;
+			}
+		}
+	}
+	SaveData.Phase = 0;
 }
 
 //UI stuff
@@ -110,55 +132,68 @@ function OnResearchTech(name)
 
 function OnBuildShip(name, n)
 {
-	if (OccupiedFleetSize() + StaticData.Ship[name].Size() * n <= StaticData.FleetSize())
+	if (OccupiedFleetSize() + StaticData.Ship[name][0].Size() * n <= StaticData.FleetSize())
 	{
 		SaveData.Ship[name][0].Planned = Math.max(0, SaveData.Ship[name][0].Planned + n);
 		if (SaveData.Ship[name][0].Num > SaveData.Ship[name][0].Planned)
 		{
 			SaveData.Ship[name][0].Num = SaveData.Ship[name][0].Planned;
-			SaveData.Ship[name][0].HP = SaveData.Ship[name][0].Num > 0 ? StaticData.Ship[name].HP() : 0;
+			SaveData.Ship[name][0].HP = SaveData.Ship[name][0].Num > 0 ? StaticData.Ship[name][0].HP() : 0;
 		}
 	}
 }
 
 function OnProductionPhase()
 {
-	if (SaveData.Ship.Destroyer[0].Num < SaveData.Ship.Destroyer[0].Planned || SaveData.Ship.Destroyer[0].HP < StaticData.Ship.Destroyer.HP())
+	for (var ship in StaticData.Ship)
 	{
+		if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned || SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP())
+		{
+			return;
+		}
 	}
-	else
-	{
-		SaveData.Phase++;
-	}
+
+	SaveData.Phase++;
 }
 
 function OnReconPhase()
 {
+	SaveData.Initiative = TotalRecon(0) >= TotalRecon(1) ? 0 : 1;
+
+	//Should be no ship loss, skip check
 	SaveData.Phase++;
 }
 
 function OnAirAttackPhase()
 {
-	SaveData.Phase++;
+	SaveData.Initiative = TotalAirToAirPower(0) >= TotalAirToAirPower(1) ? 0 : 1;
+
+	BattlePhaseStep();
 }
 
 function OnSubmarineTorpedoPhase()
 {
-	SaveData.Phase++;
+	BattlePhaseStep();
 }
 
 function OnLongRangeFirePhase()
 {
-	SaveData.Phase++;
+	BattlePhaseStep();
 }
 
 function OnShortRangeFirePhase()
 {
-	SaveData.Phase++;
+	var a = 1 - SaveData.Initiative;
+
+	var damage = Formula.ShortRangeDamage(SaveData.Initiative);
+	var shiploss = Math.floor(damage / 1);
+
+	BattlePhaseStep();
 }
 
 function OnTorpedoPhase()
 {
+
 	SaveData.Phase = 0;
 }
 
@@ -284,10 +319,10 @@ function OnRender()
 		{
 			if (SaveData.Ship[ship][0].Num <= SaveData.Ship[ship][0].Planned)
 			{
-				var cost = StaticData.Ship[ship].Cost();
-				if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship].HP() && SaveData.Ship[ship][0].Num > 0)
+				var cost = StaticData.Ship[ship][0].Cost();
+				if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP() && SaveData.Ship[ship][0].Num > 0)
 				{
-					var maxhp = StaticData.Ship[ship].HP();
+					var maxhp = StaticData.Ship[ship][0].HP();
 					SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
 				}
 				else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
@@ -301,7 +336,7 @@ function OnRender()
 				}
 			}
 			$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
-			$("#"+ship+"HP").attr("value",SaveData.Ship[ship][0].HP / StaticData.Ship.Destroyer.HP());
+			$("#"+ship+"HP").attr("value",SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP());
 		}
 	}
 }
