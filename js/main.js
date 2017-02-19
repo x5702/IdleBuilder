@@ -167,17 +167,23 @@ function CalculateShipLoss(damage, side, ship)
 
 function Attack(phase, attacker)
 {
+	console.log("Phase: " + phase + " Attacker: " + attacker);
 	var weaponused = Formula.WeaponsUsed(phase);
 	var totalattackcount = TotalAttackCount(attacker, weaponused);
+	console.log("Total Attack Count: " + JSON.stringify(totalattackcount));
 	var weights = Formula.CalculateDamageWeight(1 - attacker);
+	console.log("Ship Weights: " + JSON.stringify(weights));
 	for (var weapon in totalattackcount)
 	{
 		if (totalattackcount[weapon] > 0)
 		{
 			for (var ship in weights)
 			{
-				var totaldamage = totalattackcount[weapon] * weights[ship] * Formula.CalculateDamagePerAttack(attacker, weapon, ship);
+				var damage = Formula.CalculateDamagePerAttack(attacker, weapon, ship);
+				console.log("Single Attack Damage by *" + weapon + "* to *" + ship + "*: " + damage);
+				var totaldamage = totalattackcount[weapon] * weights[ship] * damage;
 				CalculateShipLoss(totaldamage, 1 - attacker, ship);
+				console.log("Opponent *" + ship + "* Left: " + SaveData.Ship[ship][1-attacker].Num);
 			}
 		}
 	}
