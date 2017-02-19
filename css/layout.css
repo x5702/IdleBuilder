@@ -35,22 +35,6 @@ div#Footer div.container {
   background-color: #2c3e50;
 }
 
-div#Battle {
-  padding: 0;
-}
-
-div#Battle div.row {
-  margin: 0;
-}
-
-div#Ally {
-  padding: 0;
-}
-
-div#Enemy {
-  padding: 0;
-}
-
 .dropdown-menu a.text-danger:hover{
   background-color: #e74c3c !important;
 }
@@ -59,7 +43,15 @@ div#Enemy {
     margin-bottom: 0;
 }
 
-.progress .progress-bar {
+.btn-group-xs .btn {
+    padding: 0 !important;
+}
+
+.btn-default.info {
+    text-align: left;
+}
+
+.progress .progress-bar .notransition {
     -webkit-transition: none;
     -moz-transition: none;
     -ms-transition: none;

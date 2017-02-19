@@ -75,51 +75,70 @@ function OccupiedFleetSize()
 
 function BattlePhaseStep()
 {
-	//Check if enemy all destroyed
-	var alldestroyed = true;
-	for (var ship in StaticData.Ship)
+	if (SaveData.Phase == 0)
 	{
-		if (SaveData.Ship[ship][1].Num > 0)
+		if (OccupiedFleetSize() <= 0)
 		{
-			alldestroyed = false;
-			break;
+			return;
 		}
-	}
-	if (alldestroyed)
-	{
-		SaveData.Phase = 0;
-		SaveData.Exp += StaticData.ExpPerBattle(true);		//Add exp before go to next area
-		SaveData.WorldArea++;
-		Formula.GenerateEnemy();
+		for (var ship in StaticData.Ship)
+		{
+			if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned || SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP())
+			{
+				return;
+			}
+		}
+		SaveData.Phase++;
 		RenderPhase();
-		return;		//In this case, we don't care how many ally ships survived, just go back and repair ships
-	}
-
-	//Check if ally all destroyed
-	alldestroyed = true;
-	for (var ship in StaticData.Ship)
-	{
-		if (SaveData.Ship[ship][0].Num > 0)
-		{
-			alldestroyed = false;
-			break;
-		}
-	}
-	if (alldestroyed)
-	{
-		SaveData.Phase = 0;
-		SaveData.Exp += StaticData.ExpPerBattle(false);
 	}
 	else
 	{
-		SaveData.Phase++;
-		if (SaveData.Phase > 6)
+		//Check if enemy all destroyed
+		var alldestroyed = true;
+		for (var ship in StaticData.Ship)
+		{
+			if (SaveData.Ship[ship][1].Num > 0)
+			{
+				alldestroyed = false;
+				break;
+			}
+		}
+		if (alldestroyed)
+		{
+			SaveData.Phase = 0;
+			SaveData.Exp += StaticData.ExpPerBattle(true);		//Add exp before go to next area
+			SaveData.WorldArea++;
+			Formula.GenerateEnemy();
+			RenderPhase();
+			return;		//In this case, we don't care how many ally ships survived, just go back and repair ships
+		}
+
+		//Check if ally all destroyed
+		alldestroyed = true;
+		for (var ship in StaticData.Ship)
+		{
+			if (SaveData.Ship[ship][0].Num > 0)
+			{
+				alldestroyed = false;
+				break;
+			}
+		}
+		if (alldestroyed)
 		{
 			SaveData.Phase = 0;
 			SaveData.Exp += StaticData.ExpPerBattle(false);
 		}
+		else
+		{
+			SaveData.Phase++;
+			if (SaveData.Phase > 6)
+			{
+				SaveData.Phase = 0;
+				SaveData.Exp += StaticData.ExpPerBattle(false);
+			}
+		}
+		RenderPhase();
 	}
-	RenderPhase();
 }
 
 function GetEquipNum(attacker, ship, equip)
@@ -155,12 +174,12 @@ function CalculateShipLoss(damage, side, ship)
 	var saveship = SaveData.Ship[ship][side];
 	saveship.Num -= shiploss;
 	saveship.HP -= extradamage;
-	if (saveship.HP < 0)
+	if (saveship.HP <= 0)
 	{
 		saveship.HP += maxhp;
 		saveship.Num--;
 	}
-	if (saveship.Num < 0)
+	if (saveship.Num <= 0)
 	{
 		saveship.Num = 0;
 		saveship.HP = 0;
@@ -246,59 +265,38 @@ function OnBuildShip(name, n)
 
 function OnProductionPhase()
 {
-	if (OccupiedFleetSize() <= 0)
-	{
-		return;
-	}
-	for (var ship in StaticData.Ship)
-	{
-		if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned || SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP())
-		{
-			return;
-		}
-	}
-	SaveData.Phase++;
-	RenderPhase();
 }
 
 function OnReconPhase()
 {
 	SaveData.Initiative = Formula.TotalRecon(0) >= Formula.TotalRecon(1) ? 0 : 1;
-
-	//Should be no ship loss, skip check
-	SaveData.Phase++;
-	RenderPhase();
 }
 
 function OnAirAttackPhase()
 {
 	SaveData.Initiative = Formula.TotalAirToAirPower(0) >= Formula.TotalAirToAirPower(1) ? 0 : 1;
-
-	BattlePhaseStep();
 }
 
 function OnSubmarineTorpedoPhase()
 {
-	BattlePhaseStep();
+
 }
 
 function OnLongRangeFirePhase()
 {
-	BattlePhaseStep();
+
 }
 
 function OnShortRangeFirePhase()
 {
 	Attack(5, SaveData.Initiative);
 	Attack(5, 1 - SaveData.Initiative);
-	BattlePhaseStep();
 }
 
 function OnTorpedoPhase()
 {
 	Attack(6, SaveData.Initiative);
 	Attack(6, 1 - SaveData.Initiative);
-	BattlePhaseStep();
 }
 
 function OnTick()
@@ -308,6 +306,8 @@ function OnTick()
 	SaveData.Fuel = Math.min(StaticData.FuelMax(), SaveData.Fuel + StaticData.FuelPerSec());
 	SaveData.Steel = Math.min(StaticData.SteelMax(), SaveData.Steel + StaticData.SteelPerSec());
 	SaveData.Bauxite = Math.min(StaticData.BauxiteMax(), SaveData.Bauxite + StaticData.BauxitePerSec());
+
+	BattlePhaseStep();
 
 	//Update Battle Phase
 	switch(SaveData.Phase)
@@ -343,8 +343,8 @@ function RenderPhase()
 		$("#Phase" + i).removeClass("btn-danger");
 		$("#Phase" + i).addClass("btn-default");
 	}
-		$("#Phase" + SaveData.Phase).removeClass("btn-default");
-		$("#Phase" + SaveData.Phase).addClass("btn-danger");
+	$("#Phase" + SaveData.Phase).removeClass("btn-default");
+	$("#Phase" + SaveData.Phase).addClass("btn-danger");
 }
 
 function OnRender()
@@ -464,12 +464,12 @@ function OnInit()
 	var buildingTable = $("#Build");
 	for (var building in StaticData.Building)
 	{
-		buildingTable.append("<div class='btn-group btn-block' role='group'>\n" +
-			"  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "' data-toggle='collapse' data-target='#" + building + "Detail'></button>\n" +
-			"  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "')>Build</button>\n" +
+		buildingTable.append("<div class='btn-group btn-block btn-group-sm' role='group'>\n" +
+			"  <button type='button' class='btn btn-default info' style='width: 80%' id='" + building + "' data-toggle='collapse' data-target='#" + building + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 20%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "')>Build</button>\n" +
 			"</div>\n" +
 			"<div class='progress progress-striped active'>\n" +
-			"  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n" +
+			"  <div class='progress-bar progress-bar-warning notransition' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n" +
 			"</div>\n" +
 			"<div class='collapse' id='" + building + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
@@ -479,12 +479,12 @@ function OnInit()
 	var researchTable = $("#Research");
 	for (var tech in StaticData.Technology)
 	{
-		researchTable.append("<div class='btn-group btn-block' role='group'>\n" +
-			"  <button type='button' class='btn btn-default' style='width: 65%' id='" + tech + "' data-toggle='collapse' data-target='#" + tech + "Detail'></button>\n" +
-			"  <button type='button' class='btn btn-primary' style='width: 35%' id='" + tech + "Research' onclick=OnResearchTech('" + tech + "')>Research</button>\n" +
+		researchTable.append("<div class='btn-group btn-block btn-group-sm' role='group'>\n" +
+			"  <button type='button' class='btn btn-default info' style='width: 80%' id='" + tech + "' data-toggle='collapse' data-target='#" + tech + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 20%' id='" + tech + "Research' onclick=OnResearchTech('" + tech + "')>Research</button>\n" +
 			"</div>\n" +
 			"<div class='progress progress-striped active'>\n" +
-			"  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + tech + "Progress'></div>\n" +
+			"  <div class='progress-bar progress-bar-warning notransition' role='progressbar' style='width: 80%;' id='" + tech + "Progress'></div>\n" +
 			"</div>\n" +
 			"<div class='collapse' id='" + tech + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
@@ -497,22 +497,22 @@ function OnInit()
 	var enemyShipTable = $("#Enemy");
 	for (var ship in StaticData.Ship)
 	{
-		allyShipTable.append("<div class='btn-group btn-block' role='group'>\n" +
-			"  <button type='button' class='btn btn-default' style='width: 70%' id='" + ship + "' data-toggle='collapse' data-target='#" + ship + "Detail'></button>\n" +
-			"  <button type='button' class='btn btn-primary' style='width: 15%' id='" + ship + "Research' onclick=OnBuildShip('" + ship + "', 1)>+</button>\n" +
-			"  <button type='button' class='btn btn-primary' style='width: 15%' id='" + ship + "Research' onclick=OnBuildShip('" + ship + "', -1)>-</button>\n" +
+		allyShipTable.append("<div class='btn-group btn-block btn-group-sm' role='group'>\n" +
+			"  <button type='button' class='btn btn-default info' style='width: 70%' id='" + ship + "' data-toggle='collapse' data-target='#" + ship + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-info' style='width: 15%' onclick=OnBuildShip('" + ship + "',1)>+</button>\n" +
+			"  <button type='button' class='btn btn-danger' style='width: 15%' onclick=OnBuildShip('" + ship + "',-1)>-</button>\n" +
 			"</div>\n" +
-			"<div class='progress progress-striped active'>\n" +
-			"  <div class='progress-bar progress-bar-success' role='progressbar' style='width: 80%;' id='" + ship + "HP'></div>\n" +
+			"<div class='progress'>\n" +
+			"  <div class='progress-bar progress-bar-success notransition' role='progressbar' style='width: 80%;' id='" + ship + "HP'></div>\n" +
 			"</div>\n" +
 			"<div class='collapse' id='" + ship + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
 			"	</small></div></div>\n");
 
-		enemyShipTable.append("<div class='btn-group btn-block' role='group'>\n" +
-			"  <button type='button' class='btn btn-default' style='width: 100%' id='Enemy" + ship + "' data-toggle='collapse' data-target='#Enemy" + ship + "Detail'></button>\n" +
+		enemyShipTable.append("<div class='btn-group btn-block btn-group-sm' role='group'>\n" +
+			"  <button type='button' class='btn btn-default info' style='width: 100%' id='Enemy" + ship + "' data-toggle='collapse' data-target='#Enemy" + ship + "Detail'></button>\n" +
 			"</div>\n" +
-			"<div class='progress progress-striped active'>\n" +
+			"<div class='progress'>\n" +
 			"  <div class='progress-bar progress-bar-success' role='progressbar' style='width: 80%;' id='Enemy" + ship + "HP'></div>\n" +
 			"</div>\n" +
 			"<div class='collapse' id='Enemy" + ship + "Detail'><div class='well'><small>\n" +
