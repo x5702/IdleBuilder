@@ -1,26 +1,6 @@
-//Helper Structure
-var Buildings = [
-	"OilMiner",
-	"OilStorage",
-	"SteelMiner",
-	"SteelStorage",
-	"BauxiteMiner",
-	"BauxiteStorage",
-	//"ShipFactory",
-	//"EquipmentFactory",
-	//"AircraftFactory",
-	//"ResearchLab",
-];
-
-var Ships = [
-	"Destroyer",
-	"Cruiser",
-	"Carrier",
-	"Battleship",
-	"Submarine",
-];
-
 var SaveData;
+var RenderInterval = 0.05;
+var TickInterval = 1;
 
 //Utility Functions
 function TimeDisplay(sec)
@@ -85,7 +65,7 @@ function EstimateTimeToGetResource(cost)
 
 function OccupiedFleetSize()
 {
-	return SaveData.DestroyerPlanned * StaticData.Destroyer.Size();
+	return SaveData.Ship.Destroyer[0].Planned * StaticData.Ship.Destroyer.Size();
 }
 
 //UI stuff
@@ -102,36 +82,48 @@ function OnTab(name)
 	$("#" + name).removeClass("hidden-xs");
 }
 
-function OnBuildBuilding(name, n)
+function OnBuildBuilding(name)
 {
-	if (SaveData[name].Progress == 0)
+	if (SaveData.Building[name].Progress == 0)
 	{
-		var cost = StaticData[name+"BuildCost"]();
+		var cost = StaticData.Building[name].Cost();
 		if(CheckResource(cost, 1))
 		{
 			ConsumeResource(cost, 1);
-			SaveData[name].Progress = Math.min(SaveData[name].Progress + 0.05 / cost.Time, 1);
-			$("#"+name+"Build").attr("disabled", "disabled");
+			SaveData.Building[name].Progress = Math.min(SaveData.Building[name].Progress + 0.05 / cost.Time, 1);
+		}
+	}
+}
+
+function OnResearchTech(name)
+{
+	if (SaveData.Technology[name].Progress == 0)
+	{
+		var cost = StaticData.Technology[name].Cost();
+		if(CheckResource(cost, 1))
+		{
+			ConsumeResource(cost, 1);
+			SaveData.Technology[name].Progress = Math.min(SaveData.Technology[name].Progress + 0.05 / cost.Time, 1);
 		}
 	}
 }
 
 function OnBuildShip(name, n)
 {
-	if (OccupiedFleetSize() + StaticData[name].Size() * n <= SaveData.FleetSize)
+	if (OccupiedFleetSize() + StaticData.Ship[name].Size() * n <= StaticData.FleetSize())
 	{
-		SaveData[name + "Planned"] = Math.max(0, SaveData[name + "Planned"] + n);
-		if (SaveData[name][0].Num > SaveData[name + "Planned"])
+		SaveData.Ship[name][0].Planned = Math.max(0, SaveData.Ship[name][0].Planned + n);
+		if (SaveData.Ship[name][0].Num > SaveData.Ship[name][0].Planned)
 		{
-			SaveData[name][0].Num = SaveData[name + "Planned"];
-			SaveData[name][0].HP = SaveData[name][0].Num > 0 ? 1 : 0;
+			SaveData.Ship[name][0].Num = SaveData.Ship[name][0].Planned;
+			SaveData.Ship[name][0].HP = SaveData.Ship[name][0].Num > 0 ? StaticData.Ship[name].HP() : 0;
 		}
 	}
 }
 
 function OnProductionPhase()
 {
-	if (SaveData.Destroyer[0].Num < SaveData.DestroyerPlanned)
+	if (SaveData.Ship.Destroyer[0].Num < SaveData.Ship.Destroyer[0].Planned || SaveData.Ship.Destroyer[0].HP < StaticData.Ship.Destroyer.HP())
 	{
 	}
 	else
@@ -179,7 +171,7 @@ function OnTick()
 	SaveData.Bauxite = Math.min(StaticData.BauxiteMax(), SaveData.Bauxite + StaticData.BauxitePerSec());
 
 	//Update Battle Phase
-	switch(SaveData.BattlePhase)
+	switch(SaveData.Phase)
 	{
 		case 0:
 			OnProductionPhase();
@@ -207,29 +199,28 @@ function OnTick()
 
 function OnRender()
 {
-	$("#Manpower").html("M: " + Math.floor(SaveData.Manpower) + "<span class='hidden-xs'> + " + Math.floor(StaticData.ManpowerPerSec()) + "/d / " + Math.floor(StaticData.ManpowerMax()) + "</span>");
-	$("#Fuel").html(Math.floor(SaveData.Fuel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.FuelPerSec()) + "/d / " + Math.floor(StaticData.FuelMax()) + "</span>");
-	$("#Steel").html(Math.floor(SaveData.Steel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/d / " + Math.floor(StaticData.SteelMax()) + "</span>");
-	$("#Bauxite").html(Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/d / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
+	$("#Manpower").html("M: " + Math.floor(SaveData.Manpower) + "<span class='hidden-xs'> + " + Math.floor(StaticData.ManpowerPerSec()) + "/s / " + Math.floor(StaticData.ManpowerMax()) + "</span>");
+	$("#Fuel").html(Math.floor(SaveData.Fuel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.FuelPerSec()) + "/s / " + Math.floor(StaticData.FuelMax()) + "</span>");
+	$("#Steel").html(Math.floor(SaveData.Steel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/s / " + Math.floor(StaticData.SteelMax()) + "</span>");
+	$("#Bauxite").html(Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/s / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
 	$("#Exp").html(Math.floor(SaveData.Exp));
 
 	$("#Territory").text(SaveData.Territory);
 
 	//Update Infrastructure Building
-	for(var i = 0; i < Buildings.length; i++)
+	for(var building in StaticData.Building)
 	{
-		var building = Buildings[i];
-
-		var cost = StaticData[building+"BuildCost"]();
-		if (SaveData[building].Progress >= 1)
+		var cost = StaticData.Building[building].Cost();
+		if (SaveData.Building[building].Progress >= 1)
 		{
-			SaveData[building].Progress = 0;
-			SaveData[building].Num++;
+			SaveData.Building[building].Progress = 0;
+			SaveData.Building[building].Num++;
 			$("#"+building+"Build").removeAttr("disabled");
 		}
-		else if (SaveData[building].Progress > 0)
+		else if (SaveData.Building[building].Progress > 0)
 		{
-			SaveData[building].Progress = Math.min(SaveData[building].Progress + 0.05 / cost.Time, 1);
+			SaveData.Building[building].Progress = Math.min(SaveData.Building[building].Progress + 0.05 / cost.Time, 1);
+			$("#"+building+"Build").attr("disabled", "disabled");
 		}
 		else
 		{
@@ -246,61 +237,103 @@ function OnRender()
 			}
 		}
 
-		$("#"+building).text(building + ": " + SaveData[building].Num);
-		$("#"+building+"Progress").css("width", Math.ceil(SaveData[building].Progress*100) + "%");
+		$("#"+building).text(building + ": " + SaveData.Building[building].Num);
+		$("#"+building+"Progress").css("width", Math.ceil(SaveData.Building[building].Progress*100) + "%");
 	}
 
-	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + SaveData.FleetSize);
+	//Update Technology
+	for(var tech in StaticData.Technology)
+	{
+		var cost = StaticData.Technology[tech].Cost();
+		if (SaveData.Technology[tech].Progress >= 1)
+		{
+			SaveData.Technology[tech].Progress = 0;
+			SaveData.Technology[tech].Level++;
+			$("#"+tech+"Research").removeAttr("disabled");
+		}
+		else if (SaveData.Technology[tech].Progress > 0)
+		{
+			SaveData.Technology[tech].Progress = Math.min(SaveData.Technology[tech].Progress + 0.05 / cost.Time, 1);
+			$("#"+tech+"Research").attr("disabled", "disabled");
+		}
+		else
+		{
+			var researchbutton = $("#"+tech+"Research");
+			if(CheckResource(cost, 1))
+			{
+				researchbutton.removeAttr("disabled");
+				researchbutton.text("Research");
+			}
+			else
+			{
+				researchbutton.attr("disabled", "disabled");
+				researchbutton.text(EstimateTimeToGetResource(cost));
+			}
+		}
+
+		$("#"+tech).text(tech + ": " + SaveData.Technology[tech].Level);
+		$("#"+tech+"Progress").css("width", Math.ceil(SaveData.Technology[tech].Progress*100) + "%");
+	}
 
 	//Update Ship Production
-	if(SaveData.BattlePhase == 0)
+	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + StaticData.FleetSize());
+	
+	if(SaveData.Phase == 0)
 	{
-		for(var i = 0; i < 1/*Ships.length*/; i++)
+		for(var ship in StaticData.Ship)
 		{
-			var ship = Ships[i];
-			if (SaveData[ship][0].Num <= SaveData[ship+"Planned"])
+			if (SaveData.Ship[ship][0].Num <= SaveData.Ship[ship][0].Planned)
 			{
-				var cost = StaticData[ship].Cost();
-				if (SaveData[ship][0].HP < 1 && SaveData[ship][0].Num > 0)
+				var cost = StaticData.Ship[ship].Cost();
+				if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship].HP() && SaveData.Ship[ship][0].Num > 0)
 				{
-					SaveData[ship][0].HP = Math.min(SaveData[ship][0].HP + 0.05 / cost.Time, 1);
+					var maxhp = StaticData.Ship[ship].HP();
+					SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
 				}
-				else if (SaveData[ship][0].Num < SaveData[ship+"Planned"])
+				else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
 				{
 					if(CheckResource(cost, 1))
 					{
 						ConsumeResource(cost, 1);
-						SaveData[ship][0].HP = 0;
-						SaveData[ship][0].Num++;
+						SaveData.Ship[ship][0].HP = 0;
+						SaveData.Ship[ship][0].Num++;
 					}
 				}
 			}
-			$("#"+ship).text(ship + ": " + SaveData[ship][0].Num + " / " + SaveData[ship+"Planned"]);
-			$("#"+ship+"HP").attr("value",SaveData[ship][0].HP);
+			$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
+			$("#"+ship+"HP").attr("value",SaveData.Ship[ship][0].HP / StaticData.Ship.Destroyer.HP());
 		}
 	}
-
-
-	$("#Cruiser").text("Cruiser: " + SaveData.Cruiser[0].Num + " / " + SaveData.CruiserPlanned);
-	$("#Battleship").text("Battleship: " + SaveData.Battleship[0].Num + " / " + SaveData.BattleshipPlanned);
-	$("#Carrier").text("Carrier: " + SaveData.Carrier[0].Num + " / " + SaveData.CarrierPlanned);
-	$("#Submarine").text("Submarine: " + SaveData.Submarine[0].Num + " / " + SaveData.SubmarinePlanned);
 }
 
 function OnInit()
 {
 	var buildingTable = $("#Build");
-	for(i = 0; i < Buildings.length; i++)
+	for (var building in StaticData.Building)
 	{
-		var building = Buildings[i];
 		buildingTable.append("<div class='btn-group btn-block' role='group'>\n" +
 			"  <button type='button' class='btn btn-default' style='width: 70%' id='" + building + "' data-toggle='collapse' data-target='#" + building + "Detail'></button>\n" +
-			"  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "',1)>Build</button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 30%' id='" + building + "Build' onclick=OnBuildBuilding('" + building + "')>Build</button>\n" +
 			"</div>\n" +
 			"<div class='progress progress-striped active'>\n" +
 			"  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + building + "Progress'></div>\n" +
 			"</div>\n" +
 			"<div class='collapse' id='" + building + "Detail'><div class='well'><small>\n" +
+			"	  <u>Detail info here</u>\n" +
+			"	</small></div></div>\n");
+	}
+
+	var researchTable = $("#Research");
+	for (var tech in StaticData.Technology)
+	{
+		researchTable.append("<div class='btn-group btn-block' role='group'>\n" +
+			"  <button type='button' class='btn btn-default' style='width: 65%' id='" + tech + "' data-toggle='collapse' data-target='#" + tech + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 35%' id='" + tech + "Research' onclick=OnResearchTech('" + tech + "')>Research</button>\n" +
+			"</div>\n" +
+			"<div class='progress progress-striped active'>\n" +
+			"  <div class='progress-bar progress-bar-warning' role='progressbar' style='width: 80%;' id='" + tech + "Progress'></div>\n" +
+			"</div>\n" +
+			"<div class='collapse' id='" + tech + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
 			"	</small></div></div>\n");
 	}
