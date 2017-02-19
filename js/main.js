@@ -498,9 +498,9 @@ function OnInit()
 	for (var ship in StaticData.Ship)
 	{
 		allyShipTable.append("<div class='btn-group btn-block btn-group-sm' role='group'>\n" +
-			"  <button type='button' class='btn btn-default info' style='width: 70%' id='" + ship + "' data-toggle='collapse' data-target='#" + ship + "Detail'></button>\n" +
-			"  <button type='button' class='btn btn-info' style='width: 15%' onclick=OnBuildShip('" + ship + "',1)>+</button>\n" +
 			"  <button type='button' class='btn btn-danger' style='width: 15%' onclick=OnBuildShip('" + ship + "',-1)>-</button>\n" +
+			"  <button type='button' class='btn btn-default info' style='width: 70%' id='" + ship + "' data-toggle='collapse' data-target='#" + ship + "Detail'></button>\n" +
+			"  <button type='button' class='btn btn-primary' style='width: 15%' onclick=OnBuildShip('" + ship + "',1)>+</button>\n" +
 			"</div>\n" +
 			"<div class='progress'>\n" +
 			"  <div class='progress-bar progress-bar-success notransition' role='progressbar' style='width: 80%;' id='" + ship + "HP'></div>\n" +

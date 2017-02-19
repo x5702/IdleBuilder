@@ -44,11 +44,16 @@ div#Footer div.container {
 }
 
 .btn-group-xs .btn {
-    padding: 0 !important;
+    padding: 1px 0;
+}
+
+.btn-group-sm .btn {
+    padding: 6px 0;
 }
 
 .btn-default.info {
     text-align: left;
+    padding: 6px 9px;
 }
 
 .progress .progress-bar.notransition {
