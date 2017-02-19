@@ -195,5 +195,85 @@ SaveDataInit = {
 			Level: 0,
 			Progress: 0,
 		},
+		Fleet_Destroyer_DeckImprove : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Cruiser_DeckImprove : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Battleship_DeckImprove : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Carrier_DeckImprove : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Submarine_DeckImprove : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Destroyer_Armor : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Cruiser_Armor : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Battleship_Armor : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Carrier_Armor : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Submarine_Armor : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Destroyer_FireControl : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Cruiser_FireControl : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Battleship_FireControl : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Carrier_FireControl : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Submarine_FireControl : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Destroyer_AimSystem : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Cruiser_AimSystem : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Battleship_AimSystem : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Carrier_AimSystem : {
+			Level : 0,
+			Progress : 0,
+		},
+		Fleet_Submarine_AimSystem : {
+			Level : 0,
+			Progress : 0,
+		},
 	},
 };

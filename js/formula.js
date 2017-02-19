@@ -2,8 +2,12 @@ Formula = {
 	GenerateEnemy : function() {
 		for (var ship in StaticData.Ship)
 		{
-			SaveData.Ship[ship][1].Num = SaveData.WorldArea * 5;
-			SaveData.Ship[ship][1].HP = SaveData.Ship[ship][1].HP();
+			
+			//Ship Num Increase for each 25 Level in WorldArea.
+			SaveData.Ship[ship][1].Num = StaticData.Ship[ship][1].Size();
+			
+			//Ship HP increase per 5 Level
+			SaveData.Ship[ship][1].HP = StaticData.Ship[ship][1].HP();
 			//SaveData.Ship[ship][1].Equip = [
 			//	"LightGun",
 			//	"Torpedo",
