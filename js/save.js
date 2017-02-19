@@ -1,196 +1,199 @@
 SaveDataInit = {
-	Manpower : 0,
-	Fuel : 0,
-	Steel : 0,
-	Bauxite : 0,
+	Manpower: 0,
+	Fuel: 0,
+	Steel: 0,
+	Bauxite: 0,
 	Exp: 0,
 
-	WorldArea : 0,
-	Phase : 0,
-	Initiative : -1,
-	AirSupremacy : -1,
+	WorldArea: 1,
+	Phase: 0,	// 0 = Production, 1 = Recon, 2 = Air, 3 = Sub, 4 = Long, 5 = Short, 6 = Torpedo
+	Initiative: -1,	//0 = ally first, 1 = enemy first, -1 = not set
+	AirSupremacy: -1,	//0 = ally, 1 = enemy, -1 = not set
 
-	Building : {
-		OilMiner : {
-			Num : 0,
-			Progress : 0,
+	Building: {
+		OilMiner: {
+			Num: 0,
+			Progress: 0,
 		},
-		OilStorage : {
-			Num : 0,
-			Progress : 0,
+		OilStorage: {
+			Num: 0,
+			Progress: 0,
 		},
-		SteelMiner : {
-			Num : 0,
-			Progress : 0,
+		SteelMiner: {
+			Num: 0,
+			Progress: 0,
 		},
-		SteelStorage : {
-			Num : 0,
-			Progress : 0,
+		SteelStorage: {
+			Num: 0,
+			Progress: 0,
 		},
-		BauxiteMiner : {
-			Num : 0,
-			Progress : 0,
+		BauxiteMiner: {
+			Num: 0,
+			Progress: 0,
 		},
-		BauxiteStorage : {
-			Num : 0,
-			Progress : 0,
+		BauxiteStorage: {
+			Num: 0,
+			Progress: 0,
 		},
-		//ShipFactory : {
-		//	Num : 0,
-		//	Progress : 0,
+		//ShipFactory: {
+		//	Num: 0,
+		//	Progress: 0,
 		//},
-		//EquipmentFactory : {
-		//	Num : 0,
-		//	Progress : 0,
+		//EquipmentFactory: {
+		//	Num: 0,
+		//	Progress: 0,
 		//},
-		//ResearchLab : {
-		//	Num : 0,
-		//	Progress : 0,
+		//ResearchLab: {
+		//	Num: 0,
+		//	Progress: 0,
 		//},
 	},
 
-	Ship : {
-		Destroyer : [
+	Ship: {
+		Destroyer: [
 			{
-				Num : 0,
-				HP : 0,
-				Equip : [
+				Num: 0,
+				HP: 0,
+				Equip: {
+					Main: {Gun: 1, Torpedo: 1},
+					Side: {AAGun: 2},
+					Armor: 1,
+					Engine: 1,
+					Radar: 1,
+				},
+				Planned: 0,
+			},
+			{
+				Num: 0,
+				HP: 0,
+				Equip: [
 					"LightGun",
 					"Torpedo",
 				],
-				Planned : 0,
-			},
-			{
-				Num : 0,
-				HP : 0,
-				Equip : [
-					"LightGun",
-					"Torpedo",
-				],
 			},
 		],
-		Cruiser : [
+		Cruiser: [
 			{
-				Num : 0,
-				HP : 0,
-				Equip : {
+				Num: 0,
+				HP: 0,
+				Equip: {
 
 				},
-				Planned : 0,
+				Planned: 0,
 			},
 			{
-				Num : 0,
-				HP : 0,
-				Equip : {
+				Num: 0,
+				HP: 0,
+				Equip: {
 
 				},
 			},
 		],
-		Battleship : [
+		Battleship: [
 			{
-				Num : 0,
-				HP : 0,
-				Equip : {
+				Num: 0,
+				HP: 0,
+				Equip: {
 
 				},
-				Planned : 0,
+				Planned: 0,
 			},
 			{
-				Num : 0,
-				HP : 0,
-				Equip : {
-
-				},
-			},
-		],
-		Carrier : [
-			{
-				Num : 0,
-				HP : 0,
-				Equip : {
-
-				},
-				Planned : 0,
-			},
-			{
-				Num : 0,
-				HP : 0,
-				Equip : {
+				Num: 0,
+				HP: 0,
+				Equip: {
 
 				},
 			},
 		],
-		Submarine : [
+		Carrier: [
 			{
-				Num : 0,
-				HP : 0,
-				Equip : {
+				Num: 0,
+				HP: 0,
+				Equip: {
 
 				},
-				Planned : 0,
+				Planned: 0,
 			},
 			{
-				Num : 0,
-				HP : 0,
-				Equip : {
+				Num: 0,
+				HP: 0,
+				Equip: {
+
+				},
+			},
+		],
+		Submarine: [
+			{
+				Num: 0,
+				HP: 0,
+				Equip: {
+
+				},
+				Planned: 0,
+			},
+			{
+				Num: 0,
+				HP: 0,
+				Equip: {
 
 				},
 			},
 		],
 	},
 
-	Technology : {
-		FleetExpansion : {
-			Level : 0,
-			Progress : 0,
+	Technology: {
+		FleetExpansion: {
+			Level: 0,
+			Progress: 0,
 		},
-		Manpower_InitialPlan : {
-			Level : 0,
-			Progress : 0,
+		Manpower_InitialPlan: {
+			Level: 0,
+			Progress: 0,
 		},
-		Manpower_GrowthRate : {
-			Level : 0,
-			Progress : 0,
+		Manpower_GrowthRate: {
+			Level: 0,
+			Progress: 0,
 		},
-		Manpower_OutputEfficiency : {
-			Level : 0,
-			Progress : 0,
+		Manpower_OutputEfficiency: {
+			Level: 0,
+			Progress: 0,
 		},
-		Fuel_InitialPlan : {
-			Level : 0,
-			Progress : 0,
+		Fuel_InitialPlan: {
+			Level: 0,
+			Progress: 0,
 		},
-		Fuel_GrowthRate : {
-			Level : 0,
-			Progress : 0,
+		Fuel_GrowthRate: {
+			Level: 0,
+			Progress: 0,
 		},
-		Fuel_OutputEfficiency : {
-			Level : 0,
-			Progress : 0,
+		Fuel_OutputEfficiency: {
+			Level: 0,
+			Progress: 0,
 		},
-		Steel_InitialPlan : {
-			Level : 0,
-			Progress : 0,
+		Steel_InitialPlan: {
+			Level: 0,
+			Progress: 0,
 		},
-		Steel_GrowthRate : {
-			Level : 0,
-			Progress : 0,
+		Steel_GrowthRate: {
+			Level: 0,
+			Progress: 0,
 		},
-		Steel_OutputEfficiency : {
-			Level : 0,
-			Progress : 0,
+		Steel_OutputEfficiency: {
+			Level: 0,
+			Progress: 0,
 		},
-		Bauxite_InitialPlan : {
-			Level : 0,
-			Progress : 0,
+		Bauxite_InitialPlan: {
+			Level: 0,
+			Progress: 0,
 		},
-		Bauxite_GrowthRate : {
-			Level : 0,
-			Progress : 0,
+		Bauxite_GrowthRate: {
+			Level: 0,
+			Progress: 0,
 		},
-		Bauxite_OutputEfficiency : {
-			Level : 0,
-			Progress : 0,
+		Bauxite_OutputEfficiency: {
+			Level: 0,
+			Progress: 0,
 		},
 	},
 };

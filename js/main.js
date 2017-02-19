@@ -73,21 +73,114 @@ function OccupiedFleetSize()
 	return total;
 }
 
-//Don't call this on the end of last phase, simply do /SaveData.Phase = 0;/
 function BattlePhaseStep()
 {
-	for(var i = 0; i < 2; i++)
+	//Check if enemy all destroyed
+	var alldestroyed = true;
+	for (var ship in StaticData.Ship)
 	{
-		for (var ship in StaticData.Ship)
+		if (SaveData.Ship[ship][1].Num > 0)
 		{
-			if (SaveData.Ship[ship][i].Num > 0)
+			alldestroyed = false;
+			break;
+		}
+	}
+	if (alldestroyed)
+	{
+		SaveData.Phase = 0;
+		SaveData.Exp += ExpPerBattle(true);		//Add exp before go to next area
+		SaveData.WorldArea++;
+		Formula.GenerateEnemy();
+		return;		//In this case, we don't care how many ally ships survived, just go back and repair ships
+	}
+
+	//Check if ally all destroyed
+	alldestroyed = true;
+	for (var ship in StaticData.Ship)
+	{
+		if (SaveData.Ship[ship][0].Num > 0)
+		{
+			alldestroyed = false;
+			break;
+		}
+	}
+	if (alldestroyed)
+	{
+		SaveData.Phase = 0;
+		SaveData.Exp += ExpPerBattle(false);
+	}
+	else
+	{
+		SaveData.Phase++;
+		if (SaveData.Phase > 6)
+		{
+			SaveData.Phase = 0;
+			SaveData.Exp += ExpPerBattle(false);
+		}
+	}
+}
+
+function GetEquipNum(attacker, ship, equip)
+{
+	return 1;
+}
+
+function TotalAttackCount(attacker, weaponused)
+{
+	var result = {};
+
+	for (var weapon in weaponused)
+	{
+		result[weapon] = 0;
+		if (weaponused[weapon])
+		{
+			for (var ship in StaticData.Ship)
 			{
-				SaveData.Phase++;
-				return;
+				result[weapon] += GetEquipNum(attacker, ship, weapon) * SaveData.Ship[ship][attacker].Num * StaticData.Equip[weapon][attacker].Speed();
 			}
 		}
 	}
-	SaveData.Phase = 0;
+
+	return result;
+}
+
+function CalculateShipLoss(damage, side, ship)
+{
+	var maxhp = StaticData.Ship[ship][side].HP();
+	var shiploss = Math.floor(damage / maxhp);
+	var extradamage = damage - shiploss * maxhp;
+
+	var saveship = SaveData.Ship[ship][side];
+	saveship.Num -= shiploss;
+	saveship.HP -= extradamage;
+	if (saveship.HP < 0)
+	{
+		saveship.HP += maxhp;
+		saveship.Num--;
+	}
+	if (saveship.Num < 0)
+	{
+		saveship.Num = 0;
+		saveship.HP = 0;
+	}
+}
+
+function Attack(phase, attacker)
+{
+	var weaponused = Formula.WeaponsUsed(phase);
+	var totalattackcount = TotalAttackCount(weaponused);
+	var weights = Formula.CalculateDamageWeight(1 - attacker);
+	for (var weapon in totalattackcount)
+	{
+		if (totalattackcount[weapon] > 0)
+		{
+			for (var ship in weights)
+			{
+				var totaldamage = totalattackcount[weapon] * Formula.CalculateDamagePerAttack(attacker, weapon, ship);
+				CalculateShipLoss(totaldamage, 1 - attacker, ship);
+			}
+		}
+	}
 }
 
 //UI stuff
@@ -145,6 +238,10 @@ function OnBuildShip(name, n)
 
 function OnProductionPhase()
 {
+	if (OccupiedFleetSize() <= 0)
+	{
+		return;
+	}
 	for (var ship in StaticData.Ship)
 	{
 		if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned || SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP())
@@ -152,7 +249,6 @@ function OnProductionPhase()
 			return;
 		}
 	}
-
 	SaveData.Phase++;
 }
 
@@ -183,18 +279,16 @@ function OnLongRangeFirePhase()
 
 function OnShortRangeFirePhase()
 {
-	var a = 1 - SaveData.Initiative;
-
-	var damage = Formula.ShortRangeDamage(SaveData.Initiative);
-	var shiploss = Math.floor(damage / 1);
-
+	Attack(5, SaveData.Initiative);
+	Attack(5, 1 - SaveData.Initiative);
 	BattlePhaseStep();
 }
 
 function OnTorpedoPhase()
 {
-
-	SaveData.Phase = 0;
+	Attack(6, SaveData.Initiative);
+	Attack(6, 1 - SaveData.Initiative);
+	BattlePhaseStep();
 }
 
 function OnTick()
@@ -377,6 +471,7 @@ function OnInit()
 function Reset()
 {
 	SaveData = JSON.parse(JSON.stringify(SaveDataInit));
+	Formula.GenerateEnemy();
 }
 
 function OnSave()
@@ -399,7 +494,7 @@ function OnLoad()
 	}
 	else
 	{
-		SaveData = JSON.parse(JSON.stringify(SaveDataInit));
+		Reset();
 	}
 }
 

@@ -3,8 +3,8 @@ Formula = {
 		for (var ship in StaticData.Ship)
 		{
 			SaveData.Ship[ship][1].Num = SaveData.WorldArea * 5;
-			SaveData.Ship[ship][1].HP = SaveData.Ship[ship][1].HP;
-			//SaveData.Ship[1].Destroyer.Equip = [
+			SaveData.Ship[ship][1].HP = SaveData.Ship[ship][1].HP();
+			//SaveData.Ship[ship][1].Equip = [
 			//	"LightGun",
 			//	"Torpedo",
 			//];
@@ -19,64 +19,46 @@ Formula = {
 		return 0;
 	},
 
-	SubTorpedoDamage : function(side) {
-		var result = {};
-		for (var attacker in StaticData.Ship)
+	WeaponsUsed : function(phase)	{
+		switch(phase)
 		{
-			for (var victim in StaticData.Ship)
-			{
-				result[victim] = 0;
-			}
+			case 1: 	//Recon
+				return {HeavyGun: false, LightGun: false, Torpedo: false, SubmarineTorpedo: false, DepthCharge: false, Fighter: false, Bomber: false, TorpedoBomber: false};
+			case 2: 	//Air
+				return {HeavyGun: false, LightGun: false, Torpedo: false, SubmarineTorpedo: false, DepthCharge: false, Fighter: true, Bomber: true, TorpedoBomber: true};
+			case 3: 	//Submarine and anti-sub
+				return {HeavyGun: false, LightGun: false, Torpedo: false, SubmarineTorpedo: true, DepthCharge: true, Fighter: false, Bomber: false, TorpedoBomber: false};
+			case 4: 	//Long
+				return {HeavyGun: true, LightGun: false, Torpedo: false, SubmarineTorpedo: false, DepthCharge: false, Fighter: false, Bomber: false, TorpedoBomber: false};
+			case 5: 	//Short
+				return {HeavyGun: true, LightGun: true, Torpedo: false, SubmarineTorpedo: false, DepthCharge: false, Fighter: false, Bomber: true, TorpedoBomber: true};
+			case 6: 	//Torpedo
+				return {HeavyGun: false, LightGun: false, Torpedo: true, SubmarineTorpedo: true, DepthCharge: false, Fighter: false, Bomber: false, TorpedoBomber: false};
+			default:
+				return {HeavyGun: false, LightGun: false, Torpedo: false, SubmarineTorpedo: false, DepthCharge: false, Fighter: false, Bomber: false, TorpedoBomber: false};
 		}
-		return result;
 	},
 
-	LongRangeDamage : function(side) {
-		var result = {};
-		for (var attacker in StaticData.Ship)
+	CalculateDamageWeight : function(side) {
+		var weight = {Destroyer: 1, Cruiser: 2, Battleship: 5, Carrier: 4, Submarine : 0};
+		var totalWeight = 0;
+		for (var ship in StaticData.Ship)
 		{
-			for (var victim in StaticData.Ship)
-			{
-				result[victim] = 0;
-			}
+			weight[ship] *= SaveData.Ship[ship][side].Num;
+			totalWeight += weight[ship];
 		}
-		return result;
+		for (var ship in StaticData.Ship)
+		{
+			weight[ship] /= totalWeight;
+		}
+		return weight;
 	},
 
-	ShortRangeDamage : function(side) {
-		var result = {};
-		for (var attacker in StaticData.Ship)
-		{
-			for (var victim in StaticData.Ship)
-			{
-				var weapon = StaticData.LightGun;
-				var weaponNum = 1;	//Todo: Calculate the number of equiped weapons per ship from savedata
-				var target = StaticData[victim];
-				var damagePerShell = Math.max((weapon.Attack() - target.Defend() * (1 - weapon.Piercing())), 1);
-				var hitRate = weapon.Accuracy() * (1 - target.Evade() * weapon.Evadable());
-				//Todo: Consider target priority
-				var damage = damagePerShell * hitRate * weapon.Speed() * gunNum * SaveData.Ship[side].Num;
-				result[victim] = damage;
-			}
-		}
-		return result;
-	},
-
-	TorpedoDamage : function(side) {
-		var result = {};
-		for (var attacker in StaticData.Ship)
-		{
-			for (var victim in StaticData.Ship)
-			{
-				var weapon = StaticData.Torpedo;
-				var weaponNum = 1;	//Todo: Calculate the number of equiped weapons per ship from savedata
-				var target = StaticData[victim];
-				var damagePerShell = Math.max((weapon.Attack() - target.Defend() * (1 - weapon.Piercing())), 1);
-				var hitRate = weapon.Accuracy() * (1 - target.Evade() * weapon.Evadable());
-				var damage = damagePerShell * hitRate * weapon.Speed() * gunNum * SaveData.Ship[side].Num;
-				result[victim] = damage;
-			}
-		}
-		return result;
+	CalculateDamagePerAttack : function(attackside, equip, victimship) {
+		var weapon = StaticData.Equip[equip][attackside];
+		var target = StaticData.Ship[victimship][1-attackside];
+		var damage = Math.max((weapon.Attack() - target.Defend() * (1 - weapon.Piercing())), weapon.Attack() * 0.01);
+		var hitRate = weapon.Accuracy() * (1 - target.Evade() * weapon.Evadable());
+		return damage * hitRate;
 	},
 };

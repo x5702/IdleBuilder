@@ -42,6 +42,12 @@ StaticData = {
 		return 1000 + 1000 * SaveData.Building.BauxiteStorage.Num;
 	},
 
+	ExpPerBattle : function(win) {
+		var exp = 100 * SaveData.WorldArea;
+		if (win) exp *= 10;
+		return exp;
+	},
+
 	Building : {
 		OilMiner : {
 			Cost : function() {
@@ -143,59 +149,118 @@ StaticData = {
 	},
 
 	Equip : {
-		LightGun : {
-			Attack : function() {
-				return 10;
+		LightGun : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Speed : function() {
+					return 2;
+				},
 			},
-			Piercing : function() {
-				return 0;
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Speed : function() {
+					return 2;
+				},
 			},
-			Accuracy : function() {
-				return 0.8;
-			},
-			Evadable : function () {
-				return 0;
-			},
-			Speed : function() {
-				return 2;
-			},
-		},
+		],
 
-		Torpedo : {
-			Attack : function() {
-				return 10;
+		Torpedo : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Speed : function() {
+					return 1;
+				},
 			},
-			Piercing : function() {
-				return 0.5;
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Speed : function() {
+					return 1;
+				},
 			},
-			Accuracy : function() {
-				return 0.2;
-			},
-			Evadable : function () {
-				return 0.5;
-			},
-			Speed : function() {
-				return 1;
-			},
-		},
+		],
 
-		LightArmor : {
-			Defend : function() {
-				return 2;
+		LightArmor : [
+			{
+				Defend : function() {
+					return 2;
+				},
 			},
-		},
+			{
+				Defend : function() {
+					return 2;
+				},
+			},
+		],
 
-		LightEngine : {
-			Evade : function() {
-				return 0.1;
+		LightEngine : [
+			{
+				Evade : function() {
+					return 0.1;
+				},
 			},
-		},
+			{
+				Evade : function() {
+					return 0.1;
+				},
+			},
+		],
 
-		Radar : {
-			Recon : function(){
-				return 10;
+		Radar : [
+			{
+				Recon : function(){
+					return 10;
+				},
 			},
-		},
+			{
+				Recon : function(){
+					return 10;
+				},
+			},
+		],
 	},
 
 	Technology : {
