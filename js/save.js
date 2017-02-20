@@ -1,4 +1,4 @@
-var SaveDataInit = {
+const SaveDataInit = {
 	Manpower: 0,
 	Fuel: 0,
 	Steel: 0,

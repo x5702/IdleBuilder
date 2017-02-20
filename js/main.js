@@ -19,7 +19,7 @@ function ShortNumber(n)
 {
 	var suffix = ['', 'K', 'M', 'B', 'T'];
 	var suffixid = 0;
-	while(n >= 1000 && suffixid < suffix.length)
+	while(n >= 10000 && suffixid < suffix.length)
 	{
 		n = n / 1000;
 		suffixid++;
@@ -141,23 +141,21 @@ function BattlePhaseStep()
 	}
 }
 
-function GetEquipNum(attacker, ship, equip)
-{
-	return 1;
-}
-
 function TotalAttackCount(attacker, weaponused)
 {
 	var result = {};
 
 	for (var weapon in weaponused)
 	{
-		result[weapon] = 0;
-		if ((weapon == "LightGun" || weapon == "Torpedo") && weaponused[weapon])
+		if (weapon in StaticData.Equip)		//Todo: remove this check
 		{
-			for (var ship in StaticData.Ship)
+			result[weapon] = 0;
+			if (weaponused[weapon])
 			{
-				result[weapon] += GetEquipNum(attacker, ship, weapon) * SaveData.Ship[ship][attacker].Num * StaticData.Equip[weapon][attacker].Speed();
+				for (var ship in StaticData.Ship)
+				{
+					result[weapon] += Formula.GetEquipNum(attacker, ship, weapon) * SaveData.Ship[ship][attacker].Num * StaticData.Equip[weapon][attacker].Speed();
+				}
 			}
 		}
 	}
@@ -192,6 +190,11 @@ function Attack(phase, attacker)
 	var weaponused = Formula.WeaponsUsed(phase);
 	var totalattackcount = TotalAttackCount(attacker, weaponused);
 	console.log("Total Attack Count: " + JSON.stringify(totalattackcount));
+	return totalattackcount;
+}
+
+function Hit(phase, attacker, totalattackcount)
+{
 	var weights = Formula.CalculateDamageWeight(1 - attacker);
 	console.log("Ship Weights: " + JSON.stringify(weights));
 	for (var weapon in totalattackcount)
@@ -202,7 +205,8 @@ function Attack(phase, attacker)
 			{
 				var damage = Formula.CalculateDamagePerAttack(attacker, weapon, ship);
 				console.log("Single Attack Damage by *" + weapon + "* to *" + ship + "*: " + damage);
-				var totaldamage = totalattackcount[weapon] * weights[ship] * damage;
+				var totalhit = Math.floor(Formula.CalculateHitRate(attacker, weapon, ship) * totalattackcount[weapon] * weights[ship]);
+				var totaldamage = totalhit * damage;
 				CalculateShipLoss(totaldamage, 1 - attacker, ship);
 				console.log("Opponent *" + ship + "* Left: " + SaveData.Ship[ship][1-attacker].Num);
 			}
@@ -289,14 +293,18 @@ function OnLongRangeFirePhase()
 
 function OnShortRangeFirePhase()
 {
-	Attack(5, SaveData.Initiative);
-	Attack(5, 1 - SaveData.Initiative);
+	var totalattack0 = Attack(5, 0);
+	var totalattack1 = Attack(5, 1);
+	Hit(5, 0, totalattack0);
+	Hit(5, 1, totalattack1);
 }
 
 function OnTorpedoPhase()
 {
-	Attack(6, SaveData.Initiative);
-	Attack(6, 1 - SaveData.Initiative);
+	var totalattack0 = Attack(6, 0);
+	var totalattack1 = Attack(6, 1);
+	Hit(6, 0, totalattack0);
+	Hit(6, 1, totalattack1);
 }
 
 function OnTick()
@@ -349,13 +357,12 @@ function RenderPhase()
 
 function OnRender()
 {
-	$("#Manpower").html("M: " + Math.floor(SaveData.Manpower) + "<span class='hidden-xs'> + " + Math.floor(StaticData.ManpowerPerSec()) + "/s / " + Math.floor(StaticData.ManpowerMax()) + "</span>");
-	$("#Fuel").html(Math.floor(SaveData.Fuel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.FuelPerSec()) + "/s / " + Math.floor(StaticData.FuelMax()) + "</span>");
-	$("#Steel").html(Math.floor(SaveData.Steel) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/s / " + Math.floor(StaticData.SteelMax()) + "</span>");
-	$("#Bauxite").html(Math.floor(SaveData.Bauxite) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/s / " + Math.floor(StaticData.BauxiteMax()) + "</span>");
-	$("#Exp").html(Math.floor(SaveData.Exp));
-
-	$("#Territory").text(SaveData.Territory);
+	$("#Manpower").html("M: " + ShortNumber(Math.floor(SaveData.Manpower)) + "<span class='hidden-xs'> + " + Math.floor(StaticData.ManpowerPerSec()) + "/s / " + ShortNumber(Math.floor(StaticData.ManpowerMax())) + "</span>");
+	$("#Fuel").html(ShortNumber(Math.floor(SaveData.Fuel)) + "<span class='hidden-xs'> + " + Math.floor(StaticData.FuelPerSec()) + "/s / " + ShortNumber(Math.floor(StaticData.FuelMax())) + "</span>");
+	$("#Steel").html(ShortNumber(Math.floor(SaveData.Steel)) + "<span class='hidden-xs'> + " + Math.floor(StaticData.SteelPerSec()) + "/s / " + ShortNumber(Math.floor(StaticData.SteelMax())) + "</span>");
+	$("#Bauxite").html(ShortNumber(Math.floor(SaveData.Bauxite)) + "<span class='hidden-xs'> + " + Math.floor(StaticData.BauxitePerSec()) + "/s / " + ShortNumber(Math.floor(StaticData.BauxiteMax())) + "</span>");
+	$("#Exp").html(ShortNumber(Math.floor(SaveData.Exp)));
+	$("#Territory").text(StaticData.Territory());
 
 	//Update Infrastructure Building
 	for(var building in StaticData.Building)

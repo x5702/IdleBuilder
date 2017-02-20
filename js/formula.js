@@ -1,4 +1,4 @@
-var Formula = {
+const Formula = {
 	GenerateEnemy : function() {
 		for (var ship in StaticData.Ship)
 		{
@@ -43,8 +43,47 @@ var Formula = {
 		}
 	},
 
+	GetEquipNum : function(attacker, ship, equip)	{
+		if (ship == "Destroyer")
+		{
+			if (equip == "LightGun" || equip == "Torpedo")
+			{
+				return 1;
+			}
+		}
+		else if (ship == "Cruiser")
+		{
+			if (equip == "LightGun" || equip == "Torpedo")
+			{
+				return 2;
+			}
+		}
+		else if (ship == "Battleship")
+		{
+			if (equip == "HeavyGun" || equip == "LightGun")
+			{
+				return 3;
+			}
+		}
+		else if (ship == "Carrier")
+		{
+			if (equip == "Fighter" || equip == "Bomber")
+			{
+				return 2;
+			}
+		}
+		else if (ship == "Submarine")
+		{
+			if (equip == "Torpedo")
+			{
+				return 1;
+			}
+		}
+		return 0;		//default
+	},
+
 	CalculateDamageWeight : function(side) {
-		var weight = {Destroyer: 1}; //, Cruiser: 2, Battleship: 5, Carrier: 4, Submarine : 0};
+		var weight = {Destroyer: 1}; //, Cruiser: 1, Battleship: 1, Carrier: 1, Submarine : 0};
 		var totalWeight = 0;
 		for (var ship in StaticData.Ship)
 		{
@@ -58,11 +97,19 @@ var Formula = {
 		return weight;
 	},
 
+	CalculateHitRate : function(attackside, equip, victimship) {
+		var weapon = StaticData.Equip[equip][attackside];
+		var target = StaticData.Ship[victimship][1-attackside];
+		var reconBonus = SaveData.Initiative == attackside ? 1.2 : 0.8;
+		var hitRate = reconBonus * weapon.Accuracy() * (1 - target.Evade() * weapon.Evadable());
+		var randomness = 1 + (Math.random() - 0.5) * 0.2;		//Research to decrease scatter area?? increase critical???
+		return Math.min(Math.max(hitRate*randomness, 0), 1);
+	},
+
 	CalculateDamagePerAttack : function(attackside, equip, victimship) {
 		var weapon = StaticData.Equip[equip][attackside];
 		var target = StaticData.Ship[victimship][1-attackside];
 		var damage = Math.max((weapon.Attack() - target.Defend() * (1 - weapon.Piercing())), weapon.Attack() * 0.01);
-		var hitRate = weapon.Accuracy() * (1 - target.Evade() * weapon.Evadable());
-		return damage * hitRate;
+		return damage;
 	},
 };
