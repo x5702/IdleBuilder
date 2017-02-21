@@ -121,6 +121,7 @@ const Formula = {
 		var weapon = StaticData.Equip[equip][attackside];
 		var target = StaticData.Ship[victimship][1-attackside];
 		var damage = Math.max((weapon.Attack() - target.Defend() * (1 - weapon.Piercing())), weapon.Attack() * 0.01);
+		damage = Math.min(damage, target.HP()); //Overkill
 		return damage;
 	},
 };

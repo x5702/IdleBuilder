@@ -33,7 +33,7 @@ const StaticData = {
 	},
 
 	Territory : function() {
-		return 10 + SaveData.WorldArea;
+		return 10 + SaveData.WorldArea - 1;
 	},
 
 	FleetSize : function() {

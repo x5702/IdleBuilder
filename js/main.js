@@ -200,7 +200,7 @@ function Hit(phase, attacker, totalattackcount)
 					var totalhit = Math.floor(Formula.CalculateHitRate(attacker, weapon, ship) * totalattackcount[weapon] * weights[ship]);
 					var totaldamage = totalhit * damage;
 					CalculateShipLoss(totaldamage, 1 - attacker, ship);
-					damagetext += (" -" + damage + " * " + totalhit);
+					damagetext += (" -" + ShortNumber(damage) + " * " + ShortNumber(totalhit));
 				}
 			}
 			var display = attacker == 0 ? $("#Enemy" + ship + "Damage") : $("#" + ship + "Damage");
@@ -430,7 +430,8 @@ function OnRender()
 	}
 
 	//Update Ship Production
-	$("#WorldArea").text("World Area: " + SaveData.WorldArea);
+	var area = StaticData.CombatRegion();
+	$("#WorldArea").text("World Area: " + area[0] + "-" + area[1]);
 	$("#FleetSize").text("FleetSize: " + OccupiedFleetSize() + " / " + StaticData.FleetSize());
 
 	for(var ship in StaticData.Ship)
@@ -458,10 +459,10 @@ function OnRender()
 		}
 		$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
 		$("#"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP()*100) + "%");
-		$("#"+ship+"HPDetail").text("HP: " + StaticData.Ship[ship][0].HP() + " * " + SaveData.Ship[ship][0].Num);
+		$("#"+ship+"HPDetail").text("HP: " + ShortNumber(StaticData.Ship[ship][0].HP()) + " * " + SaveData.Ship[ship][0].Num);
 		$("#Enemy"+ship).text(ship + ": " + SaveData.Ship[ship][1].Num);
 		$("#Enemy"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP()*100) + "%");
-		$("#Enemy"+ship+"HPDetail").text("HP: " + StaticData.Ship[ship][1].HP() + " * " + SaveData.Ship[ship][1].Num);
+		$("#Enemy"+ship+"HPDetail").text("HP: " + ShortNumber(StaticData.Ship[ship][1].HP()) + " * " + SaveData.Ship[ship][1].Num);
 	}
 }
 
