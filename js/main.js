@@ -83,7 +83,8 @@ function BattlePhaseStep()
 		}
 		for (var ship in StaticData.Ship)
 		{
-			if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned || SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP())
+			if (SaveData.Ship[ship][0].Planned > 0 && 
+				(SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned || SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP()))
 			{
 				return;
 			}
@@ -143,24 +144,15 @@ function BattlePhaseStep()
 
 function TotalAttackCount(attacker, weaponused)
 {
-	var result = {};
-
 	for (var weapon in weaponused)
 	{
-		if (weapon in StaticData.Equip)		//Todo: remove this check
+		for (var ship in StaticData.Ship)
 		{
-			result[weapon] = 0;
-			if (weaponused[weapon])
-			{
-				for (var ship in StaticData.Ship)
-				{
-					result[weapon] += Formula.GetEquipNum(attacker, ship, weapon) * SaveData.Ship[ship][attacker].Num * StaticData.Equip[weapon][attacker].Speed();
-				}
-			}
+			weaponused[weapon] += Formula.GetEquipNum(attacker, ship, weapon) * SaveData.Ship[ship][attacker].Num * StaticData.Equip[weapon][attacker].Rounds();
 		}
 	}
 
-	return result;
+	return weaponused;
 }
 
 function CalculateShipLoss(damage, side, ship)
@@ -186,30 +178,35 @@ function CalculateShipLoss(damage, side, ship)
 
 function Attack(phase, attacker)
 {
-	console.log("Phase: " + phase + " Attacker: " + attacker);
 	var weaponused = Formula.WeaponsUsed(phase);
 	var totalattackcount = TotalAttackCount(attacker, weaponused);
-	console.log("Total Attack Count: " + JSON.stringify(totalattackcount));
 	return totalattackcount;
 }
 
 function Hit(phase, attacker, totalattackcount)
 {
 	var weights = Formula.CalculateDamageWeight(1 - attacker);
-	console.log("Ship Weights: " + JSON.stringify(weights));
-	for (var weapon in totalattackcount)
+	
+	for (var ship in weights)
 	{
-		if (totalattackcount[weapon] > 0)
+		if (weights[ship] > 0)
 		{
-			for (var ship in weights)
+			var damagetext = "";
+			for (var weapon in totalattackcount)
 			{
-				var damage = Formula.CalculateDamagePerAttack(attacker, weapon, ship);
-				console.log("Single Attack Damage by *" + weapon + "* to *" + ship + "*: " + damage);
-				var totalhit = Math.floor(Formula.CalculateHitRate(attacker, weapon, ship) * totalattackcount[weapon] * weights[ship]);
-				var totaldamage = totalhit * damage;
-				CalculateShipLoss(totaldamage, 1 - attacker, ship);
-				console.log("Opponent *" + ship + "* Left: " + SaveData.Ship[ship][1-attacker].Num);
+				if (totalattackcount[weapon] > 0)
+				{
+					var damage = Formula.CalculateDamagePerAttack(attacker, weapon, ship);
+					var totalhit = Math.floor(Formula.CalculateHitRate(attacker, weapon, ship) * totalattackcount[weapon] * weights[ship]);
+					var totaldamage = totalhit * damage;
+					CalculateShipLoss(totaldamage, 1 - attacker, ship);
+					damagetext += (" -" + damage + " * " + totalhit);
+				}
 			}
+			var display = attacker == 0 ? $("#Enemy" + ship + "Damage") : $("#" + ship + "Damage");
+			display.text(damagetext);
+			display.show();
+			display.fadeOut(1000);
 		}
 	}
 }
@@ -278,7 +275,7 @@ function OnReconPhase()
 
 function OnAirAttackPhase()
 {
-	SaveData.Initiative = Formula.TotalAirToAirPower(0) >= Formula.TotalAirToAirPower(1) ? 0 : 1;
+	SaveData.Initiative = Formula.TotalAirToAir(0) >= Formula.TotalAirToAir(1) ? 0 : 1;
 }
 
 function OnSubmarineTorpedoPhase()
@@ -461,8 +458,10 @@ function OnRender()
 		}
 		$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
 		$("#"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP()*100) + "%");
+		$("#"+ship+"HPDetail").text("HP: " + StaticData.Ship[ship][0].HP() + " * " + SaveData.Ship[ship][0].Num);
 		$("#Enemy"+ship).text(ship + ": " + SaveData.Ship[ship][1].Num);
 		$("#Enemy"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP()*100) + "%");
+		$("#Enemy"+ship+"HPDetail").text("HP: " + StaticData.Ship[ship][1].HP() + " * " + SaveData.Ship[ship][1].Num);
 	}
 }
 
@@ -514,7 +513,8 @@ function OnInit()
 			"</div>\n" +
 			"<div class='collapse' id='" + ship + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
-			"	</small></div></div>\n");
+			"	</small></div></div>\n" + 
+			"<div><span id='" + ship + "HPDetail'></span><span class='text-danger' id='" + ship + "Damage' style='display: none'>-</span></div>\n");
 
 		enemyShipTable.append("<div class='btn-group btn-block btn-group-sm' role='group'>\n" +
 			"  <button type='button' class='btn btn-default info' style='width: 100%' id='Enemy" + ship + "' data-toggle='collapse' data-target='#Enemy" + ship + "Detail'></button>\n" +
@@ -524,7 +524,8 @@ function OnInit()
 			"</div>\n" +
 			"<div class='collapse' id='Enemy" + ship + "Detail'><div class='well'><small>\n" +
 			"	  <u>Detail info here</u>\n" +
-			"	</small></div></div>\n");
+			"	</small></div></div>\n" + 
+			"<div><span id='Enemy" + ship + "HPDetail'></span><span class='text-danger' id='Enemy" + ship + "Damage' style='display: none'>-</span></div>\n");
 	}
 }
 

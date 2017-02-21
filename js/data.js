@@ -140,7 +140,7 @@ const StaticData = {
 		Destroyer : [
 			{
 				Size : function() {
-					return 2;
+					return 10;
 				},
 				HP : function() {
 					return ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_DeckImprove.Level, 10, 1.01, 1.2, 1.5);
@@ -173,10 +173,159 @@ const StaticData = {
 				},
 			},
 		],
+
+		Cruiser : [
+			{
+				Size : function() {
+					return 25;
+				},
+				HP : function() {
+					return ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_DeckImprove.Level, 10, 1.01, 1.2, 1.5);
+				},
+				Defend : function() {//defend * 100 to make sure value has an increment.
+					return ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_Armor.Level, 0, 1.01, 1.05, 1.2);
+				},
+				Evade : function() {
+					return 0.3;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 250, Steel : 250, Bauxite : 0, Time: 20};
+				},
+			},
+			{
+				Size : function() {
+					return 0;
+				},
+				HP : function() {
+					return Math.floor(10 + 0.2 * SaveData.WorldArea);
+				},
+				Defend : function() {
+					return 0;
+				},
+				Evade : function() {
+					return 0.3;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				},
+			},
+		],
+
+		Battleship : [
+			{
+				Size : function() {
+					return 50;
+				},
+				HP : function() {
+					return ConstData.incCalc(SaveData.Technology.Fleet_Battleship_DeckImprove.Level, 10, 1.01, 1.2, 1.5);
+				},
+				Defend : function() {//defend * 100 to make sure value has an increment.
+					return ConstData.incCalc(SaveData.Technology.Fleet_Battleship_Armor.Level, 0, 1.01, 1.05, 1.2);
+				},
+				Evade : function() {
+					return 0.1;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 1000, Steel : 1000, Bauxite : 0, Time: 100};
+				},
+			},
+			{
+				Size : function() {
+					return 0;
+				},
+				HP : function() {
+					return Math.floor(10 + 0.2 * SaveData.WorldArea);
+				},
+				Defend : function() {
+					return 0;
+				},
+				Evade : function() {
+					return 0.1;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				},
+			},
+		],
+
+		Carrier : [
+			{
+				Size : function() {
+					return 40;
+				},
+				HP : function() {
+					return ConstData.incCalc(SaveData.Technology.Fleet_Carrier_DeckImprove.Level, 10, 1.01, 1.2, 1.5);
+				},
+				Defend : function() {//defend * 100 to make sure value has an increment.
+					return ConstData.incCalc(SaveData.Technology.Fleet_Carrier_Armor.Level, 0, 1.01, 1.05, 1.2);
+				},
+				Evade : function() {
+					return 0.2;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 500, Steel : 500, Bauxite : 0, Time: 80};
+				},
+			},
+			{
+				Size : function() {
+					return 0;
+				},
+				HP : function() {
+					return Math.floor(10 + 0.2 * SaveData.WorldArea);
+				},
+				Defend : function() {
+					return 0;
+				},
+				Evade : function() {
+					return 0.2;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				},
+			},
+		],
+
+		Submarine : [
+			{
+				Size : function() {
+					return 5;
+				},
+				HP : function() {
+					return ConstData.incCalc(SaveData.Technology.Fleet_Submarine_DeckImprove.Level, 10, 1.01, 1.2, 1.5);
+				},
+				Defend : function() {//defend * 100 to make sure value has an increment.
+					return ConstData.incCalc(SaveData.Technology.Fleet_Submarine_Armor.Level, 0, 1.01, 1.05, 1.2);
+				},
+				Evade : function() {
+					return 0.1;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 50, Steel : 50, Bauxite : 0, Time: 5};
+				},
+			},
+			{
+				Size : function() {
+					return 0;
+				},
+				HP : function() {
+					return Math.floor(10 + 0.2 * SaveData.WorldArea);
+				},
+				Defend : function() {
+					return 0;
+				},
+				Evade : function() {
+					return 0.1;
+				},
+				Cost : function() {
+					return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				},
+			},
+		],
 	},
 
 	Equip : {
-		LightGun : [
+		//Destroyer
+		DestroyerGun : [
 			{
 				Attack : function() {
 					return 111;
@@ -190,7 +339,7 @@ const StaticData = {
 				Evadable : function () {
 					return 0;
 				},
-				Speed : function() {
+				Rounds : function() {
 					return 2;
 				},
 			},
@@ -207,13 +356,13 @@ const StaticData = {
 				Evadable : function () {
 					return 0;
 				},
-				Speed : function() {
+				Rounds : function() {
 					return 2;
 				},
 			},
 		],
 
-		Torpedo : [
+		DestroyerTorpedo : [
 			{
 				Attack : function() {
 					return 10;
@@ -227,7 +376,7 @@ const StaticData = {
 				Evadable : function () {
 					return 0.5;
 				},
-				Speed : function() {
+				Rounds : function() {
 					return 1;
 				},
 			},
@@ -244,47 +393,457 @@ const StaticData = {
 				Evadable : function () {
 					return 0.5;
 				},
-				Speed : function() {
+				Rounds : function() {
 					return 1;
 				},
 			},
 		],
 
-		LightArmor : [
+		DestroyerAAGun : [
 			{
-				Defend : function() {
+				AntiAir : function() {
+					return 10;
+				},
+			},
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+		],
+
+		DepthCharge : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.7;
+				},
+				Evadable : function () {
+					return 0.3;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.7;
+				},
+				Evadable : function () {
+					return 0.3;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+		],
+
+		//Cruiser
+		CruiserGun : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Rounds : function() {
 					return 2;
 				},
 			},
 			{
-				Defend : function() {
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Rounds : function() {
 					return 2;
 				},
 			},
 		],
 
-		LightEngine : [
+		CruiserTorpedo : [
 			{
-				Evade : function() {
-					return 0.1;
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
 				},
 			},
 			{
-				Evade : function() {
-					return 0.1;
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
 				},
 			},
 		],
 
+		CruiserAAGun : [
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+		],
+
+		//Battleship
+		BattleshipMainGun : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Rounds : function() {
+					return 2;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Rounds : function() {
+					return 2;
+				},
+			},
+		],
+
+		BattleshipSubGun : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+		],
+
+		BattleshipAAGun : [
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+		],
+
+		//Carrier
+		Fighter : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Rounds : function() {
+					return 2;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0;
+				},
+				Accuracy : function() {
+					return 0.8;
+				},
+				Evadable : function () {
+					return 0;
+				},
+				Rounds : function() {
+					return 2;
+				},
+			},
+		],
+
+		Bomber : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+		],
+
+		TropedoBomber : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+		],
+
+		CarrierAAGun : [
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+			{
+				AntiAir : function() {
+					return 10;
+				},
+			},
+		],
+
+		//Submarine
+		SubmarineTorpedo : [
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+			{
+				Attack : function() {
+					return 10;
+				},
+				Piercing : function() {
+					return 0.5;
+				},
+				Accuracy : function() {
+					return 0.2;
+				},
+				Evadable : function () {
+					return 0.5;
+				},
+				Rounds : function() {
+					return 1;
+				},
+			},
+		],
+
+		//Radar
 		Radar : [
 			{
-				Recon : function(){
-					return 10;
+				AntiAir : function() {
+					return 1.1;
 				},
 			},
 			{
-				Recon : function(){
-					return 10;
+				AntiAir : function() {
+					return 1.1;
+				},
+			},
+		],
+
+		FireControlSystem : [
+			{
+				Accuracy : function() {
+					return 1.1;
+				},
+			},
+			{
+				Accuracy : function() {
+					return 1.1;
+				},
+			},
+		],
+
+		Sonar : [
+			{
+				Accuracy : function() {
+					return 1.1;
+				},
+			},
+			{
+				Accuracy : function() {
+					return 1.1;
+				},
+			},
+		],
+
+		//Misc
+		SmokeScreen : [
+			{
+				Accuracy : function() {
+					return 0.5;
+				},
+				Evade : function() {
+					return 1.5;
+				},
+			},
+			{
+				Accuracy : function() {
+					return 0.5;
+				},
+				Evade : function() {
+					return 1.5;
 				},
 			},
 		],
