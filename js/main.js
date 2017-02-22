@@ -197,7 +197,7 @@ function Hit(phase, attacker, totalattackcount)
 				if (totalattackcount[weapon] > 0)
 				{
 					var damage = Formula.CalculateDamagePerAttack(attacker, weapon, ship);
-					var totalhit = Math.floor(Formula.CalculateHitRate(attacker, weapon, ship) * totalattackcount[weapon] * weights[ship]);
+					var totalhit = Formula.CalculateHitRate(attacker, weapon, ship, totalattackcount[weapon] * weights[ship]);
 					var totaldamage = totalhit * damage;
 					CalculateShipLoss(totaldamage, 1 - attacker, ship);
 					damagetext += (" -" + ShortNumber(damage) + " * " + ShortNumber(totalhit));

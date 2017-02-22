@@ -108,13 +108,18 @@ const Formula = {
 		return weight;
 	},
 
-	CalculateHitRate : function(attackside, equip, victimship) {
+	CalculateHitRate : function(attackside, equip, victimship, totalattack) {
 		var weapon = StaticData.Equip[equip][attackside];
 		var target = StaticData.Ship[victimship][1-attackside];
+		
 		var reconBonus = SaveData.Initiative == attackside ? 1.2 : 0.8;
 		var hitRate = reconBonus * weapon.Accuracy() * (1 - target.Evade() * weapon.Evadable());
-		var randomness = 1 + (Math.random() - 0.5) * 0.2;		//Research to decrease scatter area?? increase critical???
-		return Math.min(Math.max(hitRate*randomness, 0), 1);
+		//Maybe no clamping? So that if you got a bonus that makes the hit rate exceeds 100%, part of the randomness can be negated.
+		//hitRate =  Math.min(Math.max(hitRate, 0), 1);	
+		var hitShells =  hitRate * totalattack;
+		var randomness = Math.max(hitShells * 0.2, 1) * (Math.random() - 0.5);
+		
+		return Math.min(Math.max(Math.round(hitShells + randomness), 0), totalattack);
 	},
 
 	CalculateDamagePerAttack : function(attackside, equip, victimship) {
