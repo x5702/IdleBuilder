@@ -371,7 +371,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -388,7 +388,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -496,7 +496,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -513,7 +513,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -584,7 +584,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -601,7 +601,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -628,37 +628,25 @@ const StaticData = {
 		//Carrier
 		Fighter : [
 			{
-				Attack : function() {
+				AntiAir : function() {
 					return 10;
 				},
-				Piercing : function() {
-					return 0;
+				Durable : function () {
+					return 10;
 				},
-				Accuracy : function() {
-					return 0.8;
-				},
-				Evadable : function () {
-					return 0;
-				},
-				Rounds : function() {
-					return 2;
+				Maneuver : function() {
+					return 0.2;
 				},
 			},
 			{
-				Attack : function() {
+				AntiAir : function() {
 					return 10;
 				},
-				Piercing : function() {
-					return 0;
+				Durable : function () {
+					return 10;
 				},
-				Accuracy : function() {
-					return 0.8;
-				},
-				Evadable : function () {
-					return 0;
-				},
-				Rounds : function() {
-					return 2;
+				Maneuver : function() {
+					return 0.2;
 				},
 			},
 		],
@@ -672,13 +660,16 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
-					return 0.5;
+					return 0;
 				},
-				Rounds : function() {
-					return 1;
+				Durable : function () {
+					return 10;
+				},
+				Maneuver : function() {
+					return 0.2;
 				},
 			},
 			{
@@ -689,13 +680,16 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
-					return 0.5;
+					return 0;
 				},
-				Rounds : function() {
-					return 1;
+				Durable : function () {
+					return 10;
+				},
+				Maneuver : function() {
+					return 0.2;
 				},
 			},
 		],
@@ -709,13 +703,16 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
 				},
-				Rounds : function() {
-					return 1;
+				Durable : function () {
+					return 10;
+				},
+				Maneuver : function() {
+					return 0.2;
 				},
 			},
 			{
@@ -726,13 +723,16 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
 				},
-				Rounds : function() {
-					return 1;
+				Durable : function () {
+					return 10;
+				},
+				Maneuver : function() {
+					return 0.2;
 				},
 			},
 		],
@@ -760,7 +760,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;
@@ -777,7 +777,7 @@ const StaticData = {
 					return 0.5;
 				},
 				Accuracy : function() {
-					return 0.2;
+					return 0.8;
 				},
 				Evadable : function () {
 					return 0.5;

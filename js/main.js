@@ -206,7 +206,7 @@ function Hit(phase, attacker, totalattackcount)
 			var display = attacker == 0 ? $("#Enemy" + ship + "Damage") : $("#" + ship + "Damage");
 			display.text(damagetext);
 			display.show();
-			display.fadeOut(1000);
+			display.fadeOut(900);
 		}
 	}
 }
