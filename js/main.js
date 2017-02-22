@@ -73,6 +73,13 @@ function OccupiedFleetSize()
 	return total;
 }
 
+function ReturnToDock()
+{
+	SaveData.Phase = 0;
+	SaveData.Initiative = -1;
+	SaveData.AirSupremacy = -1;
+}
+
 function BattlePhaseStep()
 {
 	if (SaveData.Phase == 0)
@@ -106,7 +113,7 @@ function BattlePhaseStep()
 		}
 		if (alldestroyed)
 		{
-			SaveData.Phase = 0;
+			ReturnToDock();
 			SaveData.Exp += StaticData.ExpPerBattle(true);		//Add exp before go to next area
 			SaveData.WorldArea++;
 			Formula.GenerateEnemy();
@@ -126,7 +133,7 @@ function BattlePhaseStep()
 		}
 		if (alldestroyed)
 		{
-			SaveData.Phase = 0;
+			ReturnToDock();
 			SaveData.Exp += StaticData.ExpPerBattle(false);
 		}
 		else
@@ -134,7 +141,7 @@ function BattlePhaseStep()
 			SaveData.Phase++;
 			if (SaveData.Phase > 6)
 			{
-				SaveData.Phase = 0;
+				ReturnToDock();
 				SaveData.Exp += StaticData.ExpPerBattle(false);
 			}
 		}
@@ -233,7 +240,7 @@ function OnBuildBuilding(name)
 		if(CheckResource(cost, 1))
 		{
 			ConsumeResource(cost, 1);
-			SaveData.Building[name].Progress = Math.min(SaveData.Building[name].Progress + 0.05 / cost.Time, 1);
+			SaveData.Building[name].Progress = Math.min(SaveData.Building[name].Progress + RenderInterval / cost.Time, 1);
 		}
 	}
 }
@@ -246,7 +253,7 @@ function OnResearchTech(name)
 		if(CheckResource(cost, 1))
 		{
 			ConsumeResource(cost, 1);
-			SaveData.Technology[name].Progress = Math.min(SaveData.Technology[name].Progress + 0.05 / cost.Time, 1);
+			SaveData.Technology[name].Progress = Math.min(SaveData.Technology[name].Progress + RenderInterval / cost.Time, 1);
 		}
 	}
 }
@@ -275,7 +282,7 @@ function OnReconPhase()
 
 function OnAirAttackPhase()
 {
-	SaveData.Initiative = Formula.TotalAirToAir(0) >= Formula.TotalAirToAir(1) ? 0 : 1;
+	SaveData.AirSupremacy = Formula.TotalAirToAir(0) >= Formula.TotalAirToAir(1) ? 0 : 1;
 }
 
 function OnSubmarineTorpedoPhase()
@@ -345,11 +352,52 @@ function RenderPhase()
 {
 	for (var i = 0; i < 7; i++)
 	{
-		$("#Phase" + i).removeClass("btn-danger");
+		$("#Phase" + i).removeClass("btn-success");
 		$("#Phase" + i).addClass("btn-default");
 	}
 	$("#Phase" + SaveData.Phase).removeClass("btn-default");
-	$("#Phase" + SaveData.Phase).addClass("btn-danger");
+	$("#Phase" + SaveData.Phase).addClass("btn-success");
+
+	var initiativeInfo = $("#Initiative");
+	if (SaveData.Initiative == 0)
+	{
+		initiativeInfo.removeAttr("disabled");
+		initiativeInfo.removeClass("btn-default");
+		initiativeInfo.addClass("btn-success");
+	}
+	else if (SaveData.Initiative == 1)
+	{
+		initiativeInfo.removeAttr("disabled");
+		initiativeInfo.removeClass("btn-default");
+		initiativeInfo.addClass("btn-danger");
+	}
+	else
+	{
+		initiativeInfo.attr("disabled", "disabled");
+		initiativeInfo.addClass("btn-default");
+		initiativeInfo.removeClass("btn-success");
+	}
+
+	var airsupremacyInfo = $("#AirSupremacy");
+	if (SaveData.AirSupremacy == 0)
+	{
+		airsupremacyInfo.removeAttr("disabled");
+		airsupremacyInfo.removeClass("btn-default");
+		airsupremacyInfo.addClass("btn-success");
+	}
+	else if (SaveData.AirSupremacy == 1)
+	{
+		airsupremacyInfo.removeAttr("disabled");
+		airsupremacyInfo.removeClass("btn-default");
+		airsupremacyInfo.addClass("btn-danger");
+	}
+	else
+	{
+		airsupremacyInfo.attr("disabled", "disabled");
+		airsupremacyInfo.addClass("btn-default");
+		airsupremacyInfo.removeClass("btn-success");
+	}
+
 }
 
 function OnRender()
@@ -373,7 +421,7 @@ function OnRender()
 		}
 		else if (SaveData.Building[building].Progress > 0)
 		{
-			SaveData.Building[building].Progress = Math.min(SaveData.Building[building].Progress + 0.05 / cost.Time, 1);
+			SaveData.Building[building].Progress = Math.min(SaveData.Building[building].Progress + RenderInterval / cost.Time, 1);
 			$("#"+building+"Build").attr("disabled", "disabled");
 		}
 		else
@@ -392,7 +440,7 @@ function OnRender()
 		}
 
 		$("#"+building).text(building + ": " + SaveData.Building[building].Num);
-		$("#"+building+"Progress").css("width", Math.ceil(SaveData.Building[building].Progress*100) + "%");
+		$("#"+building+"Progress").css("width", (SaveData.Building[building].Progress*100) + "%");
 	}
 
 	//Update Technology
@@ -407,7 +455,7 @@ function OnRender()
 		}
 		else if (SaveData.Technology[tech].Progress > 0)
 		{
-			SaveData.Technology[tech].Progress = Math.min(SaveData.Technology[tech].Progress + 0.05 / cost.Time, 1);
+			SaveData.Technology[tech].Progress = Math.min(SaveData.Technology[tech].Progress + RenderInterval / cost.Time, 1);
 			$("#"+tech+"Research").attr("disabled", "disabled");
 		}
 		else
@@ -426,7 +474,7 @@ function OnRender()
 		}
 
 		$("#"+tech).text(tech + ": " + SaveData.Technology[tech].Level);
-		$("#"+tech+"Progress").css("width", Math.ceil(SaveData.Technology[tech].Progress*100) + "%");
+		$("#"+tech+"Progress").css("width", (SaveData.Technology[tech].Progress*100) + "%");
 	}
 
 	//Update Ship Production
@@ -444,7 +492,7 @@ function OnRender()
 				if (SaveData.Ship[ship][0].HP < StaticData.Ship[ship][0].HP() && SaveData.Ship[ship][0].Num > 0)
 				{
 					var maxhp = StaticData.Ship[ship][0].HP();
-					SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + 0.05 / cost.Time * maxhp, maxhp);
+					SaveData.Ship[ship][0].HP = Math.min(SaveData.Ship[ship][0].HP + RenderInterval / cost.Time * maxhp, maxhp);
 				}
 				else if (SaveData.Ship[ship][0].Num < SaveData.Ship[ship][0].Planned)
 				{
@@ -458,10 +506,10 @@ function OnRender()
 			}
 		}
 		$("#"+ship).text(ship + ": " + SaveData.Ship[ship][0].Num + " / " + SaveData.Ship[ship][0].Planned);
-		$("#"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP()*100) + "%");
+		$("#"+ship+"HP").css("width", (SaveData.Ship[ship][0].HP / StaticData.Ship[ship][0].HP()*100) + "%");
 		$("#"+ship+"HPDetail").text("HP: " + ShortNumber(StaticData.Ship[ship][0].HP()) + " * " + SaveData.Ship[ship][0].Num);
 		$("#Enemy"+ship).text(ship + ": " + SaveData.Ship[ship][1].Num);
-		$("#Enemy"+ship+"HP").css("width", Math.ceil(SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP()*100) + "%");
+		$("#Enemy"+ship+"HP").css("width", (SaveData.Ship[ship][1].HP / StaticData.Ship[ship][1].HP()*100) + "%");
 		$("#Enemy"+ship+"HPDetail").text("HP: " + ShortNumber(StaticData.Ship[ship][1].HP()) + " * " + SaveData.Ship[ship][1].Num);
 	}
 }
@@ -499,6 +547,31 @@ function OnInit()
 	}
 
 	RenderPhase();
+
+	var designTable = $("#Design");
+	for (var ship in StaticData.Ship)
+	{
+		designTable.append("<button type='button' class='btn btn-primary info btn-block' data-toggle='collapse' data-target='#" + ship + "Design'> "+ ship +"</button>\n" +
+			"<div class='collapse' id='" + ship + "Design'><div class='well'><small>\n" +
+			"	  <u>Detail info here</u>\n" +
+			"	</small></div></div>\n");
+
+		designTable.append("<div class='btn-group btn-block btn-group-sm btn-group-justified' role='group'>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Main</button></div>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>--</button></div>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>--</button></div>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Gun</button></div>\n" +
+			"</div>\n");
+
+		designTable.append("<div class='btn-group btn-block btn-group-sm btn-group-justified' style='width:50%' role='group'>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Sub</button></div>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Gun</button></div>\n" +
+			"</div>\n");
+
+		designTable.append("<div class='btn-group btn-block btn-group-sm btn-group-justified' style='width:25%' role='group'>\n" +
+			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>AA Gun</button></div>\n" +
+			"</div>\n");
+	}
 
 	var allyShipTable = $("#Ally");
 	var enemyShipTable = $("#Enemy");
@@ -588,7 +661,7 @@ window.addEventListener("load", function(){
 	OnLoad();
 	OnInit();
 	OnRender();
-	setInterval(OnRender, 50);
+	setInterval(OnRender, RenderInterval * 1000);
 	setInterval(OnTick, 1000);
 	setInterval(OnSave, 1000 * 300);
 });
