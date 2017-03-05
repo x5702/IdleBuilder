@@ -83,7 +83,7 @@ const StaticData = {
 				
 				ManpowerCost *= Math.pow( 1.6, SaveData.Building.OilMiner.Num);	
 				
-				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.OilMiner.Num) * 2) * ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.OilMiner.Num) * 2) * ConstData.BuildTimer, Time: 10 * ConstData.BuildTimer};
 			},
 		},
 		OilStorage : {
@@ -123,7 +123,7 @@ const StaticData = {
 				ManpowerCost *= Math.pow( 1.6, (SaveData.Building.BauxiteMiner.Num));	
 				FuelCost *= Math.pow( 1.6, (SaveData.Building.BauxiteMiner.Num));	
 			
-				return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.BauxiteMiner.Num) * 2 )* ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.BauxiteMiner.Num) * 2 )* ConstData.BuildTimer, Exp: 0};
 			},
 		},
 		BauxiteStorage : {
@@ -132,7 +132,7 @@ const StaticData = {
 				
 				ManpowerCost +=  (SaveData.Building.BauxiteStorage.Num) * ConstData.BaseCost;	
 			
-				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10* ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10* ConstData.BuildTimer, Exp: 0};
 			},
 		},
 	},
@@ -153,7 +153,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower :0, Fuel : 100, Steel : 100, Bauxite :100, Time: 10 * ConstData.BuildTimer};
+				return {Manpower :0, Fuel : 100, Steel : 100, Bauxite :100, Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},	
 		},		
 		{		
@@ -170,7 +170,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0, Exp: 0};
 			},	
 		},		
 	],			
@@ -190,7 +190,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower :0, Fuel : 250, Steel : 250, Bauxite :250, Time: 10 * ConstData.BuildTimer};
+				return {Manpower :0, Fuel : 250, Steel : 250, Bauxite :250, Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},	
 		},		
 		{		
@@ -207,7 +207,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0, Exp: 0};
 			},	
 		},		
 	],			
@@ -227,7 +227,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower :0, Fuel : 1000, Steel : 1000, Bauxite :1000, Time: 10 * ConstData.BuildTimer};
+				return {Manpower :0, Fuel : 1000, Steel : 1000, Bauxite :1000, Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},	
 		},		
 		{		
@@ -244,7 +244,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0, Exp: 0};
 			},	
 		},		
 	],			
@@ -264,7 +264,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower :0, Fuel : 2000, Steel : 2000, Bauxite :2000, Time: 10 * ConstData.BuildTimer};
+				return {Manpower :0, Fuel : 2000, Steel : 2000, Bauxite :2000, Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},	
 		},		
 		{		
@@ -281,7 +281,7 @@ Ship : {
 				return 0.5;
 			},	
 			Cost : function() {	
-				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0, Exp: 0};
 			},	
 		},		
 	],			
@@ -301,7 +301,7 @@ Ship : {
 				return 0.8;
 			},	
 			Cost : function() {	
-				return {Manpower :0, Fuel : 500, Steel : 500, Bauxite :500, Time: 10 * ConstData.BuildTimer};
+				return {Manpower :0, Fuel : 500, Steel : 500, Bauxite :500, Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},	
 		},		
 		{		
@@ -318,7 +318,7 @@ Ship : {
 				return 0.8;
 			},	
 			Cost : function() {	
-				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0};
+				return {Manpower : 0, Fuel : 0, Steel : 0, Bauxite : 0, Time: 0, Exp: 0};
 			},	
 		},		
 	],			
