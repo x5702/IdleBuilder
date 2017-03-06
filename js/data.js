@@ -83,7 +83,7 @@ const StaticData = {
 				
 				ManpowerCost *= Math.pow( 1.6, SaveData.Building.OilMiner.Num);	
 				
-				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.OilMiner.Num) * 2) * ConstData.BuildTimer, Time: 10 * ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.OilMiner.Num) * 2) * ConstData.BuildTimer, Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},
 		},
 		OilStorage : {
@@ -92,7 +92,7 @@ const StaticData = {
 				
 				ManpowerCost +=  (SaveData.Building.OilStorage.Num) * ConstData.BaseCost;	
 			
-				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10 * ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},
 		},
 		SteelMiner : {
@@ -103,7 +103,7 @@ const StaticData = {
 				ManpowerCost *= Math.pow( 1.6, SaveData.Building.SteelMiner.Num);	
 				FuelCost *= Math.pow( 1.6, SaveData.Building.SteelMiner.Num);	
 				
-				return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.SteelMiner.Num)* 2)* ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : FuelCost, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.SteelMiner.Num)* 2)* ConstData.BuildTimer, Exp: 0};
 			},
 		},
 		SteelStorage : {
@@ -112,7 +112,7 @@ const StaticData = {
 				
 				ManpowerCost +=  (SaveData.Building.SteelStorage.Num + SaveData.Building.SteelStorage.Num )* ConstData.BaseCost;	
 			
-				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10 * ConstData.BuildTimer};
+				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: 10 * ConstData.BuildTimer, Exp: 0};
 			},
 		},
 		BauxiteMiner : {

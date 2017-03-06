@@ -33,7 +33,8 @@ function CheckResource(cost, count)
 	return SaveData.Manpower >= cost.Manpower * count &&
 		SaveData.Fuel >= cost.Fuel * count &&
 		SaveData.Steel >= cost.Steel * count &&
-		SaveData.Bauxite >= cost.Bauxite * count;
+		SaveData.Bauxite >= cost.Bauxite * count &&
+		SaveData.Exp >= cost.Exp * count;
 }
 
 function ConsumeResource(cost, count)
@@ -43,6 +44,7 @@ function ConsumeResource(cost, count)
 	SaveData.Fuel -= cost.Fuel * count;
 	SaveData.Steel -= cost.Steel * count;
 	SaveData.Bauxite -= cost.Bauxite * count;
+	SaveData.Exp -= cost.Exp * count;
 }
 
 function EstimateTimeToGetResource(cost)
@@ -50,7 +52,8 @@ function EstimateTimeToGetResource(cost)
 	if (cost.Manpower > StaticData.ManpowerMax() || 
 		cost.Fuel > StaticData.FuelMax() || 
 		cost.Steel > StaticData.SteelMax() || 
-		cost.Bauxite > StaticData.BauxiteMax() )
+		cost.Bauxite > StaticData.BauxiteMax() ||
+		cost.Exp > SaveData.Exp )
 	{
 		return "inf";
 	}
@@ -547,31 +550,6 @@ function OnInit()
 	}
 
 	RenderPhase();
-
-	var designTable = $("#Design");
-	for (var ship in StaticData.Ship)
-	{
-		designTable.append("<button type='button' class='btn btn-primary info btn-block' data-toggle='collapse' data-target='#" + ship + "Design'> "+ ship +"</button>\n" +
-			"<div class='collapse' id='" + ship + "Design'><div class='well'><small>\n" +
-			"	  <u>Detail info here</u>\n" +
-			"	</small></div></div>\n");
-
-		designTable.append("<div class='btn-group btn-block btn-group-sm btn-group-justified' role='group'>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Main</button></div>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>--</button></div>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>--</button></div>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Gun</button></div>\n" +
-			"</div>\n");
-
-		designTable.append("<div class='btn-group btn-block btn-group-sm btn-group-justified' style='width:50%' role='group'>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Sub</button></div>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>Gun</button></div>\n" +
-			"</div>\n");
-
-		designTable.append("<div class='btn-group btn-block btn-group-sm btn-group-justified' style='width:25%' role='group'>\n" +
-			"<div class='btn-group' role='group'><button type='button' class='btn btn-default'>AA Gun</button></div>\n" +
-			"</div>\n");
-	}
 
 	var allyShipTable = $("#Ally");
 	var enemyShipTable = $("#Enemy");
