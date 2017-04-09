@@ -10,7 +10,7 @@ const ConstData = {
 	var ccc = Math.max(0, Math.floor(num * 0.01 - 10));
 	var cccc = Math.min(4, Math.floor(num * 0.04));	
 	
-	return Math.floor((base + c * Math.pow(ratio1, cc)) * Math.pow(ratio2, ccc) * Math.pow(ratio3, cccc)) ; 
+	return Math.floor((base * c * Math.pow(ratio1, cc * 2 / 3)) * Math.pow(ratio2, ccc * 2 / 3) * Math.pow(ratio3, cccc * 2 / 3)) ; 
 	},
 
 
@@ -55,19 +55,19 @@ const StaticData = {
 		},
 
 	ManpowerMax : function() {
-		return 1000 * StaticData.Territory();
+		return 1000 * Math.pow(1.1, StaticData.Territory());
 	},
 
 	FuelMax : function() {
-		return 1000 + 1000 * SaveData.Building.OilStorage.Num;
+		return 1000 + 1000 * Math.pow(1.2, SaveData.Building.OilStorage.Num);
 	},
 
 	SteelMax : function() {
-		return 1000 + 1000 * SaveData.Building.SteelStorage.Num;
+		return 1000 + 1000 * Math.pow(1.2, SaveData.Building.SteelStorage.Num);
 	},
 
 	BauxiteMax : function() {
-		return 1000 + 1000 * SaveData.Building.BauxiteStorage.Num;
+		return 1000 + 1000 * Math.pow(1.2, SaveData.Building.BauxiteStorage.Num);
 	},
 
 	ExpPerBattle : function(win) {
@@ -144,10 +144,10 @@ Ship : {
 				return 10;
 				},
 			HP : function() {	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_DeckImprove.Level, 100, 1, 1.2, 1.5);
+				return 120 + ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_DeckImprove.Level, 5, 1.05, 1.2, 1.5);
 				},
 			Defend : function() {//defend * 100 to make sure value has an increment.	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_Armor.Level, 100, 1, 1.05, 1.2);
+				return 100 + ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_Armor.Level, 2, 1.1 , 1.05, 1.2);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -164,7 +164,7 @@ Ship : {
 				return Math.floor(100 + 2 * SaveData.WorldArea + 10 * StaticData.CombatRegion()[0]) * Math.pow(20, Math.floor(StaticData.CombatRegion()[1] /10)) ;
 			},	
 			Defend : function() {	
-				return 100 * Math.pow(1.1,  (StaticData.CombatRegion()[0] -1) * 1);
+				return Math.min(100 * Math.pow(1.05,  (StaticData.CombatRegion()[0] -1) * 1), 200);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -181,10 +181,10 @@ Ship : {
 				return 25;
 			},	
 			HP : function() {	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_DeckImprove.Level, 250, 2.5, 1.2, 1.5);
+				return 250 + ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_DeckImprove.Level, 25, 1.25, 2, 1.5);
 			},	
 			Defend : function() {//defend * 100 to make sure value has an increment.	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_Armor.Level, 100, 1, 1.05, 1.2);
+				return 100 + ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_Armor.Level, 2, 1.02, 1.05, 1.2);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -201,7 +201,7 @@ Ship : {
 				return Math.floor(250 + 5 * SaveData.WorldArea + 50 * StaticData.CombatRegion()[0]) * Math.pow(30, Math.floor(StaticData.CombatRegion()[1] /10)) ;
 			},	
 			Defend : function() {	
-				return 120 * Math.pow(1.1,  (StaticData.CombatRegion()[0] -1) * 1);
+				return 120 * Math.pow(1.05,  (StaticData.CombatRegion()[0] -1) * 1);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -218,10 +218,10 @@ Ship : {
 				return 40;
 			},	
 			HP : function() {	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Battleship_DeckImprove.Level, 500, 5, 1.2, 1.5);
+				return 500 + ConstData.incCalc(SaveData.Technology.Fleet_Battleship_DeckImprove.Level, 100, 1.05, 1.2, 1.5);
 			},	
 			Defend : function() {//defend * 100 to make sure value has an increment.	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Battleship_Armor.Level, 200, 2, 1.05, 1.2);
+				return 200 + ConstData.incCalc(SaveData.Technology.Fleet_Battleship_Armor.Level, 5, 1.02, 1.05, 1.2);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -238,7 +238,7 @@ Ship : {
 				return Math.floor(500 + 5 * SaveData.WorldArea + 100 * StaticData.CombatRegion()[0]) * Math.pow(20, Math.floor(StaticData.CombatRegion()[1] /10)) ;
 			},	
 			Defend : function() {	
-				return 200 * Math.pow(1.1,  (StaticData.CombatRegion()[0] -1) * 1);
+				return Math.max(200 * Math.pow(1.05,  (StaticData.CombatRegion()[0] -1) * 1), 320);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -255,10 +255,10 @@ Ship : {
 				return 50;
 			},	
 			HP : function() {	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Carrier_DeckImprove.Level, 400, 4, 1.2, 1.5);
+				return 400 + ConstData.incCalc(SaveData.Technology.Fleet_Carrier_DeckImprove.Level, 80, 1.05, 1.2, 1.5);
 			},	
 			Defend : function() {//defend * 100 to make sure value has an increment.	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Carrier_Armor.Level, 50, 1, 1.05, 1.2);
+				return 50 + ConstData.incCalc(SaveData.Technology.Fleet_Carrier_Armor.Level, 1, 1.02, 1.05, 1.2);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -275,7 +275,7 @@ Ship : {
 				return Math.floor(400 + 4 * SaveData.WorldArea + 40 * StaticData.CombatRegion()[0]) * Math.pow(20, Math.floor(StaticData.CombatRegion()[1] /10)) ;
 			},	
 			Defend : function() {	
-				return 50 * Math.pow(1.1,  (StaticData.CombatRegion()[0] -1) * 1);
+				return 30 * Math.pow(1.05,  (StaticData.CombatRegion()[0] -1) * 1);
 			},	
 			Evade : function() {	
 				return 0.5;
@@ -292,10 +292,10 @@ Ship : {
 				return 5;
 			},	
 			HP : function() {	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Submarine_DeckImprove.Level, 100, 1, 1.2, 1.5);
+				return 100 + ConstData.incCalc(SaveData.Technology.Fleet_Submarine_DeckImprove.Level, 1, 1.05, 1.2, 1.5);
 			},	
 			Defend : function() {//defend * 100 to make sure value has an increment.	
-				return ConstData.incCalc(SaveData.Technology.Fleet_Submarine_Armor.Level, 100, 1, 1.05, 1.2);
+				return 100 + ConstData.incCalc(SaveData.Technology.Fleet_Submarine_Armor.Level, 1, 1.02, 1.05, 1.2);
 			},	
 			Evade : function() {	
 				return 0.8;
@@ -312,7 +312,7 @@ Ship : {
 				return Math.floor(100 + 2 * SaveData.WorldArea + 10 * StaticData.CombatRegion()[0]) * Math.pow(20, Math.floor(StaticData.CombatRegion()[1] /10)) ;
 			},	
 			Defend : function() {	
-				return 100 * Math.pow(1.1,  (StaticData.CombatRegion()[0] -1) * 1);
+				return 12 * Math.pow(1.1,  (StaticData.CombatRegion()[0] -1) * 1);
 			},	
 			Evade : function() {	
 				return 0.8;
@@ -329,7 +329,7 @@ Ship : {
 		DestroyerGun : [
 			{
 				Attack : function() {
-					return 100 + ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_FireControl.Level, 10, 1.01, 1.2, 1.5);
+					return 100 + ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_FireControl.Level, 5, 1.05, 1.2, 1.5);
 				},
 				Piercing : function() {
 					return 0;
@@ -366,10 +366,10 @@ Ship : {
 		DestroyerTorpedo : [
 			{
 				Attack : function() {
-					return 50 + ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_FireControl.Level, 10, 1.01, 1.2, 1.5);
+					return 80 + ConstData.incCalc(SaveData.Technology.Fleet_Destroyer_FireControl.Level, 4, 1.05, 1.2, 1.5);
 				},
 				Piercing : function() {
-					return 0.5;
+					return 0.6;
 				},
 				Accuracy : function() {
 					return 0.8;
@@ -454,7 +454,7 @@ Ship : {
 		CruiserGun : [
 			{
 				Attack : function() {
-					return 120 + ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_FireControl.Level, 12, 1.01, 1.2, 1.5);
+					return 120 + ConstData.incCalc(SaveData.Technology.Fleet_Cruiser_FireControl.Level, 12, 1.05, 1.2, 1.5);
 				},
 				Piercing : function() {
 					return 0;
@@ -855,147 +855,147 @@ Ship : {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.FleetExpansion.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 50000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 50000};
 			},
 		},
 		Manpower_InitialPlan :{
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Manpower_InitialPlan.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},
 		Manpower_GrowthRate :  {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Manpower_GrowthRate.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},
 		Manpower_OutputEfficiency :{
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Manpower_OutputEfficiency.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Fuel_InitialPlan :  {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Fuel_InitialPlan.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Fuel_GrowthRate : {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Fuel_GrowthRate.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Fuel_OutputEfficiency :{
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Fuel_OutputEfficiency.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Steel_InitialPlan : {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Manpower_GrowthRate.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Steel_GrowthRate : {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Steel_GrowthRate.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Steel_OutputEfficiency : {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Steel_OutputEfficiency.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},		
 		Bauxite_InitialPlan :  {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Bauxite_InitialPlan.Level);
 
-				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Destroyer_Armor : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Destroyer_Armor.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Cruiser_Armor :{
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Cruiser_Armor.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Battleship_Armor :  {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Battleship_Armor.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Carrier_Armor :{
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Carrier_Armor.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},		
 		Fleet_Submarine_Armor :  {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Submarine_Armor.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Destroyer_DeckImprove : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Destroyer_DeckImprove.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Cruiser_DeckImprove : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Cruiser_DeckImprove.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Battleship_DeckImprove : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Battleship_DeckImprove.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Carrier_DeckImprove : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Carrier_DeckImprove.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Submarine_DeckImprove : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Submarine_DeckImprove.Level, 10, 1, 3, 10, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 
@@ -1003,35 +1003,35 @@ Ship : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Destroyer_FireControl.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Cruiser_FireControl : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Cruiser_FireControl.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Battleship_FireControl : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Battleship_FireControl.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 1000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 1000};
 			},
 		},
 		Fleet_Carrier_FireControl : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Carrier_FireControl.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 1000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 1000};
 			},
 		},
 		Fleet_Submarine_FireControl : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Submarine_FireControl.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 
@@ -1039,35 +1039,35 @@ Ship : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Destroyer_AimSystem.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Cruiser_AimSystem : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Cruiser_AimSystem.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Battleship_AimSystem : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Battleship_AimSystem.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000};
 			},
 		},
 		Fleet_Carrier_AimSystem : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Carrier_AimSystem.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 };
 			},
 		},
 		Fleet_Submarine_AimSystem : {
 			Cost : function() {
 				var baseCost = ConstData.costCalc(SaveData.Technology.Fleet_Submarine_AimSystem.Level, 10, 1, 10, 100, 2 );
 				
-				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 * baseCost};
+				return {Manpower : 10 * baseCost, Fuel : 0, Steel : 2 * baseCost, Bauxite : 2 * baseCost, Time : 10, Exp : 10000 };
 			},
 		},
 	},
