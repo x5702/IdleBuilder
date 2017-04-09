@@ -83,7 +83,7 @@ const StaticData = {
 				
 				ManpowerCost *= Math.pow( 1.6, SaveData.Building.OilMiner.Num);	
 				
-				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.OilMiner.Num) * 2) * ConstData.BuildTimer, Time: 10 * ConstData.BuildTimer, Exp: 0};
+				return {Manpower : ManpowerCost, Fuel : 0, Steel : 0, Bauxite : 0,  Time: (1 + (SaveData.Building.OilMiner.Num) * 2) * ConstData.BuildTimer, Exp: 10 * ConstData.BuildTimer, Exp: 0};
 			},
 		},
 		OilStorage : {
@@ -922,6 +922,20 @@ Ship : {
 			},
 		},		
 		Bauxite_InitialPlan :  {
+			Cost : function() {
+				var baseCost = Math.pow(1.05, SaveData.Technology.Bauxite_InitialPlan.Level);
+
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
+			},
+		},
+		Bauxite_GrowthRate :  {
+			Cost : function() {
+				var baseCost = Math.pow(1.05, SaveData.Technology.Bauxite_InitialPlan.Level);
+
+				return {Manpower : 100 * baseCost, Fuel : 0, Steel : 0, Bauxite : 0, Time : 10, Exp : 10000};
+			},
+		},
+		Bauxite_OutputEfficiency :  {
 			Cost : function() {
 				var baseCost = Math.pow(1.05, SaveData.Technology.Bauxite_InitialPlan.Level);
 
